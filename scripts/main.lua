@@ -67,8 +67,8 @@ RegisterKeyBind(Key.Z, function()
     ExecuteInGameThread(function()
         local hitActor = ForwardLineTraceByChannel(3)
         if hitActor then
-            LogDebug(string.format("HitActor: %s", hitActor:GetFullName()))
-            LogDebug(string.format("FullClassName: %s", hitActor:GetClass():GetFullName()))
+            LogDebug("HitActor: " .. hitActor:GetFullName())
+            LogDebug("ClassName: " .. hitActor:GetClass():GetFullName())
             if hitActor:IsA(AFUtils.GetClassDeployed_Battery_ParentBP_C()) then
                 hitActor["Update Current Item Data"]()
 
@@ -83,84 +83,45 @@ RegisterKeyBind(Key.Z, function()
     end)
 end)
 
--- RegisterHook("/Game/Blueprints/DeployedObjects/Misc/Deployed_Battery_ParentBP.Deployed_Battery_ParentBP_C:BatteryTick", function(Context)
---     local this = Context:get()
+RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:TickMinigame", function(Context, DeltaTime)
+    local this = Context:get()
+    local deltaTime = DeltaTime:get()
 
---     if this.ChangeableData and this.ChangeableData.LiquidLevel_46_D6414A6E49082BC020AADC89CC29E35A < this.MaxBattery then
---         LogDebug("[BatteryTick] called:")
---         this.ChangeableData.LiquidLevel_46_D6414A6E49082BC020AADC89CC29E35A = this.MaxBattery
---         LogDebug("Set LiquidLevel: " .. this.ChangeableData.LiquidLevel_46_D6414A6E49082BC020AADC89CC29E35A)
---         LogDebug("------------------------------")
---     end
--- end)
+    if this.ActiveFishSpeed > 0 and this.CurrentOwner and this.CurrentOwner:IsValid() then
+        LogDebug("[TickMinigame] called:")
+        LogDebug("Param DeltaTime: " .. deltaTime)
+        LogDebug("ActiveRodTension: " .. this.ActiveRodTension)
+        LogDebug("NextDirectionChangeTime: " .. this.NextDirectionChangeTime)
+        LogDebug("NextCooldownTime: " .. this.NextCooldownTime)
+        LogDebug("FishCaptureProgress: " .. this.FishCaptureProgress)
+        LogDebug("FishCaptureDistance: " .. this.FishCaptureDistance)
+        LogDebug("FishCaptureStage: " .. this.FishCaptureStage)
+        LogDebug("ActiveFishSpeed: " .. this.ActiveFishSpeed)
+        LogDebug("TimeToStartMinigame: " .. this.TimeToStartMinigame)
+        LogDebug("HasActiveFish: " .. tostring(this.HasActiveFish))
+        LogDebug("ReelAnimTime: " .. this.ReelAnimTime)
+        LogDebug("Reeling: " .. tostring(this.Reeling))
+        LogDebug("HotspotActive: " .. tostring(this.HotspotActive))
+        LogDebug("LastTimeFishingEnded: " .. this.LastTimeFishingEnded)
+        LogDebug("CatchingJunk: " .. tostring(this.CatchingJunk))
+        LogDebug("JunkReward.RowName: " .. this.JunkReward.RowName:ToString())
+        LogDebug("FishReward.RowName: " .. this.FishReward.RowName:ToString())
+        LogDebug("FishReward.DataTablePath: " .. this.FishReward.DataTablePath:ToString())
+        LogDebug("RequiredCaptures: " .. this.RequiredCaptures)
+        LogDebug("TackleboxActive: " .. tostring(this.TackleboxActive))
+        LogDebug("LuckyHat: " .. tostring(this.LuckyHat))
+        LogDebug("OwnerLastKnownLevel: " .. this.OwnerLastKnownLevel)
+        LogDebug("------------------------------")
 
--- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:Server Heavy Armor Debuff Check", function(Context, WeightClassValue)
---     local this = Context:get()
---     local weightClassValue = WeightClassValue:get()
+        local myPlayer = AFUtils.GetMyPlayer()
+        if myPlayer and myPlayer:GetAddress() == this.CurrentOwner:GetAddress() then
+            this.TimeToStartMinigame = 10.0
+            if this.ActiveRodTension > 0 then
+                this:FishingSuccess()
+            end
+        end
+    end
+end)
 
---     LogDebug("[Server Heavy Armor Debuff Check] called:")
---     LogDebug("WeightClassValue: " .. weightClassValue)
---     LogDebug("------------------------------")
---     if weightClassValue > 0 then
---         this["Server Heavy Armor Debuff Check"](0)
---     end
--- end)
-
--- RegisterHook("/Game/Blueprints/Items/RechargeableComponent.RechargeableComponent_C:Server_ModifyBattery", function(Context, Amount, NotOwnedByPlayer)
---     local this = Context:get()
---     local amount = Amount:get()
---     local notOwnedByPlayer = NotOwnedByPlayer:get()
-
---     if not this.RechargeableActive then
---         return
---     end
-
---     LogDebug("[Server_ModifyBattery] called:")
---     LogDebug("Amount: " .. amount)
---     LogDebug("NotOwnedByPlayer: " .. tostring(notOwnedByPlayer))
-
---     LogDebug("RechargeableActive: " .. tostring(this.RechargeableActive))
---     LogDebug("LastBatteryLevel: " .. this.LastBatteryLevel)
---     LogDebug("DrainPerTick: " .. this.DrainPerTick)
---     LogDebug("ChargeMultiplier: " .. this.ChargeMultiplier)
---     LogDebug("LastItemChargePercentage: " .. this.LastItemChargePercentage)
---     LogDebug("------------------------------")
--- end)
-
--- RegisterHook("/Game/Blueprints/Items/RechargeableComponent.RechargeableComponent_C:Server_DrainBattery", function(Context)
---     local this = Context:get()
-
---     LogDebug("[Server_DrainBattery] called:")
---     LogDebug("RechargeableActive: " .. tostring(this.RechargeableActive))
---     LogDebug("LastBatteryLevel: " .. this.LastBatteryLevel)
---     LogDebug("DrainPerTick: " .. this.DrainPerTick)
---     LogDebug("ChargeMultiplier: " .. this.ChargeMultiplier)
---     LogDebug("LastItemChargePercentage: " .. this.LastItemChargePercentage)
---     LogDebug("------------------------------")
--- end)
-
--- RegisterHook("/Game/Blueprints/DeployedObjects/Misc/Deployed_Battery_ParentBP.Deployed_Battery_ParentBP_C:GetPluggedInDeviceCount", function(Context, Count)
---     local this = Context:get()
---     local count = Count:get()
---     local rechargeableComponent = this.RechargeableComponent
-
---     LogDebug("[ADeployed_Battery_ParentBP_C:GetPluggedInDeviceCount] called:")
---     LogDebug("Count: " .. count)
---     LogDebug("HasBatteryPower: " .. tostring(this.HasBatteryPower))
---     LogDebug("PowerTimerActive: " .. tostring(this.PowerTimerActive))
---     LogDebug("BatteryPercentage: " .. this.BatteryPercentage)
---     LogDebug("DevicesPullingPower: " .. this.DevicesPullingPower)
---     LogDebug("MaxBattery: " .. this.MaxBattery)
---     LogDebug("FreezeBatteryDrain: " .. tostring(this.FreezeBatteryDrain))
-
---     if rechargeableComponent and rechargeableComponent:IsValid() then
---         LogDebug("RechargeableActive: " .. tostring(rechargeableComponent.RechargeableActive))
---         LogDebug("LastBatteryLevel: " .. rechargeableComponent.LastBatteryLevel)
---         LogDebug("DrainPerTick: " .. rechargeableComponent.DrainPerTick)
---         LogDebug("ChargeMultiplier: " .. rechargeableComponent.ChargeMultiplier)
---         LogDebug("LastItemChargePercentage: " .. rechargeableComponent.LastItemChargePercentage)
---     end
---     LogDebug("------------------------------")
--- end)
 
 LogInfo("Mod loaded successfully")
