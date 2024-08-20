@@ -31,7 +31,6 @@ end
 LogInfo("Starting mod initialization")
 
 local IsModEnabled = false
-
 local function SetModState(Enable)
     ExecuteInGameThread(function()
         Enable = Enable or false
@@ -59,6 +58,28 @@ RegisterKeyBind(ToggleModKey, ToggleModKeyModifiers, function()
                 LogDebug("ItemName: " .. itemData.ItemName_51_B88648C048EE5BC2885E4E95F3E13F0A:ToString())
 
                 AFUtils.LogInventoryChangeableDataStruct(changeableData, "ChangeableData.")
+            end
+        end
+    end)
+end)
+
+RegisterKeyBind(Key.Z, function()
+    ExecuteInGameThread(function()
+        local hitActor = ForwardLineTraceByChannel(3)
+        if hitActor then
+            LogDebug(string.format("HitActor: %s", hitActor:GetFullName()))
+            LogDebug(string.format("FullClassName: %s", hitActor:GetClass():GetFullName()))
+            if hitActor:IsA(AFUtils.GetClassDeployed_Battery_ParentBP_C()) then
+                hitActor["Update Current Item Data"]()
+
+                AFUtils.LogDeployedBattery(hitActor)
+                -- hitActor.HasBatteryPower = true
+                -- hitActor.BatteryPercentage = 1.0
+                -- hitActor.FreezeBatteryDrain = true
+                hitActor.ChangeableData.LiquidLevel_46_D6414A6E49082BC020AADC89CC29E35A = hitActor.MaxBattery
+            end
+            if hitActor:IsA(AFUtils.GetClassAbioticDeployed_ParentBP_C()) then
+                AFUtils.LogInventoryChangeableDataStruct(hitActor.ChangeableData, "ChangeableData.")
             end
         end
     end)
