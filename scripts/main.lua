@@ -73,10 +73,8 @@ RegisterKeyBind(Key.Z, function()
                 hitActor["Update Current Item Data"]()
 
                 AFUtils.LogDeployedBattery(hitActor)
-                -- hitActor.HasBatteryPower = true
-                -- hitActor.BatteryPercentage = 1.0
                 -- hitActor.FreezeBatteryDrain = true
-                hitActor.ChangeableData.LiquidLevel_46_D6414A6E49082BC020AADC89CC29E35A = hitActor.MaxBattery
+                -- hitActor.ChangeableData.LiquidLevel_46_D6414A6E49082BC020AADC89CC29E35A = hitActor.MaxBattery
             end
             if hitActor:IsA(AFUtils.GetClassAbioticDeployed_ParentBP_C()) then
                 AFUtils.LogInventoryChangeableDataStruct(hitActor.ChangeableData, "ChangeableData.")
@@ -85,14 +83,15 @@ RegisterKeyBind(Key.Z, function()
     end)
 end)
 
--- RegisterHook("/Game/Blueprints/Characters/Abiotic_InventoryComponent.Abiotic_InventoryComponent_C:ComputeCurrentInventoryWeight", function(Context, TotalWeight)
+-- RegisterHook("/Game/Blueprints/DeployedObjects/Misc/Deployed_Battery_ParentBP.Deployed_Battery_ParentBP_C:BatteryTick", function(Context)
 --     local this = Context:get()
---     local totalWeight = TotalWeight:get()
 
---     LogDebug("[ComputeCurrentInventoryWeight] called:")
---     LogDebug("TotalWeight: " .. totalWeight)
---     LogDebug("CurrentTotalInventoryWeight: " .. this.CurrentTotalInventoryWeight)
---     LogDebug("------------------------------")
+--     if this.ChangeableData and this.ChangeableData.LiquidLevel_46_D6414A6E49082BC020AADC89CC29E35A < this.MaxBattery then
+--         LogDebug("[BatteryTick] called:")
+--         this.ChangeableData.LiquidLevel_46_D6414A6E49082BC020AADC89CC29E35A = this.MaxBattery
+--         LogDebug("Set LiquidLevel: " .. this.ChangeableData.LiquidLevel_46_D6414A6E49082BC020AADC89CC29E35A)
+--         LogDebug("------------------------------")
+--     end
 -- end)
 
 -- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:Server Heavy Armor Debuff Check", function(Context, WeightClassValue)
