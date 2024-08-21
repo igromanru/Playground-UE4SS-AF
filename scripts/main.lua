@@ -45,13 +45,11 @@ local function SetModState(Enable)
 end
 
 RegisterKeyBind(ToggleModKey, ToggleModKeyModifiers, function()
-    -- SetModState(not IsModEnabled)
     ExecuteInGameThread(function()
-        print("ToggleModKey pressed")
         local myPlayer = AFUtils.GetMyPlayer()
         if myPlayer then
             local currentItem = myPlayer.ItemInHand_BP
-            if currentItem then
+            if currentItem:IsValid() then
                 local itemData = currentItem.ItemData
                 local changeableData = currentItem.ChangeableData
                 LogDebug("ItemInHand:")
@@ -83,45 +81,34 @@ RegisterKeyBind(Key.Z, function()
     end)
 end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:TickMinigame", function(Context, DeltaTime)
-    local this = Context:get()
-    local deltaTime = DeltaTime:get()
-
-    if this.ActiveFishSpeed > 0 and this.CurrentOwner and this.CurrentOwner:IsValid() then
-        LogDebug("[TickMinigame] called:")
-        LogDebug("Param DeltaTime: " .. deltaTime)
-        LogDebug("ActiveRodTension: " .. this.ActiveRodTension)
-        LogDebug("NextDirectionChangeTime: " .. this.NextDirectionChangeTime)
-        LogDebug("NextCooldownTime: " .. this.NextCooldownTime)
-        LogDebug("FishCaptureProgress: " .. this.FishCaptureProgress)
-        LogDebug("FishCaptureDistance: " .. this.FishCaptureDistance)
-        LogDebug("FishCaptureStage: " .. this.FishCaptureStage)
-        LogDebug("ActiveFishSpeed: " .. this.ActiveFishSpeed)
-        LogDebug("TimeToStartMinigame: " .. this.TimeToStartMinigame)
-        LogDebug("HasActiveFish: " .. tostring(this.HasActiveFish))
-        LogDebug("ReelAnimTime: " .. this.ReelAnimTime)
-        LogDebug("Reeling: " .. tostring(this.Reeling))
-        LogDebug("HotspotActive: " .. tostring(this.HotspotActive))
-        LogDebug("LastTimeFishingEnded: " .. this.LastTimeFishingEnded)
-        LogDebug("CatchingJunk: " .. tostring(this.CatchingJunk))
-        LogDebug("JunkReward.RowName: " .. this.JunkReward.RowName:ToString())
-        LogDebug("FishReward.RowName: " .. this.FishReward.RowName:ToString())
-        LogDebug("FishReward.DataTablePath: " .. this.FishReward.DataTablePath:ToString())
-        LogDebug("RequiredCaptures: " .. this.RequiredCaptures)
-        LogDebug("TackleboxActive: " .. tostring(this.TackleboxActive))
-        LogDebug("LuckyHat: " .. tostring(this.LuckyHat))
-        LogDebug("OwnerLastKnownLevel: " .. this.OwnerLastKnownLevel)
-        LogDebug("------------------------------")
-
-        local myPlayer = AFUtils.GetMyPlayer()
-        if myPlayer and myPlayer:GetAddress() == this.CurrentOwner:GetAddress() then
-            this.TimeToStartMinigame = 10.0
-            if this.ActiveRodTension > 0 then
-                this:FishingSuccess()
-            end
-        end
-    end
+RegisterKeyBind(Key.U, function()
+    ExecuteInGameThread(function()
+        
+    end)
 end)
 
+RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:GetCurrentHeldItem", function(Context, Success, ItemSlotInfo, ItemData, Blueprint)
+    local this = Context:get()
+    local success = Success:get()
+    local itemSlotInfo = ItemSlotInfo:get()
+    local itemData = ItemData:get()
+    local blueprint = Blueprint:get()
+    LogDebug("Blueprint type: " .. Blueprint:type())
+    LogDebug("blueprint type: " .. blueprint:type())
+
+    LogDebug("[GetCurrentHeldItem] called:")
+    LogDebug("Success: " .. tostring(success))
+    AFUtils.LogInventoryItemSlotStruct(itemSlotInfo, "ItemSlotInfo.")
+    AFUtils.LogInventoryItemStruct(itemData, "ItemData.")
+    if blueprint:IsValid() then
+        LogDebug("Blueprint: " .. blueprint:GetClass():GetFullName())
+        if blueprint:IsA(AFUtils.GetClassAbiotic_Item_ParentBP_C()) then
+            AFUtils.LogInventoryItemStruct(blueprint.ItemData, "Blueprint.ItemData.")
+            AFUtils.LogInventoryChangeableDataStruct(blueprint.ChangeableData, "Blueprint.ChangeableData.")
+        end
+        -- AFUtils.SetItemLiquidLevel(blueprint)
+    end
+    LogDebug("------------------------------")
+end)
 
 LogInfo("Mod loaded successfully")
