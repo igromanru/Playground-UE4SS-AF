@@ -96,8 +96,11 @@ RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_Player
     if success then
         LogDebug("[GetCurrentHeldItem] called:")
         LogDebug("Success: " .. tostring(success))
-        -- AFUtils.LogInventoryItemSlotStruct(itemSlotInfo, "ItemSlotInfo.")
-        -- LogDebug("---")
+
+        LogDebug("CurrentHotbarSlotSelected.Index: " ..  this.CurrentHotbarSlotSelected.Index_5_6BDC7B3944A5DE0B319F9FA20720872F)
+        LogDebug("LastSelectedHotbarSlot: " ..  this.LastSelectedHotbarSlot)
+        AFUtils.LogInventoryItemSlotStruct(itemSlotInfo, "ItemSlotInfo.")
+        LogDebug("---")
         -- AFUtils.LogInventoryItemStruct(itemData, "ItemData.")
         -- LogDebug("---")
         if blueprint:IsValid() then
@@ -108,7 +111,6 @@ RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_Player
                 -- AFUtils.LogInventoryItemStruct(blueprint.ItemData, "Blueprint.ItemData.")
                 -- AFUtils.LogInventoryChangeableDataStruct(blueprint.ChangeableData, "Blueprint.ChangeableData.")
             end
-            
             -- LogDebug("BlueprintCreatedComponents Num: " .. #blueprint.BlueprintCreatedComponents)
             -- for i = 1, #blueprint.BlueprintCreatedComponents, 1 do
             --     local component = blueprint.BlueprintCreatedComponents[i]
@@ -117,27 +119,32 @@ RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_Player
             --     end
             -- end
         end
-
         LogDebug("------------------------------")
     end
 end)
 
-RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:Server_TryChangeValueInLiquidContainer", 
-function(Context, Inventory, SlotIndex, NewLiquidValue, LiquidType, OptionalItemRow, Success)
-    local this = Context:get()
-    local inventory = Inventory:get()
-    local slotIndex = SlotIndex:get()
-    local newLiquidValue = NewLiquidValue:get()
-    local liquidType = LiquidType:get()
-    local optionalItemRow = OptionalItemRow:get()
-    local success = Success:get()
+-- RegisterHook("/Game/Blueprints/Characters/Abiotic_InventoryComponent.Abiotic_InventoryComponent_C:GetItemInSlot", function(Context, Index, Success, SlotData, ItemData)
+--     local this = Context:get()
+--     local index = Index:get()
+--     local success = Success:get()
+--     local slotData = SlotData:get()
+--     local itemData = ItemData:get()
 
-    LogDebug("[Server_TryChangeValueInLiquidContainer] called:")
-    LogDebug("SlotIndex: " .. slotIndex)
-    LogDebug("NewLiquidValue: " .. newLiquidValue)
-    LogDebug("LiquidType: " .. liquidType)
-    LogDebug("OptionalItemRow: " .. optionalItemRow:ToString())
-    LogDebug("Success: " .. tostring(success))
+--     LogDebug("[InventoryComponent_C:GetItemInSlot] called:")
+--     LogDebug("Index: " .. index)
+--     LogDebug("Success: " .. tostring(success))
+--     AFUtils.LogInventoryItemSlotStruct(itemSlotInfo, "SlotData.")
+--     LogDebug("---")
+--     AFUtils.LogInventoryItemStruct(itemData, "ItemData.")
+--     LogDebug("------------------------------")
+-- end)
+
+RegisterHook("/Game/Blueprints/Meta/Abiotic_PlayerController.Abiotic_PlayerController_C:OnHotbarUpdated", function(Context, Inventory)
+    local playerController = Context:get()
+    local inventory = Inventory:get()
+
+    LogDebug("[OnHotbarUpdated] called:")
+    -- AFUtils.LogInventoryComponent(inventory, "Inventory.")
     LogDebug("------------------------------")
 end)
 
