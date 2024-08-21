@@ -65,18 +65,17 @@ RegisterKeyBind(Key.Z, function()
     ExecuteInGameThread(function()
         local hitActor = ForwardLineTraceByChannel(3)
         if hitActor then
+            LogDebug("[ForwardLineTraceByChannel]:")
             LogDebug("HitActor: " .. hitActor:GetFullName())
             LogDebug("ClassName: " .. hitActor:GetClass():GetFullName())
             if hitActor:IsA(AFUtils.GetClassDeployed_Battery_ParentBP_C()) then
-                hitActor["Update Current Item Data"]()
-
                 AFUtils.LogDeployedBattery(hitActor)
-                -- hitActor.FreezeBatteryDrain = true
-                -- hitActor.ChangeableData.LiquidLevel_46_D6414A6E49082BC020AADC89CC29E35A = hitActor.MaxBattery
+                -- hitActor["Update Current Item Data"]()
             end
             if hitActor:IsA(AFUtils.GetClassAbioticDeployed_ParentBP_C()) then
                 AFUtils.LogInventoryChangeableDataStruct(hitActor.ChangeableData, "ChangeableData.")
             end
+            LogDebug("------------------------------")
         end
     end)
 end)
@@ -92,23 +91,55 @@ RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_Player
     local success = Success:get()
     local itemSlotInfo = ItemSlotInfo:get()
     local itemData = ItemData:get()
-    local blueprint = Blueprint:get()
-    LogDebug("Blueprint type: " .. Blueprint:type())
-    LogDebug("blueprint type: " .. blueprint:type())
+    local blueprint = Blueprint:get() -- AAbiotic_Item_ParentBP_C
 
-    LogDebug("[GetCurrentHeldItem] called:")
-    LogDebug("Success: " .. tostring(success))
-    AFUtils.LogInventoryItemSlotStruct(itemSlotInfo, "ItemSlotInfo.")
-    AFUtils.LogInventoryItemStruct(itemData, "ItemData.")
-    if blueprint:IsValid() then
-        LogDebug("Blueprint: " .. blueprint:GetClass():GetFullName())
-        if blueprint:IsA(AFUtils.GetClassAbiotic_Item_ParentBP_C()) then
-            AFUtils.LogInventoryItemStruct(blueprint.ItemData, "Blueprint.ItemData.")
-            AFUtils.LogInventoryChangeableDataStruct(blueprint.ChangeableData, "Blueprint.ChangeableData.")
+    if success then
+        LogDebug("[GetCurrentHeldItem] called:")
+        LogDebug("Success: " .. tostring(success))
+        -- AFUtils.LogInventoryItemSlotStruct(itemSlotInfo, "ItemSlotInfo.")
+        -- LogDebug("---")
+        -- AFUtils.LogInventoryItemStruct(itemData, "ItemData.")
+        -- LogDebug("---")
+        if blueprint:IsValid() then
+            LogDebug("Blueprint: " .. blueprint:GetClass():GetFullName())
+            if blueprint:IsA(AFUtils.GetClassAbiotic_Item_ParentBP_C()) then
+                AFUtils.LogItemParentBP(blueprint, "Blueprint.")
+                LogDebug("---")
+                -- AFUtils.LogInventoryItemStruct(blueprint.ItemData, "Blueprint.ItemData.")
+                -- AFUtils.LogInventoryChangeableDataStruct(blueprint.ChangeableData, "Blueprint.ChangeableData.")
+            end
+            
+            -- LogDebug("BlueprintCreatedComponents Num: " .. #blueprint.BlueprintCreatedComponents)
+            -- for i = 1, #blueprint.BlueprintCreatedComponents, 1 do
+            --     local component = blueprint.BlueprintCreatedComponents[i]
+            --     if component:IsValid() then
+            --         LogDebug(i .. ": " .. component:GetClass():GetFullName())
+            --     end
+            -- end
         end
-        -- AFUtils.SetItemLiquidLevel(blueprint)
+
+        LogDebug("------------------------------")
     end
+end)
+
+RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:Server_TryChangeValueInLiquidContainer", 
+function(Context, Inventory, SlotIndex, NewLiquidValue, LiquidType, OptionalItemRow, Success)
+    local this = Context:get()
+    local inventory = Inventory:get()
+    local slotIndex = SlotIndex:get()
+    local newLiquidValue = NewLiquidValue:get()
+    local liquidType = LiquidType:get()
+    local optionalItemRow = OptionalItemRow:get()
+    local success = Success:get()
+
+    LogDebug("[Server_TryChangeValueInLiquidContainer] called:")
+    LogDebug("SlotIndex: " .. slotIndex)
+    LogDebug("NewLiquidValue: " .. newLiquidValue)
+    LogDebug("LiquidType: " .. liquidType)
+    LogDebug("OptionalItemRow: " .. optionalItemRow:ToString())
+    LogDebug("Success: " .. tostring(success))
     LogDebug("------------------------------")
 end)
+
 
 LogInfo("Mod loaded successfully")
