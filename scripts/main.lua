@@ -33,41 +33,53 @@ end
 RegisterKeyBind(Key.L, function()
     ExecuteInGameThread(function()
         LogDebug("------------ L ---------------")
-        local aiDirector = FindFirstOf("Abiotic_AIDirector_C")
-        if aiDirector and aiDirector:IsValid() then
-            LogDebug("-- Abiotic_AIDirector_C:")
-            AFUtils.LogAIDirector(aiDirector)
-            local timerHandle = { Handle = aiDirector.LeyakTimer.Handle }
-            LogDebug("LeyakTimer IsValid: "..tostring(GetKismetSystemLibrary():K2_IsValidTimerHandle(timerHandle)))
-            timerHandle.Handle = aiDirector.CoworkerTimer.Handle
-            LogDebug("CoworkerTimer IsValid: "..tostring(GetKismetSystemLibrary():K2_IsValidTimerHandle(timerHandle)))
-            if aiDirector.ActiveLeyak:IsValid() then
-                LogDebug("-- ActiveLeyak:")
-                AFUtils.LogNPCLeyak(aiDirector.ActiveLeyak)
+        local aiDirectors = FindAllOf("Abiotic_AIDirector_C")
+        if aiDirectors then
+            LogDebug("Abiotic_AIDirector_C num: "..#aiDirectors)
+            local aiDirector = aiDirectors[1]
+            if aiDirector and aiDirector:IsValid() then
+                LogDebug("-- Abiotic_AIDirector_C:")
+                AFUtils.LogAIDirector(aiDirector)
+                local timerHandle = { Handle = aiDirector.LeyakTimer.Handle }
+                LogDebug("LeyakTimer IsValid: "..tostring(GetKismetSystemLibrary():K2_IsValidTimerHandle(timerHandle)))
+                timerHandle.Handle = aiDirector.CoworkerTimer.Handle
+                LogDebug("CoworkerTimer IsValid: "..tostring(GetKismetSystemLibrary():K2_IsValidTimerHandle(timerHandle)))
+        
+                aiDirector.LeyakCooldown = 60.0
 
-                -- aiDirector.ActiveLeyak:DropEssence()
-            else
-                local spawnDistanceInM = 20
-                local playerController = GetMyPlayerController()
-                if playerController and playerController.PlayerCameraManager:IsValid() then
-                    local cameraManager = playerController.PlayerCameraManager
-                    local lookDirection = cameraManager:GetActorForwardVector()
-                    local lookDirOffset = GetKismetMathLibrary():Multiply_VectorFloat(lookDirection, MToUnits(spawnDistanceInM))
-                    local spawnLocation = GetKismetMathLibrary():Add_VectorVector(cameraManager:GetCameraLocation(), lookDirOffset)
-                    aiDirector:SpawnLeyak(VectorToUserdata(spawnLocation));
+                if aiDirector.ActiveLeyak:IsValid() and not IsEmptyVector(aiDirector.ActiveLeyak:K2_GetActorLocation()) then
+                    LogDebug("-- ActiveLeyak:")
+                    AFUtils.LogNPCLeyak(aiDirector.ActiveLeyak)
+                    
+                    -- aiDirector.ActiveLeyak:DropEssence()
+                else
+                    local spawnDistanceInM = 20
+                    local playerController = GetMyPlayerController()
+                    if playerController and playerController.PlayerCameraManager:IsValid() then
+                        local cameraManager = playerController.PlayerCameraManager
+                        local lookDirection = cameraManager:GetActorForwardVector()
+                        local lookDirOffset = GetKismetMathLibrary():Multiply_VectorFloat(lookDirection, MToUnits(spawnDistanceInM))
+                        local spawnLocation = GetKismetMathLibrary():Add_VectorVector(cameraManager:GetCameraLocation(), lookDirOffset)
+                        aiDirector:SpawnLeyak(VectorToUserdata(spawnLocation));
+                    end
                 end
             end
         else
             LogDebug("No Abiotic_AIDirector_C found")
         end
-        local aiControllerLeyak = FindFirstOf("AI_Controller_Leyak_C")
-        if aiControllerLeyak and aiControllerLeyak:IsValid() then
-            LogDebug("-- AI_Controller_Leyak_C:")
-            AFUtils.LogAIControllerLeyak(aiControllerLeyak)
-            -- aiControllerLeyak.WantsToDespawn = true
-        else
-            LogDebug("No AI_Controller_Leyak_C found")
+        local aiControllerLeyaks = FindAllOf("AI_Controller_Leyak_C")
+        if aiControllerLeyaks then
+            LogDebug("AI_Controller_Leyak_C num: "..#aiControllerLeyaks)
+            local aiControllerLeyak = aiControllerLeyaks[1]
+            if aiControllerLeyak and aiControllerLeyak:IsValid() then
+                LogDebug("-- AI_Controller_Leyak_C:")
+                AFUtils.LogAIControllerLeyak(aiControllerLeyak)
+                -- aiControllerLeyak.WantsToDespawn = true
+            else
+                LogDebug("No AI_Controller_Leyak_C found")
+            end
         end
+
         -- local myPlayer = AFUtils.GetMyPlayer()
         -- if myPlayer then
         --     local currentItem = myPlayer.ItemInHand_BP
@@ -106,14 +118,14 @@ end)
 
 RegisterKeyBind(Key.U, function()
     ExecuteInGameThread(function()
-        LogDebug("------------ U ---------------")
-        local aiControllerLeyak = FindFirstOf("AI_Controller_Leyak_C")
-        if aiControllerLeyak and aiControllerLeyak:IsValid() then
-            aiControllerLeyak:Despawn()
-        else
-            LogDebug("No AI_Controller_Leyak_C found")
-        end
-        LogDebug("------------------------------")
+        -- LogDebug("------------ U ---------------")
+        -- local aiControllerLeyak = FindFirstOf("AI_Controller_Leyak_C")
+        -- if aiControllerLeyak and aiControllerLeyak:IsValid() then
+        --     aiControllerLeyak:Despawn()
+        -- else
+        --     LogDebug("No AI_Controller_Leyak_C found")
+        -- end
+        -- LogDebug("------------------------------")
     end)
 end)
 
@@ -173,15 +185,15 @@ end)
 -- end)
 
 RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SpawnLeyak", function(Context, Location)
-    local aIDirector = Context:get()
+    local aiDirector = Context:get()
     local location = Location:get()
 
-    LogDebug("[SpawnLeyak] called:")
-    AFUtils.LogAIDirector(aIDirector)
-    local leakTimer = {
-        Handle = aIDirector.LeyakTimer.Handle
-    }
-    
+    LogDebug("----- [SpawnLeyak] called -----")
+    -- local aiControllerLeyak = FindFirstOf("AI_Controller_Leyak_C")
+    -- if aiControllerLeyak and aiControllerLeyak:IsValid() then
+    --     LogDebug("AI_Controller_Leyak_C found, call Despawn")
+    --     aiControllerLeyak:Despawn()
+    -- end
     LogDebug("------------------------------")
 end)
 
@@ -196,21 +208,33 @@ RegisterHook("/Game/Blueprints/Characters/NPCs/AI_Controller_Leyak.AI_Controller
     local aiControllerLeyak = Context:get()
 
     LogDebug("[AI_Controller_Leyak_C:Despawn] called:")
+    local aiDirector = FindFirstOf("Abiotic_AIDirector_C")
+    if aiDirector and aiDirector:IsValid() then
+        LogDebug("LeyakCooldown: " .. aiDirector.LeyakCooldown)
+        if aiDirector.ActiveLeyak:IsValid() then
+            AFUtils.LogNPCLeyak(aiDirector.ActiveLeyak, "ActiveLeyak.")
+        end
+    end
     LogDebug("------------------------------")
 end)
 
-RegisterHook("/Game/Blueprints/Characters/NPCs/NPC_Leyak.NPC_Leyak_C:OnDespawn", function(Context)
-    local aiControllerLeyak = Context:get()
-
-    LogDebug("[NPC_Leyak_C:OnDespawn] called:")
-    LogDebug("------------------------------")
-end)
-
--- RegisterHook("/Game/Blueprints/Characters/NPCs/NPC_Leyak.NPC_Leyak_C:ReceiveTick", function(Context, DeltaSeconds)
+-- RegisterHook("/Game/Blueprints/Characters/NPCs/AI_Controller_Leyak.AI_Controller_Leyak_C:ReceiveTick", function(Context, DeltaSeconds)
 --     local aiControllerLeyak = Context:get()
 
---     LogDebug("[NPC_Leyak_C:ReceiveTick] called:")
+--     LogDebug("[AI_Controller_Leyak_C:ReceiveTick] called:")
+--     AFUtils.LogAIControllerLeyak(aiControllerLeyak)
 --     LogDebug("------------------------------")
 -- end)
+
+RegisterHook("/Game/Blueprints/Characters/NPCs/NPC_Leyak.NPC_Leyak_C:UpdateLeyakVisibility", function(Context)
+    local leyak = Context:get()
+
+    LogDebug("[UpdateLeyakVisibility] called:")
+    -- leyak.SeenDespawnTime = 0.1
+    -- leyak.AbsolutelyStuck = true
+    -- leyak.TimeAllowedToBeStuck = 0.1
+    -- AFUtils.LogNPCLeyak(leyak)
+    LogDebug("------------------------------")
+end)
 
 LogInfo("Mod loaded successfully")
