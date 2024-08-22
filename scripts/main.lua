@@ -1,17 +1,8 @@
 --[[
     Author: Igromanru
     Date: 19.08.2024
-    Mod Name: My Test
+    Mod Name: My Playground
 ]]
-
--------------------------------------
--- Hotkey to toggle the mod on/off --
--- Possible keys: https://github.com/UE4SS-RE/RE-UE4SS/blob/main/docs/lua-api/table-definitions/key.md
-local ToggleModKey = Key.L
--- See ModifierKey: https://github.com/UE4SS-RE/RE-UE4SS/blob/main/docs/lua-api/table-definitions/modifierkey.md
--- ModifierKeys can be combined. e.g.: {ModifierKey.CONTROL, ModifierKey.ALT} = CTRL + ALT + L
-local ToggleModKeyModifiers = {}
--------------------------------------
 
 ------------------------------
 -- Don't change code below --
@@ -22,12 +13,6 @@ require("AFUtils.AFUtilsDebug")
 ModName = "Playground"
 ModVersion = "1.0.0"
 DebugMode = true
-
-local function ModDisplayTextChatMessage(Message)
-    local prefix = GetModInfoPrefix()
-    -- LogDebug("ModDisplayTextChatMessage Prefix: " .. prefix .. ", Message: " .. Message)
-    AFUtils.DisplayTextChatMessage(Message, prefix)
-end
 
 LogInfo("Starting mod initialization")
 
@@ -45,7 +30,7 @@ local function SetModState(Enable)
     end)
 end
 
-RegisterKeyBind(ToggleModKey, ToggleModKeyModifiers, function()
+RegisterKeyBind(Key.L, function()
     ExecuteInGameThread(function()
         local myPlayer = AFUtils.GetMyPlayer()
         if myPlayer then
@@ -69,6 +54,7 @@ RegisterKeyBind(Key.Z, function()
             LogDebug("[ForwardLineTraceByChannel]:")
             LogDebug("HitActor: " .. hitActor:GetFullName())
             LogDebug("ClassName: " .. hitActor:GetClass():GetFullName())
+
             if hitActor:IsA(AFUtils.GetClassDeployed_Battery_ParentBP_C()) then
                 AFUtils.LogDeployedBattery(hitActor)
                 -- hitActor["Update Current Item Data"]()
