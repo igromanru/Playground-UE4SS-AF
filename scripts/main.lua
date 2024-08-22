@@ -17,6 +17,7 @@ local ToggleModKeyModifiers = {}
 -- Don't change code below --
 ------------------------------
 local AFUtils = require("AFUtils.AFUtils")
+require("AFUtils.AFUtilsDebug")
 
 ModName = "Playground"
 ModVersion = "1.0.0"
@@ -87,40 +88,42 @@ RegisterKeyBind(Key.U, function()
 end)
 
 RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:GetCurrentHeldItem", function(Context, Success, ItemSlotInfo, ItemData, Blueprint)
-    local this = Context:get()
+    local playerCharacter = Context:get()
     local success = Success:get()
     local itemSlotInfo = ItemSlotInfo:get()
     local itemData = ItemData:get()
     local blueprint = Blueprint:get() -- AAbiotic_Item_ParentBP_C
 
-    if success then
-        LogDebug("[GetCurrentHeldItem] called:")
-        LogDebug("Success: " .. tostring(success))
+    -- if success then
+    --     LogDebug("[GetCurrentHeldItem] called:")
+    --     LogDebug("Success: " .. tostring(success))
 
-        LogDebug("CurrentHotbarSlotSelected.Index: " ..  this.CurrentHotbarSlotSelected.Index_5_6BDC7B3944A5DE0B319F9FA20720872F)
-        LogDebug("LastSelectedHotbarSlot: " ..  this.LastSelectedHotbarSlot)
-        AFUtils.LogInventoryItemSlotStruct(itemSlotInfo, "ItemSlotInfo.")
-        LogDebug("---")
-        -- AFUtils.LogInventoryItemStruct(itemData, "ItemData.")
-        -- LogDebug("---")
-        if blueprint:IsValid() then
-            LogDebug("Blueprint: " .. blueprint:GetClass():GetFullName())
-            if blueprint:IsA(AFUtils.GetClassAbiotic_Item_ParentBP_C()) then
-                AFUtils.LogItemParentBP(blueprint, "Blueprint.")
-                LogDebug("---")
-                -- AFUtils.LogInventoryItemStruct(blueprint.ItemData, "Blueprint.ItemData.")
-                -- AFUtils.LogInventoryChangeableDataStruct(blueprint.ChangeableData, "Blueprint.ChangeableData.")
-            end
-            -- LogDebug("BlueprintCreatedComponents Num: " .. #blueprint.BlueprintCreatedComponents)
-            -- for i = 1, #blueprint.BlueprintCreatedComponents, 1 do
-            --     local component = blueprint.BlueprintCreatedComponents[i]
-            --     if component:IsValid() then
-            --         LogDebug(i .. ": " .. component:GetClass():GetFullName())
-            --     end
-            -- end
-        end
-        LogDebug("------------------------------")
-    end
+    --     LogDebug("CurrentHotbarSlotSelected.Index: " ..  playerCharacter.CurrentHotbarSlotSelected.Index_5_6BDC7B3944A5DE0B319F9FA20720872F)
+    --     LogDebug("LastSelectedHotbarSlot: " ..  playerCharacter.LastSelectedHotbarSlot)
+    --     -- AFUtils.LogInventoryItemSlotStruct(itemSlotInfo, "ItemSlotInfo.")
+    --     -- LogDebug("---")
+    --     -- AFUtils.LogInventoryItemStruct(itemData, "ItemData.")
+    --     -- LogDebug("---")
+    --     -- AFUtils.LogInventoryItemStruct(playerCharacter.CurrentHeldItemData, "CurrentHeldItemData.")
+    --     LogDebug("---")
+    --     if blueprint:IsValid() then
+    --         LogDebug("Blueprint: " .. blueprint:GetClass():GetFullName())
+    --         if blueprint:IsA(AFUtils.GetClassAbiotic_Item_ParentBP_C()) then
+    --             AFUtils.LogItemParentBP(blueprint, "Blueprint.")
+    --             LogDebug("---")
+    --             -- AFUtils.LogInventoryItemStruct(blueprint.ItemData, "Blueprint.ItemData.")
+    --             -- AFUtils.LogInventoryChangeableDataStruct(blueprint.ChangeableData, "Blueprint.ChangeableData.")
+    --         end
+    --         -- LogDebug("BlueprintCreatedComponents Num: " .. #blueprint.BlueprintCreatedComponents)
+    --         -- for i = 1, #blueprint.BlueprintCreatedComponents, 1 do
+    --         --     local component = blueprint.BlueprintCreatedComponents[i]
+    --         --     if component:IsValid() then
+    --         --         LogDebug(i .. ": " .. component:GetClass():GetFullName())
+    --         --     end
+    --         -- end
+    --     end
+    --     LogDebug("------------------------------")
+    -- end
 end)
 
 -- RegisterHook("/Game/Blueprints/Characters/Abiotic_InventoryComponent.Abiotic_InventoryComponent_C:GetItemInSlot", function(Context, Index, Success, SlotData, ItemData)
@@ -138,15 +141,5 @@ end)
 --     AFUtils.LogInventoryItemStruct(itemData, "ItemData.")
 --     LogDebug("------------------------------")
 -- end)
-
-RegisterHook("/Game/Blueprints/Meta/Abiotic_PlayerController.Abiotic_PlayerController_C:OnHotbarUpdated", function(Context, Inventory)
-    local playerController = Context:get()
-    local inventory = Inventory:get()
-
-    LogDebug("[OnHotbarUpdated] called:")
-    -- AFUtils.LogInventoryComponent(inventory, "Inventory.")
-    LogDebug("------------------------------")
-end)
-
 
 LogInfo("Mod loaded successfully")
