@@ -40,12 +40,8 @@ RegisterKeyBind(Key.L, function()
             if aiDirector and aiDirector:IsValid() then
                 LogDebug("-- Abiotic_AIDirector_C:")
                 AFUtils.LogAIDirector(aiDirector)
-                local timerHandle = { Handle = aiDirector.LeyakTimer.Handle }
-                LogDebug("LeyakTimer IsValid: "..tostring(GetKismetSystemLibrary():K2_IsValidTimerHandle(timerHandle)))
-                timerHandle.Handle = aiDirector.CoworkerTimer.Handle
-                LogDebug("CoworkerTimer IsValid: "..tostring(GetKismetSystemLibrary():K2_IsValidTimerHandle(timerHandle)))
         
-                aiDirector.LeyakCooldown = 60.0
+                -- aiDirector.LeyakCooldown = 60.0
 
                 if aiDirector.ActiveLeyak:IsValid() and not IsEmptyVector(aiDirector.ActiveLeyak:K2_GetActorLocation()) then
                     LogDebug("-- ActiveLeyak:")
@@ -53,15 +49,15 @@ RegisterKeyBind(Key.L, function()
                     
                     -- aiDirector.ActiveLeyak:DropEssence()
                 else
-                    local spawnDistanceInM = 20
-                    local playerController = GetMyPlayerController()
-                    if playerController and playerController.PlayerCameraManager:IsValid() then
-                        local cameraManager = playerController.PlayerCameraManager
-                        local lookDirection = cameraManager:GetActorForwardVector()
-                        local lookDirOffset = GetKismetMathLibrary():Multiply_VectorFloat(lookDirection, MToUnits(spawnDistanceInM))
-                        local spawnLocation = GetKismetMathLibrary():Add_VectorVector(cameraManager:GetCameraLocation(), lookDirOffset)
-                        aiDirector:SpawnLeyak(VectorToUserdata(spawnLocation));
-                    end
+                    -- local spawnDistanceInM = 20
+                    -- local playerController = GetMyPlayerController()
+                    -- if playerController and playerController.PlayerCameraManager:IsValid() then
+                    --     local cameraManager = playerController.PlayerCameraManager
+                    --     local lookDirection = cameraManager:GetActorForwardVector()
+                    --     local lookDirOffset = GetKismetMathLibrary():Multiply_VectorFloat(lookDirection, MToUnits(spawnDistanceInM))
+                    --     local spawnLocation = GetKismetMathLibrary():Add_VectorVector(cameraManager:GetCameraLocation(), lookDirOffset)
+                    --     aiDirector:SpawnLeyak(VectorToUserdata(spawnLocation));
+                    -- end
                 end
             end
         else
@@ -208,13 +204,22 @@ RegisterHook("/Game/Blueprints/Characters/NPCs/AI_Controller_Leyak.AI_Controller
     local aiControllerLeyak = Context:get()
 
     LogDebug("[AI_Controller_Leyak_C:Despawn] called:")
-    local aiDirector = FindFirstOf("Abiotic_AIDirector_C")
-    if aiDirector and aiDirector:IsValid() then
-        LogDebug("LeyakCooldown: " .. aiDirector.LeyakCooldown)
-        if aiDirector.ActiveLeyak:IsValid() then
-            AFUtils.LogNPCLeyak(aiDirector.ActiveLeyak, "ActiveLeyak.")
-        end
-    end
+    -- local aiDirector = FindFirstOf("Abiotic_AIDirector_C")
+    -- if aiDirector and aiDirector:IsValid() then
+    --     LogDebug("LeyakCooldown: " .. aiDirector.LeyakCooldown)
+    --     if aiDirector.ActiveLeyak:IsValid() then
+    --         AFUtils.LogNPCLeyak(aiDirector.ActiveLeyak, "ActiveLeyak.")
+    --     end
+    -- end
+    LogDebug("------------------------------")
+end)
+
+RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SetLeyakOnCooldown", function(Context, CooldownReductionMultiplier)
+    local aiDirector = Context:get()
+    local cooldownReductionMultiplier = CooldownReductionMultiplier:get()
+
+    LogDebug("[Abiotic_AIDirector_C:SetLeyakOnCooldown] called:")
+    LogDebug("CooldownReductionMultiplier: " .. cooldownReductionMultiplier)
     LogDebug("------------------------------")
 end)
 
@@ -230,11 +235,18 @@ RegisterHook("/Game/Blueprints/Characters/NPCs/NPC_Leyak.NPC_Leyak_C:UpdateLeyak
     local leyak = Context:get()
 
     LogDebug("[UpdateLeyakVisibility] called:")
-    -- leyak.SeenDespawnTime = 0.1
+    -- leyak.SeenDespawnTime = 1.0
     -- leyak.AbsolutelyStuck = true
-    -- leyak.TimeAllowedToBeStuck = 0.1
-    -- AFUtils.LogNPCLeyak(leyak)
+    -- leyak.TimeAllowedToBeStuck = 1.0
+    AFUtils.LogNPCLeyak(leyak)
     LogDebug("------------------------------")
+end)
+
+NotifyOnNewObject("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C", function(AIDirector)
+    LogDebug("Abiotic_AIDirector_C object was created")
+    local cooldownInMin = 30.0
+    AIDirector.LeyakCooldown = cooldownInMin * 60.0
+    LogDebug("LeyakCooldown set to: "..AIDirector.LeyakCooldown.." ("..cooldownInMin.." min)")
 end)
 
 LogInfo("Mod loaded successfully")
