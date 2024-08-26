@@ -30,8 +30,7 @@ local function SetModState(Enable)
     end)
 end
 
-RegisterKeyBind(Key.L, function()
-    LogDebug("------------ L ---------------")
+local function LeyakTest()
     local aiDirector = AFUtils.GetAIDirector()
     if aiDirector then
         LogDebug("-- Abiotic_AIDirector_C:")
@@ -58,7 +57,6 @@ RegisterKeyBind(Key.L, function()
     else
         LogDebug("No Abiotic_AIDirector_C found")
     end
-
     local aiControllerLeyak = AFUtils.GetAIControllerLeyak()
     if aiControllerLeyak and aiControllerLeyak:IsValid() then
         LogDebug("-- AI_Controller_Leyak_C:")
@@ -67,18 +65,33 @@ RegisterKeyBind(Key.L, function()
     else
         LogDebug("No AI_Controller_Leyak_C found")
     end
-    -- local myPlayer = AFUtils.GetMyPlayer()
-    -- if myPlayer then
-    --     local currentItem = myPlayer.ItemInHand_BP
-    --     if currentItem:IsValid() then
-    --         local itemData = currentItem.ItemData
-    --         local changeableData = currentItem.ChangeableData
-    --         LogDebug("ItemInHand:")
-    --         LogDebug("ItemName: " .. itemData.ItemName_51_B88648C048EE5BC2885E4E95F3E13F0A:ToString())
+end
 
-    --         AFUtils.LogInventoryChangeableDataStruct(changeableData, "ChangeableData.")
-    --     end
-    -- end
+function LogRecoilStuff(myPlayer)
+    LogDebug("AimRecoilAdditive: "..myPlayer.AimRecoilAdditive)
+    LogDebug("ControllerRecoilTimeline_NewTrack: "..myPlayer.ControllerRecoilTimeline_NewTrack_0_AFC3F42148DFC42265088DA509116D45)
+    AFUtils.LogTimelineComponent(myPlayer.ControllerRecoilTimeline, "ControllerRecoilTimeline.")
+    LogDebug("RecoilTimeline_NewTrack: "..myPlayer.RecoilTimeline_NewTrack_0_7619EC7841CCE2A53A63A7841FB4C01D)
+    LogDebug("RecoilTimeline__Direction (enum 0-1): "..myPlayer.RecoilTimeline__Direction_7619EC7841CCE2A53A63A7841FB4C01D)
+    AFUtils.LogTimelineComponent(myPlayer.RecoilTimeline, "RecoilTimeline.")
+    LogDebug("SwayTimelineLoop_NewTrack: "..VectorToString(myPlayer.SwayTimelineLoop_NewTrack_1_1E19F0E74CE5FFB6096EBC86C262A1F2))
+    AFUtils.LogTimelineComponent(myPlayer.SwayTimelineLoop, "SwayTimelineLoop.")
+    LogDebug("BaseGunSway_Multiplier: "..myPlayer.BaseGunSway_Multiplier)
+    LogDebug("CurrentGunSway_Speed: "..myPlayer.CurrentGunSway_Speed)
+    LogDebug("CrosshairCenterNoSway: "..tostring(myPlayer.CrosshairCenterNoSway))
+    LogDebug("ScopeSwayTime: "..myPlayer.ScopeSwayTime)
+    LogDebug("ScopeSwaySpeed: "..myPlayer.ScopeSwaySpeed)
+    LogDebug("BulletSpread_Base: "..myPlayer.BulletSpread_Base)
+end
+
+RegisterKeyBind(Key.L, function()
+    LogDebug("------------ L ---------------")
+    local myPlayer = AFUtils.GetMyPlayer()
+    if myPlayer then
+        if myPlayer.ItemInHand_BP:IsValid() then
+            AFUtils.LogInventoryItemStruct(myPlayer.ItemInHand_BP.ItemData)
+        end
+    end
     LogDebug("------------------------------")
 end)
 
@@ -102,11 +115,13 @@ end)
 
 RegisterKeyBind(Key.U, function()
     LogDebug("------------ U ---------------")
-    -- local aiDirector = AFUtils.GetAIDirector()
-    -- if aiDirector then
-    --     aiDirector.LeyakCooldown = 30.0
-    --     aiDirector:SetLeyakOnCooldown(1.0)
-    -- end
+    local aiDirector = AFUtils.GetAIDirector()
+    if aiDirector then
+        local cooldownInMin = 1.0
+        aiDirector.LeyakCooldown = cooldownInMin * 60.0
+        aiDirector:SetLeyakOnCooldown(1.0)
+        LogDebug("LeyakCooldown set to: "..aiDirector.LeyakCooldown.." ("..cooldownInMin.." min)")
+    end
     LogDebug("------------------------------")
 end)
 
@@ -191,46 +206,46 @@ RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AI
     LogDebug("------------------------------")
 end)
 
-RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:LeyakFailsafeRemove", function(Context)
-    local aIDirector = Context:get()
+-- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:LeyakFailsafeRemove", function(Context)
+--     local aIDirector = Context:get()
 
-    LogDebug("[Abiotic_AIDirector_C:LeyakFailsafeRemove] called:")
-    LogDebug("------------------------------")
-end)
+--     LogDebug("[Abiotic_AIDirector_C:LeyakFailsafeRemove] called:")
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Characters/NPCs/AI_Controller_Leyak.AI_Controller_Leyak_C:Despawn", function(Context)
-    local aiControllerLeyak = Context:get()
+-- RegisterHook("/Game/Blueprints/Characters/NPCs/AI_Controller_Leyak.AI_Controller_Leyak_C:Despawn", function(Context)
+--     local aiControllerLeyak = Context:get()
 
-    LogDebug("[AI_Controller_Leyak_C:Despawn] called:")
-    -- local aiDirector = FindFirstOf("Abiotic_AIDirector_C")
-    -- if aiDirector and aiDirector:IsValid() then
-    --     LogDebug("LeyakCooldown: " .. aiDirector.LeyakCooldown)
-    --     if aiDirector.ActiveLeyak:IsValid() then
-    --         AFUtils.LogNPCLeyak(aiDirector.ActiveLeyak, "ActiveLeyak.")
-    --     end
-    -- end
-    LogDebug("------------------------------")
-end)
+--     LogDebug("[AI_Controller_Leyak_C:Despawn] called:")
+--     -- local aiDirector = FindFirstOf("Abiotic_AIDirector_C")
+--     -- if aiDirector and aiDirector:IsValid() then
+--     --     LogDebug("LeyakCooldown: " .. aiDirector.LeyakCooldown)
+--     --     if aiDirector.ActiveLeyak:IsValid() then
+--     --         AFUtils.LogNPCLeyak(aiDirector.ActiveLeyak, "ActiveLeyak.")
+--     --     end
+--     -- end
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SetLeyakOnCooldown", function(Context, CooldownReductionMultiplier)
-    local aiDirector = Context:get()
-    local cooldownReductionMultiplier = CooldownReductionMultiplier:get()
+-- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SetLeyakOnCooldown", function(Context, CooldownReductionMultiplier)
+--     local aiDirector = Context:get()
+--     local cooldownReductionMultiplier = CooldownReductionMultiplier:get()
 
-    LogDebug("[Abiotic_AIDirector_C:SetLeyakOnCooldown] called:")
-    LogDebug("CooldownReductionMultiplier: " .. cooldownReductionMultiplier)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("[Abiotic_AIDirector_C:SetLeyakOnCooldown] called:")
+--     LogDebug("CooldownReductionMultiplier: " .. cooldownReductionMultiplier)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Characters/NPCs/NPC_Leyak.NPC_Leyak_C:UpdateLeyakVisibility", function(Context)
-    local leyak = Context:get()
+-- RegisterHook("/Game/Blueprints/Characters/NPCs/NPC_Leyak.NPC_Leyak_C:UpdateLeyakVisibility", function(Context)
+--     local leyak = Context:get()
 
-    LogDebug("[UpdateLeyakVisibility] called:")
-    -- leyak.SeenDespawnTime = 0.1
-    -- leyak.TimeAllowedToBeStuck = 0.1
-    -- leyak.AbsolutelyStuck = true
-    -- AFUtils.LogNPCLeyak(leyak)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("[UpdateLeyakVisibility] called:")
+--     -- leyak.SeenDespawnTime = 0.1
+--     -- leyak.TimeAllowedToBeStuck = 0.1
+--     -- leyak.AbsolutelyStuck = true
+--     -- AFUtils.LogNPCLeyak(leyak)
+--     LogDebug("------------------------------")
+-- end)
 
 NotifyOnNewObject("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C", function(AIDirector)
     LogDebug("Abiotic_AIDirector_C object was created")
@@ -238,6 +253,7 @@ NotifyOnNewObject("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiot
     AIDirector.LeyakCooldown = cooldownInMin * 60.0
     AIDirector:SetLeyakOnCooldown(1.0)
     LogDebug("LeyakCooldown set to: "..AIDirector.LeyakCooldown.." ("..cooldownInMin.." min)")
+    return false
 end)
 
 LogInfo("Mod loaded successfully")
