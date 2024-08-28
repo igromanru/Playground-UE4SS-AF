@@ -16,7 +16,7 @@ DebugMode = true
 
 LogInfo("Starting mod initialization")
 
-local IsModEnabled = false
+IsModEnabled = false
 local function SetModState(Enable)
     ExecuteInGameThread(function()
         Enable = Enable or false
@@ -85,44 +85,110 @@ function LogRecoilStuff(myPlayer)
 end
 
 RegisterKeyBind(Key.L, function()
-    LogDebug("------------ L ---------------")
-    local myPlayer = AFUtils.GetMyPlayer()
-    if myPlayer then
-        if myPlayer.ItemInHand_BP:IsValid() then
-            AFUtils.LogInventoryItemStruct(myPlayer.ItemInHand_BP.ItemData)
+    ExecuteInGameThread(function()
+        LogDebug("------------ L ---------------")
+        local myPlayer = AFUtils.GetMyPlayer()
+        if myPlayer then
+            -- local progressionComponent = myPlayer.CharacterProgressionComponent
+            -- if progressionComponent:IsValid() then
+            --     LogDebug("CharacterProgressionComponent.CharacterSkills_Keys Num: " .. #progressionComponent.CharacterSkills_Keys)
+            --     for i = 1, #progressionComponent.CharacterSkills_Keys, 1 do
+            --         local skillKey = progressionComponent.CharacterSkills_Keys[i]
+            --         LogDebug(string.format("%d: %d", i, skillKey))
+            --     end
+
+            --     LogDebug("CharacterProgressionComponent.CharacterSkills_Values Num: " .. #progressionComponent.CharacterSkills_Values)
+            --     for i = 1, #progressionComponent.CharacterSkills_Values, 1 do
+            --         local skillStruct = progressionComponent.CharacterSkills_Values[i]
+            --         -- LogDebug(string.format("%d: %s", i, skillStruct.SkillName_12_151AF436411AC221F1B7A295B82A483E:ToString()))
+            --         -- LogDebug("SkillTooltip: " .. skillStruct.SkillTooltip_19_0D5F12434F2DBC48AE7090961B6F4DF0:ToString())
+            --         LogDebug("CurrentSkillXP: " .. skillStruct.CurrentSkillXP_20_8F7934CD4A4542F036AE5C9649362556)
+            --         LogDebug("CurrentXPMultiplier: " .. skillStruct.CurrentXPMultiplier_15_9DA8B8A24B4F5B134743CDBE828520F0)
+            --     end
+            -- end
+            -- if myPlayer.ItemInHand_BP:IsValid() then
+            --     AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
+            --     if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
+            --         local weapon = myPlayer.ItemInHand_BP
+            --         ---@cast weapon AAbiotic_Weapon_ParentBP_C
+            --         LogDebug("ConsumeAmmoOnFire: "..tostring(weapon.ConsumeAmmoOnFire))
+            --     end
+            -- end
+            -- if myPlayer.CharacterInventory:IsValid() then
+            --     -- myPlayer.CharacterInventory.MaxSlots = 42
+            --     -- myPlayer.CharacterInventory:UpdateInventorySlotCount(myPlayer.CharacterInventory.MaxSlots)
+            --     LogDebug("CharacterInventory.MaxSlots: "..myPlayer.CharacterInventory.MaxSlots)
+            -- end
+            -- LogDebug("Trait_FannyPack: " .. tostring(myPlayer.Trait_FannyPack))
+            -- myPlayer.Trait_FannyPack = true
+            -- if myPlayer.CharacterHotbarInventory:IsValid() then
+            --     myPlayer.CharacterHotbarInventory.MaxSlots = 10
+            --     myPlayer.CharacterHotbarInventory:UpdateInventorySlotCount(myPlayer.CharacterHotbarInventory.MaxSlots)
+            --     LogDebug("CharacterHotbarInventory.MaxSlots: "..myPlayer.CharacterHotbarInventory.MaxSlots)
+            -- end
         end
-    end
-    LogDebug("------------------------------")
+
+        -- local myPlayerController = AFUtils.GetMyPlayerController()
+        -- if myPlayerController then
+        --     if myPlayerController.DayNightManager:IsValid() then
+        --         AFUtils.LogDayNightManager(myPlayerController.DayNightManager, "DayNightManager.")
+                
+        --     end
+        -- end
+
+        -- local outNames = {}
+        -- AFUtils.GetWeatherEventHandleFunctionLibrary():GetAllWeatherEventRowNames(outNames)
+        -- LogDebug("WeatherEventRowNames Num: " .. #outNames)
+        -- for i = 1, #outNames, 1 do
+        --     local rowName = outNames[i]:get()
+        --     LogDebug(string.format("%d: %s", i, rowName:ToString()))
+        -- end
+
+        -- local outRowHandles = {}
+        -- AFUtils.GetWeatherEventHandleFunctionLibrary():GetAllWeatherEventRowHandles(outRowHandles)
+        -- LogDebug("WeatherEventRowHandles Num: " .. #outRowHandles)
+        -- for i = 1, #outRowHandles, 1 do
+        --     local rowHandle = outRowHandles[i]:get()
+        --     LogDebug(string.format("%d: RowName: %s", i, rowHandle.RowName:ToString()))
+        -- end
+
+        LogDebug("------------------------------")
+    end)
 end)
 
 RegisterKeyBind(Key.Z, function()
-    local hitActor = ForwardLineTraceByChannel(3)
-    if hitActor then
-        LogDebug("[ForwardLineTraceByChannel]:")
-        LogDebug("HitActor: " .. hitActor:GetFullName())
-        LogDebug("ClassName: " .. hitActor:GetClass():GetFullName())
+    ExecuteInGameThread(function()
+        local hitActor = ForwardLineTraceByChannel(3)
+        if hitActor then
+            LogDebug("[ForwardLineTraceByChannel]:")
+            LogDebug("HitActor: " .. hitActor:GetFullName())
+            LogDebug("ClassName: " .. hitActor:GetClass():GetFullName())
 
-        if hitActor:IsA(AFUtils.GetClassDeployed_Battery_ParentBP_C()) then
-            AFUtils.LogDeployedBattery(hitActor)
-            -- hitActor["Update Current Item Data"]()
+            if hitActor:IsA(AFUtils.GetClassDeployed_Battery_ParentBP_C()) then
+                AFUtils.LogDeployedBattery(hitActor)
+                -- hitActor["Update Current Item Data"]()
+            end
+            if hitActor:IsA(AFUtils.GetClassAbioticDeployed_ParentBP_C()) then
+                AFUtils.LogInventoryChangeableDataStruct(hitActor.ChangeableData, "ChangeableData.")
+            end
+            LogDebug("------------------------------")
         end
-        if hitActor:IsA(AFUtils.GetClassAbioticDeployed_ParentBP_C()) then
-            AFUtils.LogInventoryChangeableDataStruct(hitActor.ChangeableData, "ChangeableData.")
-        end
-        LogDebug("------------------------------")
-    end
+    end)
 end)
 
 RegisterKeyBind(Key.U, function()
-    LogDebug("------------ U ---------------")
-    local aiDirector = AFUtils.GetAIDirector()
-    if aiDirector then
-        local cooldownInMin = 1.0
-        aiDirector.LeyakCooldown = cooldownInMin * 60.0
-        aiDirector:SetLeyakOnCooldown(1.0)
-        LogDebug("LeyakCooldown set to: "..aiDirector.LeyakCooldown.." ("..cooldownInMin.." min)")
-    end
-    LogDebug("------------------------------")
+    ExecuteInGameThread(function()
+        LogDebug("------------ U ---------------")
+        -- local aiDirector = AFUtils.GetAIDirector()
+        -- if aiDirector then
+        --     local cooldownInMin = 1.0
+        --     aiDirector.LeyakCooldown = cooldownInMin * 60.0
+        --     aiDirector:SetLeyakOnCooldown(1.0)
+        --     LogDebug("LeyakCooldown set to: "..aiDirector.LeyakCooldown.." ("..cooldownInMin.." min)")
+        -- end
+        AFUtils.TriggerWeatherEvent(AFUtils.WeatherEvents.RadLeak)
+        LogDebug("------------------------------")
+    end)
 end)
 
 RegisterKeyBind(Key.PAUSE, function()
@@ -247,13 +313,52 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
-NotifyOnNewObject("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C", function(AIDirector)
-    LogDebug("Abiotic_AIDirector_C object was created")
-    local cooldownInMin = 30.0
-    AIDirector.LeyakCooldown = cooldownInMin * 60.0
-    AIDirector:SetLeyakOnCooldown(1.0)
-    LogDebug("LeyakCooldown set to: "..AIDirector.LeyakCooldown.." ("..cooldownInMin.." min)")
-    return false
-end)
+-- NotifyOnNewObject("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C", function(AIDirector)
+--     LogDebug("Abiotic_AIDirector_C object was created")
+--     local cooldownInMin = 30.0
+--     AIDirector.LeyakCooldown = cooldownInMin * 60.0
+--     AIDirector:SetLeyakOnCooldown(1.0)
+--     LogDebug("LeyakCooldown set to: "..AIDirector.LeyakCooldown.." ("..cooldownInMin.." min)")
+--     return false
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Characters/Abiotic_InventoryComponent.Abiotic_InventoryComponent_C:UpdateInventorySlotCount", function(Context, NewMaxSlots)
+--     local inventoryComponent = Context:get()
+--     local newMaxSlots = NewMaxSlots:get()
+
+--     local myPlayer = AFUtils.GetMyPlayer()
+--     if myPlayer and myPlayer.CharacterInventory:IsValid() and myPlayer.CharacterHotbarInventory:IsValid() then
+--         if myPlayer.CharacterInventory:GetAddress() == inventoryComponent:GetAddress() then
+--             LogDebug("[UpdateInventorySlotCount] called: -----")
+--             LogDebug("NewMaxSlots: "..newMaxSlots)
+--             LogDebug("------------------------------")
+--             -- local targetMaxSlots = 42
+--             -- if newMaxSlots < targetMaxSlots then
+--             --     inventoryComponent.MaxSlots = targetMaxSlots
+--             --     -- inventoryComponent:UpdateInventorySlotCount(targetMaxSlots)
+--             -- end
+--         end
+--         if myPlayer.CharacterHotbarInventory:GetAddress() == inventoryComponent:GetAddress() then
+--             LogDebug("[UpdateInventorySlotCount] called: -----")
+--             LogDebug("NewMaxSlots: "..newMaxSlots)
+--             LogDebug("------------------------------")
+--         end
+--     end
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Characters/Abiotic_InventoryComponent.Abiotic_InventoryComponent_C:ComputeCurrentInventoryWeight", function(Context, TotalWeight)
+--     local inventoryComponent = Context:get()
+--     local totalWeight = TotalWeight:get()
+
+--     local myPlayer = AFUtils.GetMyPlayer()
+--     if myPlayer and myPlayer.CharacterInventory:IsValid() then
+--         if myPlayer.CharacterInventory:GetAddress() == inventoryComponent:GetAddress() then
+--             LogDebug("[ComputeCurrentInventoryWeight] called: -----")
+--             LogDebug("TotalWeight: "..totalWeight)
+--             LogDebug("------------------------------")
+--         end
+--     end
+-- end)
+
 
 LogInfo("Mod loaded successfully")
