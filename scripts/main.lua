@@ -128,13 +128,12 @@ RegisterKeyBind(Key.L, function()
             -- end
         end
 
-        -- local myPlayerController = AFUtils.GetMyPlayerController()
-        -- if myPlayerController then
-        --     if myPlayerController.DayNightManager:IsValid() then
-        --         AFUtils.LogDayNightManager(myPlayerController.DayNightManager, "DayNightManager.")
-                
-        --     end
-        -- end
+        local myPlayerController = AFUtils.GetMyPlayerController()
+        if myPlayerController then
+            if myPlayerController.DayNightManager:IsValid() then
+                AFUtils.LogDayNightManager(myPlayerController.DayNightManager, "DayNightManager.")
+            end
+        end
 
         -- local outNames = {}
         -- AFUtils.GetWeatherEventHandleFunctionLibrary():GetAllWeatherEventRowNames(outNames)
@@ -360,5 +359,34 @@ end)
 --     end
 -- end)
 
+RegisterHook("/Game/Blueprints/Environment/Systems/DayNightManager.DayNightManager_C:CheckForWeatherRequest", function(Context, Requested)
+    local dayNightManager = Context:get()
+    local requested = Requested:get()
+
+    LogDebug("----- [CheckForWeatherRequest] called -----")
+    LogDebug("Requested: " .. tostring(requested))
+    -- AFUtils.LogDayNightManager(dayNightManager)
+    LogDebug("------------------------------")
+end)
+
+RegisterHook("/Game/Blueprints/Environment/Systems/DayNightManager.DayNightManager_C:OnRep_CurrentWeatherEvent", function(Context)
+    local dayNightManager = Context:get()
+
+    LogDebug("----- [OnRep_CurrentWeatherEvent] called -----")
+    -- AFUtils.LogDayNightManager(dayNightManager)
+    LogDebug("------------------------------")
+end)
+
+RegisterHook("/Game/Blueprints/Environment/Systems/DayNightManager.DayNightManager_C:TriggerWeatherEvent", function(Context, EventRow)
+    local dayNightManager = Context:get()
+    local eventRow = EventRow:get()
+
+    LogDebug("----- [TriggerWeatherEvent] called -----")
+    LogDebug("EventRow type: " .. eventRow:type())
+    LogDebug("EventRow.RowName: " .. eventRow.RowName:ToString())
+    LogDebug("EventRow.DataTablePath: " .. eventRow.DataTablePath:ToString())
+    AFUtils.LogDayNightManager(dayNightManager)
+    LogDebug("------------------------------")
+end)
 
 LogInfo("Mod loaded successfully")
