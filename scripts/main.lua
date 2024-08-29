@@ -193,7 +193,7 @@ RegisterKeyBind(Key.U, function()
         --     aiDirector:SetLeyakOnCooldown(1.0)
         --     LogDebug("LeyakCooldown set to: "..aiDirector.LeyakCooldown.." ("..cooldownInMin.." min)")
         -- end
-        AFUtils.TriggerWeatherEvent(AFUtils.WeatherEvents.RadLeak)
+        -- AFUtils.TriggerWeatherEvent(AFUtils.WeatherEvents.RadLeak)
         LogDebug("------------------------------")
     end)
 end)
@@ -320,12 +320,29 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
--- NotifyOnNewObject("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C", function(AIDirector)
---     LogDebug("Abiotic_AIDirector_C object was created")
---     local cooldownInMin = 30.0
---     AIDirector.LeyakCooldown = cooldownInMin * 60.0
---     AIDirector:SetLeyakOnCooldown(1.0)
---     LogDebug("LeyakCooldown set to: "..AIDirector.LeyakCooldown.." ("..cooldownInMin.." min)")
+-- local JagerName = NAME_None
+-- local function GetJagerName()
+--     if JagerName == NAME_None then
+--         JagerName = FName("Jager", EFindName.FNAME_Find)
+--     end
+--     return JagerName
+-- end
+
+-- LoopAsync(500, function()
+--     local humanNPCs = FindAllOf("NarrativeNPC_Human_ParentBP_C")
+--     if humanNPCs then
+--         for i, humanNPC in ipairs(humanNPCs) do
+--             ---@cast humanNPC ANarrativeNPC_Human_ParentBP_C
+--             local JagerName = GetJagerName()
+--             if JagerName ~= NAME_None and humanNPC.NarrativeNPC_ConversationRow.RowName == JagerName and humanNPC.IsDead then
+--                 LogDebug("Found dead Dr. Jager, destroy actor")
+--                 ExecuteInGameThread(function()
+--                     humanNPC:K2_DestroyActor()
+--                 end)
+--                 return true
+--             end
+--         end
+--     end
 --     return false
 -- end)
 
