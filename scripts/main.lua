@@ -162,21 +162,27 @@ RegisterKeyBind(Key.Z, function()
             LogDebug("--- [ForwardLineTraceByChannel]:")
             LogDebug("HitActor: " .. hitActor:GetFullName())
             LogDebug("ClassName: " .. hitActor:GetClass():GetFullName())
+            
+            if hitActor:IsA(AFUtils.GetClassActor()) then
+                ---@cast hitActor AActor
+                LogDebug("Location: ", VectorToString(hitActor:K2_GetActorLocation()))
+            end
 
             if hitActor:IsA(AFUtils.GetClassDeployed_Battery_ParentBP_C()) then
                 AFUtils.LogDeployedBattery(hitActor)
                 -- hitActor["Update Current Item Data"]()
             end
             if hitActor:IsA(AFUtils.GetClassAbioticDeployed_ParentBP_C()) then
+                ---@cast hitActor AAbioticDeployed_ParentBP_C
                 AFUtils.LogInventoryChangeableDataStruct(hitActor.ChangeableData, "ChangeableData.")
             end
             if hitActor:IsA(AFUtils.GetClassNarrativeNPC_ParentBP_C()) then
-                local narrativeNPC = hitActor ---@type ANarrativeNPC_ParentBP_C
-                AFUtils.LogNarrativeNPC(narrativeNPC)
+                ---@cast hitActor ANarrativeNPC_ParentBP_C
+                AFUtils.LogNarrativeNPC(hitActor)
             end
             if hitActor:IsA(AFUtils.GetClassAbiotic_Character_ParentBP_C()) then
-                local character = hitActor ---@type AAbiotic_Character_ParentBP_C
-                AFUtils.LogCharacterParentBP(character)
+                ---@cast hitActor AAbiotic_Character_ParentBP_C
+                AFUtils.LogCharacterParentBP(hitActor)
             end
             LogDebug("------------------------------")
         end
@@ -210,6 +216,17 @@ RegisterKeyBind(Key.PAUSE, function()
         LogDebug("------------------------------")
     end)
 end)
+
+-- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:Local_BeginPlay", function(Context)
+--     local playerCharacter = Context:get()
+
+--     LogDebug("----- [Local_BeginPlay] called -----")
+--     local myPlayer = AFUtils.GetMyPlayer()
+--     if myPlayer and playerCharacter:GetAddress() == myPlayer:GetAddress() then
+--         LogDebug("My Player")
+--     end
+--     LogDebug("------------------------------")
+-- end)
 
 -- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:GetCurrentHeldItem", function(Context, Success, ItemSlotInfo, ItemData, Blueprint)
 --     local playerCharacter = Context:get()
@@ -410,7 +427,7 @@ RegisterHook("/Game/Blueprints/Environment/Systems/DayNightManager.DayNightManag
     LogDebug("EventRow type: " .. eventRow:type())
     LogDebug("EventRow.RowName: " .. eventRow.RowName:ToString())
     LogDebug("EventRow.DataTablePath: " .. eventRow.DataTablePath:ToString())
-    AFUtils.LogDayNightManager(dayNightManager)
+    -- AFUtils.LogDayNightManager(dayNightManager)
     LogDebug("------------------------------")
 end)
 
