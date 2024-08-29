@@ -159,7 +159,7 @@ RegisterKeyBind(Key.Z, function()
     ExecuteInGameThread(function()
         local hitActor = ForwardLineTraceByChannel(3)
         if hitActor then
-            LogDebug("[ForwardLineTraceByChannel]:")
+            LogDebug("--- [ForwardLineTraceByChannel]:")
             LogDebug("HitActor: " .. hitActor:GetFullName())
             LogDebug("ClassName: " .. hitActor:GetClass():GetFullName())
 
@@ -169,6 +169,14 @@ RegisterKeyBind(Key.Z, function()
             end
             if hitActor:IsA(AFUtils.GetClassAbioticDeployed_ParentBP_C()) then
                 AFUtils.LogInventoryChangeableDataStruct(hitActor.ChangeableData, "ChangeableData.")
+            end
+            if hitActor:IsA(AFUtils.GetClassNarrativeNPC_ParentBP_C()) then
+                local narrativeNPC = hitActor ---@type ANarrativeNPC_ParentBP_C
+                AFUtils.LogNarrativeNPC(narrativeNPC)
+            end
+            if hitActor:IsA(AFUtils.GetClassAbiotic_Character_ParentBP_C()) then
+                local character = hitActor ---@type AAbiotic_Character_ParentBP_C
+                AFUtils.LogCharacterParentBP(character)
             end
             LogDebug("------------------------------")
         end
