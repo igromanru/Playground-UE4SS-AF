@@ -89,6 +89,7 @@ RegisterKeyBind(Key.L, function()
         LogDebug("------------ L ---------------")
         local myPlayer = AFUtils.GetMyPlayer()
         if myPlayer then
+            -- AFUtils.LogCharacterParentBP(myPlayer)
             -- local progressionComponent = myPlayer.CharacterProgressionComponent
             -- if progressionComponent:IsValid() then
             --     LogDebug("CharacterProgressionComponent.CharacterSkills_Keys Num: " .. #progressionComponent.CharacterSkills_Keys)
@@ -132,16 +133,9 @@ RegisterKeyBind(Key.L, function()
         if myPlayerController then
             if myPlayerController.DayNightManager:IsValid() then
                 AFUtils.LogDayNightManager(myPlayerController.DayNightManager, "DayNightManager.")
+                -- AFUtils.SetNextWeatherEvent(AFUtils.WeatherEvents.Fog)
             end
         end
-
-        -- local outNames = {}
-        -- AFUtils.GetWeatherEventHandleFunctionLibrary():GetAllWeatherEventRowNames(outNames)
-        -- LogDebug("WeatherEventRowNames Num: " .. #outNames)
-        -- for i = 1, #outNames, 1 do
-        --     local rowName = outNames[i]:get()
-        --     LogDebug(string.format("%d: %s", i, rowName:ToString()))
-        -- end
 
         -- local outRowHandles = {}
         -- AFUtils.GetWeatherEventHandleFunctionLibrary():GetAllWeatherEventRowHandles(outRowHandles)
@@ -150,7 +144,7 @@ RegisterKeyBind(Key.L, function()
         --     local rowHandle = outRowHandles[i]:get()
         --     LogDebug(string.format("%d: RowName: %s", i, rowHandle.RowName:ToString()))
         -- end
-
+        -- LeyakTest()
         LogDebug("------------------------------")
     end)
 end)
@@ -194,9 +188,9 @@ RegisterKeyBind(Key.U, function()
         LogDebug("------------ U ---------------")
         -- local aiDirector = AFUtils.GetAIDirector()
         -- if aiDirector then
-        --     local cooldownInMin = 1.0
-        --     aiDirector.LeyakCooldown = cooldownInMin * 60.0
-        --     aiDirector:SetLeyakOnCooldown(1.0)
+        --     -- local cooldownInMin = 1.0
+        --     -- aiDirector.LeyakCooldown = cooldownInMin * 60.0
+        --     -- aiDirector:SetLeyakOnCooldown(1.0)
         --     LogDebug("LeyakCooldown set to: "..aiDirector.LeyakCooldown.." ("..cooldownInMin.." min)")
         -- end
         -- AFUtils.TriggerWeatherEvent(AFUtils.WeatherEvents.RadLeak)
@@ -216,6 +210,21 @@ RegisterKeyBind(Key.PAUSE, function()
         LogDebug("------------------------------")
     end)
 end)
+
+-- RegisterHook("/Script/Engine.PlayerController:ClientRestart", function(Context)
+--     local playerController = Context:get()
+
+--     LogDebug("----- [ClientRestart] called -----")
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Script/Engine.PlayerController:ServerAcknowledgePossession", function(Context, Pawn)
+--     local playerController = Context:get()
+--     local pawn = Pawn:get()
+
+--     LogDebug("----- [ServerAcknowledgePossession] called -----")
+--     LogDebug("------------------------------")
+-- end)
 
 -- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:Local_BeginPlay", function(Context)
 --     local playerCharacter = Context:get()
@@ -283,18 +292,18 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
-RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SpawnLeyak", function(Context, Location)
-    local aiDirector = Context:get()
-    local location = Location:get()
+-- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SpawnLeyak", function(Context, Location)
+--     local aiDirector = Context:get()
+--     local location = Location:get()
 
-    LogDebug("----- [SpawnLeyak] called -----")
-    -- local aiControllerLeyak = FindFirstOf("AI_Controller_Leyak_C")
-    -- if aiControllerLeyak and aiControllerLeyak:IsValid() then
-    --     LogDebug("AI_Controller_Leyak_C found, call Despawn")
-    --     aiControllerLeyak:Despawn()
-    -- end
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [SpawnLeyak] called -----")
+--     -- local aiControllerLeyak = FindFirstOf("AI_Controller_Leyak_C")
+--     -- if aiControllerLeyak and aiControllerLeyak:IsValid() then
+--     --     LogDebug("AI_Controller_Leyak_C found, call Despawn")
+--     --     aiControllerLeyak:Despawn()
+--     -- end
+--     LogDebug("------------------------------")
+-- end)
 
 -- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:LeyakFailsafeRemove", function(Context)
 --     local aIDirector = Context:get()
@@ -401,34 +410,34 @@ end)
 --     end
 -- end)
 
-RegisterHook("/Game/Blueprints/Environment/Systems/DayNightManager.DayNightManager_C:CheckForWeatherRequest", function(Context, Requested)
-    local dayNightManager = Context:get()
-    local requested = Requested:get()
+-- RegisterHook("/Game/Blueprints/Environment/Systems/DayNightManager.DayNightManager_C:CheckForWeatherRequest", function(Context, Requested)
+--     local dayNightManager = Context:get()
+--     local requested = Requested:get()
 
-    LogDebug("----- [CheckForWeatherRequest] called -----")
-    LogDebug("Requested: " .. tostring(requested))
-    -- AFUtils.LogDayNightManager(dayNightManager)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [CheckForWeatherRequest] called -----")
+--     LogDebug("Requested: " .. tostring(requested))
+--     -- AFUtils.LogDayNightManager(dayNightManager)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Environment/Systems/DayNightManager.DayNightManager_C:OnRep_CurrentWeatherEvent", function(Context)
-    local dayNightManager = Context:get()
+-- RegisterHook("/Game/Blueprints/Environment/Systems/DayNightManager.DayNightManager_C:OnRep_CurrentWeatherEvent", function(Context)
+--     local dayNightManager = Context:get()
 
-    LogDebug("----- [OnRep_CurrentWeatherEvent] called -----")
-    -- AFUtils.LogDayNightManager(dayNightManager)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [OnRep_CurrentWeatherEvent] called -----")
+--     -- AFUtils.LogDayNightManager(dayNightManager)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Environment/Systems/DayNightManager.DayNightManager_C:TriggerWeatherEvent", function(Context, EventRow)
-    local dayNightManager = Context:get()
-    local eventRow = EventRow:get()
+-- RegisterHook("/Game/Blueprints/Environment/Systems/DayNightManager.DayNightManager_C:TriggerWeatherEvent", function(Context, EventRow)
+--     local dayNightManager = Context:get()
+--     local eventRow = EventRow:get()
 
-    LogDebug("----- [TriggerWeatherEvent] called -----")
-    LogDebug("EventRow type: " .. eventRow:type())
-    LogDebug("EventRow.RowName: " .. eventRow.RowName:ToString())
-    LogDebug("EventRow.DataTablePath: " .. eventRow.DataTablePath:ToString())
-    -- AFUtils.LogDayNightManager(dayNightManager)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [TriggerWeatherEvent] called -----")
+--     LogDebug("EventRow type: " .. eventRow:type())
+--     LogDebug("EventRow.RowName: " .. eventRow.RowName:ToString())
+--     LogDebug("EventRow.DataTablePath: " .. eventRow.DataTablePath:ToString())
+--     -- AFUtils.LogDayNightManager(dayNightManager)
+--     LogDebug("------------------------------")
+-- end)
 
 LogInfo("Mod loaded successfully")
