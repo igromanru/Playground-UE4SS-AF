@@ -16,20 +16,6 @@ DebugMode = true
 
 LogInfo("Starting mod initialization")
 
-IsModEnabled = false
-local function SetModState(Enable)
-    ExecuteInGameThread(function()
-        Enable = Enable or false
-        IsModEnabled = Enable
-        local state = "Disabled"
-        if IsModEnabled then
-            state = "Enabled"
-        end
-        LogInfo("Mod state changed to: " .. state)
-        ModDisplayTextChatMessage(state)
-    end)
-end
-
 local function LeyakTest()
     local aiDirector = AFUtils.GetAIDirector()
     if aiDirector then
@@ -90,6 +76,9 @@ RegisterKeyBind(Key.L, function()
         local myPlayer = AFUtils.GetMyPlayer()
         if myPlayer then
             -- AFUtils.LogCharacterParentBP(myPlayer)
+
+            LogCharacterMovementComponent(myPlayer.CharacterMovement, "CharacterMovement.")
+
             -- local progressionComponent = myPlayer.CharacterProgressionComponent
             -- if progressionComponent:IsValid() then
             --     LogDebug("CharacterProgressionComponent.CharacterSkills_Keys Num: " .. #progressionComponent.CharacterSkills_Keys)
@@ -129,13 +118,13 @@ RegisterKeyBind(Key.L, function()
             -- end
         end
 
-        local myPlayerController = AFUtils.GetMyPlayerController()
-        if myPlayerController then
-            if myPlayerController.DayNightManager:IsValid() then
-                AFUtils.LogDayNightManager(myPlayerController.DayNightManager, "DayNightManager.")
-                -- AFUtils.SetNextWeatherEvent(AFUtils.WeatherEvents.Fog)
-            end
-        end
+        -- local myPlayerController = AFUtils.GetMyPlayerController()
+        -- if myPlayerController then
+        --     if myPlayerController.DayNightManager:IsValid() then
+        --         AFUtils.LogDayNightManager(myPlayerController.DayNightManager, "DayNightManager.")
+        --         -- AFUtils.SetNextWeatherEvent(AFUtils.WeatherEvents.Fog)
+        --     end
+        -- end
 
         -- local outRowHandles = {}
         -- AFUtils.GetWeatherEventHandleFunctionLibrary():GetAllWeatherEventRowHandles(outRowHandles)
