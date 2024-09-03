@@ -75,9 +75,12 @@ RegisterKeyBind(Key.L, function()
         LogDebug("------------ L ---------------")
         local myPlayer = AFUtils.GetMyPlayer()
         if myPlayer then
+            -- local location = myPlayer:K2_GetActorLocation()
+            -- location.Z = location.Z + 100
+            -- SpawnActorFromClass("/Game/Blueprints/Items/Weapons/Abiotic_Weapon_Melee_ParentBP.Abiotic_Weapon_Melee_ParentBP_C", location)
+            
             -- AFUtils.LogCharacterParentBP(myPlayer)
-
-            LogCharacterMovementComponent(myPlayer.CharacterMovement, "CharacterMovement.")
+            -- LogCharacterMovementComponent(myPlayer.CharacterMovement, "CharacterMovement.")
 
             -- local progressionComponent = myPlayer.CharacterProgressionComponent
             -- if progressionComponent:IsValid() then
@@ -96,14 +99,9 @@ RegisterKeyBind(Key.L, function()
             --         LogDebug("CurrentXPMultiplier: " .. skillStruct.CurrentXPMultiplier_15_9DA8B8A24B4F5B134743CDBE828520F0)
             --     end
             -- end
-            -- if myPlayer.ItemInHand_BP:IsValid() then
-            --     AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
-            --     if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
-            --         local weapon = myPlayer.ItemInHand_BP
-            --         ---@cast weapon AAbiotic_Weapon_ParentBP_C
-            --         LogDebug("ConsumeAmmoOnFire: "..tostring(weapon.ConsumeAmmoOnFire))
-            --     end
-            -- end
+            if myPlayer.ItemInHand_BP:IsValid() then
+                AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
+            end
             -- if myPlayer.CharacterInventory:IsValid() then
             --     -- myPlayer.CharacterInventory.MaxSlots = 42
             --     -- myPlayer.CharacterInventory:UpdateInventorySlotCount(myPlayer.CharacterInventory.MaxSlots)
@@ -117,6 +115,12 @@ RegisterKeyBind(Key.L, function()
             --     LogDebug("CharacterHotbarInventory.MaxSlots: "..myPlayer.CharacterHotbarInventory.MaxSlots)
             -- end
         end
+
+        -- local gameState = GetGameState()
+        -- if gameState then
+        --     LogDebug("GameState.Class: " .. gameState:GetClass():GetFullName())
+        --     LogDebug("MatchState: " .. gameState.MatchState:ToString())
+        -- end
 
         -- local myPlayerController = AFUtils.GetMyPlayerController()
         -- if myPlayerController then
@@ -200,10 +204,17 @@ RegisterKeyBind(Key.PAUSE, function()
     end)
 end)
 
--- RegisterHook("/Script/Engine.PlayerController:ClientRestart", function(Context)
+-- RegisterHook("/Script/Engine.PlayerController:ClientRestart", function(Context, NewPawn)
 --     local playerController = Context:get()
+--     local pawn = NewPawn:get()
 
 --     LogDebug("----- [ClientRestart] called -----")
+--     LogDebug("Pawn.Class: " .. pawn:GetClass():GetFullName())
+--     local gameState = GetGameState()
+--         if gameState then
+--             LogDebug("GameState.Class: " .. gameState:GetClass():GetFullName())
+--             LogDebug("MatchState: " .. gameState.MatchState:ToString())
+--         end
 --     LogDebug("------------------------------")
 -- end)
 
@@ -212,17 +223,7 @@ end)
 --     local pawn = Pawn:get()
 
 --     LogDebug("----- [ServerAcknowledgePossession] called -----")
---     LogDebug("------------------------------")
--- end)
-
--- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:Local_BeginPlay", function(Context)
---     local playerCharacter = Context:get()
-
---     LogDebug("----- [Local_BeginPlay] called -----")
---     local myPlayer = AFUtils.GetMyPlayer()
---     if myPlayer and playerCharacter:GetAddress() == myPlayer:GetAddress() then
---         LogDebug("My Player")
---     end
+--     LogDebug("Pawn.Class: " .. pawn:GetClass():GetFullName())
 --     LogDebug("------------------------------")
 -- end)
 
