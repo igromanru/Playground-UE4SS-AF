@@ -71,7 +71,7 @@ function LogRecoilStuff(myPlayer)
 end
 
 RegisterKeyBind(Key.L, function()
-    ExecuteInGameThread(function()
+    -- ExecuteInGameThread(function()
         LogDebug("------------ L ---------------")
         local myPlayer = AFUtils.GetMyPlayer()
         if myPlayer then
@@ -80,8 +80,10 @@ RegisterKeyBind(Key.L, function()
             -- SpawnActorFromClass("/Game/Blueprints/Items/Weapons/Abiotic_Weapon_Melee_ParentBP.Abiotic_Weapon_Melee_ParentBP_C", location)
             
             -- AFUtils.LogCharacterParentBP(myPlayer)
+            -- AFUtils.LogAbioticCharacter(myPlayer)
+            -- LogDebug("DefaultGravityScale: ", myPlayer.DefaultGravityScale)
             -- LogCharacterMovementComponent(myPlayer.CharacterMovement, "CharacterMovement.")
-
+            
             -- local progressionComponent = myPlayer.CharacterProgressionComponent
             -- if progressionComponent:IsValid() then
             --     LogDebug("CharacterProgressionComponent.CharacterSkills_Keys Num: " .. #progressionComponent.CharacterSkills_Keys)
@@ -99,9 +101,9 @@ RegisterKeyBind(Key.L, function()
             --         LogDebug("CurrentXPMultiplier: " .. skillStruct.CurrentXPMultiplier_15_9DA8B8A24B4F5B134743CDBE828520F0)
             --     end
             -- end
-            if myPlayer.ItemInHand_BP:IsValid() then
-                AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
-            end
+            -- if myPlayer.ItemInHand_BP:IsValid() then
+            --     AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
+            -- end
             -- if myPlayer.CharacterInventory:IsValid() then
             --     -- myPlayer.CharacterInventory.MaxSlots = 42
             --     -- myPlayer.CharacterInventory:UpdateInventorySlotCount(myPlayer.CharacterInventory.MaxSlots)
@@ -122,13 +124,33 @@ RegisterKeyBind(Key.L, function()
         --     LogDebug("MatchState: " .. gameState.MatchState:ToString())
         -- end
 
-        -- local myPlayerController = AFUtils.GetMyPlayerController()
-        -- if myPlayerController then
-        --     if myPlayerController.DayNightManager:IsValid() then
-        --         AFUtils.LogDayNightManager(myPlayerController.DayNightManager, "DayNightManager.")
-        --         -- AFUtils.SetNextWeatherEvent(AFUtils.WeatherEvents.Fog)
-        --     end
-        -- end
+        local myPlayerController = AFUtils.GetMyPlayerController()
+        if myPlayerController then
+            if myPlayerController.DayNightManager:IsValid() then
+                -- myPlayerController.DayNightManager.IsNight = false
+                AFUtils.LogDayNightManager(myPlayerController.DayNightManager, "DayNightManager.")
+                -- AFUtils.SetNextWeatherEvent(AFUtils.WeatherEvents.Fog)
+            end
+        end
+        local powerSockets = FindAllOf("PowerSocket_ParentBP_C")
+        ---@cast powerSockets APowerSocket_ParentBP_C[]?
+        if powerSockets then
+            LogDebug("PowerSocke count: " .. #powerSockets)
+            for i = 1, #powerSockets, 1 do
+                ---@type APowerSocket_ParentBP_C
+                local powerSocket = powerSockets[i]
+                if powerSocket:IsValid() then
+                    LogDebug("Socket: " .. i .. " SocketAlwaysPowered: ", powerSocket.SocketAlwaysPowered)
+                    -- powerSocket.SocketAlwaysPowered = true
+                end
+            end
+        end
+
+        local worldSettings = GetWorldSettings()
+        ---@cast worldSettings AAbioticWorldSettings?
+        if worldSettings then
+            AFUtils.LogWorldSettings(worldSettings)
+        end
 
         -- local outRowHandles = {}
         -- AFUtils.GetWeatherEventHandleFunctionLibrary():GetAllWeatherEventRowHandles(outRowHandles)
@@ -139,7 +161,7 @@ RegisterKeyBind(Key.L, function()
         -- end
         -- LeyakTest()
         LogDebug("------------------------------")
-    end)
+    -- end)
 end)
 
 RegisterKeyBind(Key.Z, function()
@@ -202,6 +224,15 @@ RegisterKeyBind(Key.PAUSE, function()
         end
         LogDebug("------------------------------")
     end)
+end)
+
+RegisterHook("/Game/Blueprints/Environment/Systems/DayNightManager.DayNightManager_C:CheckPlayersLeftStartingZone", function(Context, LeftZone)
+    local dayNightManager = Context:get()
+    local leftZone = LeftZone:get()
+
+    LogDebug("----- [CheckPlayersLeftStartingZone] called -----")
+    LogDebug("LeftZone: ", leftZone)
+    LogDebug("------------------------------")
 end)
 
 -- RegisterHook("/Script/Engine.PlayerController:ClientRestart", function(Context, NewPawn)
