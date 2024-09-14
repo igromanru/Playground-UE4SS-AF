@@ -10,6 +10,8 @@
 local AFUtils = require("AFUtils.AFUtils")
 require("AFUtils.AFUtilsDebug")
 
+local UEHelpers = require("UEHelpers")
+
 ModName = "Playground"
 ModVersion = "1.0.0"
 DebugMode = true
@@ -71,14 +73,31 @@ function LogRecoilStuff(myPlayer)
 end
 
 RegisterKeyBind(Key.L, function()
-    -- ExecuteInGameThread(function()
+    ExecuteInGameThread(function()
         LogDebug("------------ L ---------------")
+        -- local gameInstance = GetGameInstance()
+        -- if gameInstance and gameInstance.CustomizationUnlocksSaveFile:IsValid() and gameInstance.CustomizationUnlocksSaveFile.CustomizationUnlocks then
+        --     LogDebug("CustomizationUnlocks: " .. #(gameInstance.CustomizationUnlocksSaveFile.CustomizationUnlocks))
+        --     for i = 1, #(gameInstance.CustomizationUnlocksSaveFile.CustomizationUnlocks), 1 do
+        --         local customization = gameInstance.CustomizationUnlocksSaveFile.CustomizationUnlocks[i]
+        --         LogDebug(i .. ": " .. customization:ToString())
+        --     end
+        -- end
+
+        local myPlayerController = GetMyPlayerController()
+        if myPlayerController then
+            LogDebug("myPlayerController: "..myPlayerController:GetFullName())
+        end
         local myPlayer = AFUtils.GetMyPlayer()
         if myPlayer then
             -- local location = myPlayer:K2_GetActorLocation()
             -- location.Z = location.Z + 100
             -- SpawnActorFromClass("/Game/Blueprints/Items/Weapons/Abiotic_Weapon_Melee_ParentBP.Abiotic_Weapon_Melee_ParentBP_C", location)
             
+            -- myPlayer.DefaultMaxInventoryWeight = 60.0
+            -- myPlayer.MaxInventoryWeight = 900.0
+            -- myPlayer:OnRep_MaxInventoryWeight()
+            -- AFUtils.LogPlayerCharacter(myPlayer)
             -- AFUtils.LogCharacterParentBP(myPlayer)
             -- AFUtils.LogAbioticCharacter(myPlayer)
             -- LogDebug("DefaultGravityScale: ", myPlayer.DefaultGravityScale)
@@ -124,33 +143,34 @@ RegisterKeyBind(Key.L, function()
         --     LogDebug("MatchState: " .. gameState.MatchState:ToString())
         -- end
 
-        local myPlayerController = AFUtils.GetMyPlayerController()
-        if myPlayerController then
-            if myPlayerController.DayNightManager:IsValid() then
-                -- myPlayerController.DayNightManager.IsNight = false
-                AFUtils.LogDayNightManager(myPlayerController.DayNightManager, "DayNightManager.")
-                -- AFUtils.SetNextWeatherEvent(AFUtils.WeatherEvents.Fog)
-            end
-        end
-        local powerSockets = FindAllOf("PowerSocket_ParentBP_C")
-        ---@cast powerSockets APowerSocket_ParentBP_C[]?
-        if powerSockets then
-            LogDebug("PowerSocke count: " .. #powerSockets)
-            for i = 1, #powerSockets, 1 do
-                ---@type APowerSocket_ParentBP_C
-                local powerSocket = powerSockets[i]
-                if powerSocket:IsValid() then
-                    LogDebug("Socket: " .. i .. " SocketAlwaysPowered: ", powerSocket.SocketAlwaysPowered)
-                    -- powerSocket.SocketAlwaysPowered = true
-                end
-            end
-        end
+        -- local myPlayerController = AFUtils.GetMyPlayerController()
+        -- if myPlayerController then
+        --     LogDebug("ActiveLevelName: " .. myPlayerController.ActiveLevelName:ToString())
+        --     -- if myPlayerController.DayNightManager:IsValid() then
+        --     --     -- myPlayerController.DayNightManager.IsNight = false
+        --     --     AFUtils.LogDayNightManager(myPlayerController.DayNightManager, "DayNightManager.")
+        --     --     -- AFUtils.SetNextWeatherEvent(AFUtils.WeatherEvents.Fog)
+        --     -- end
+        -- end
+        -- local powerSockets = FindAllOf("PowerSocket_ParentBP_C")
+        -- ---@cast powerSockets APowerSocket_ParentBP_C[]?
+        -- if powerSockets then
+        --     LogDebug("PowerSocke count: " .. #powerSockets)
+        --     for i = 1, #powerSockets, 1 do
+        --         ---@type APowerSocket_ParentBP_C
+        --         local powerSocket = powerSockets[i]
+        --         if powerSocket:IsValid() then
+        --             LogDebug("Socket: " .. i .. " SocketAlwaysPowered: ", powerSocket.SocketAlwaysPowered)
+        --             -- powerSocket.SocketAlwaysPowered = true
+        --         end
+        --     end
+        -- end
 
-        local worldSettings = GetWorldSettings()
-        ---@cast worldSettings AAbioticWorldSettings?
-        if worldSettings then
-            AFUtils.LogWorldSettings(worldSettings)
-        end
+        -- local worldSettings = GetWorldSettings()
+        -- ---@cast worldSettings AAbioticWorldSettings?
+        -- if worldSettings then
+        --     AFUtils.LogWorldSettings(worldSettings)
+        -- end
 
         -- local outRowHandles = {}
         -- AFUtils.GetWeatherEventHandleFunctionLibrary():GetAllWeatherEventRowHandles(outRowHandles)
@@ -161,7 +181,7 @@ RegisterKeyBind(Key.L, function()
         -- end
         -- LeyakTest()
         LogDebug("------------------------------")
-    -- end)
+    end)
 end)
 
 RegisterKeyBind(Key.Z, function()
@@ -193,6 +213,10 @@ RegisterKeyBind(Key.Z, function()
                 ---@cast hitActor AAbiotic_Character_ParentBP_C
                 AFUtils.LogCharacterParentBP(hitActor)
             end
+            if hitActor:IsA(AFUtils.GetClassCharacterCorpse_ParentBP()) then
+                ---@cast hitActor ACharacterCorpse_ParentBP_C
+                
+            end
             LogDebug("------------------------------")
         end
     end)
@@ -201,6 +225,57 @@ end)
 RegisterKeyBind(Key.U, function()
     ExecuteInGameThread(function()
         LogDebug("------------ U ---------------")
+
+        local playerController = UEHelpers.GetPlayerController()
+        if playerController:IsValid() then
+            LogDebug("playerController: " .. playerController:GetFullName())
+        else
+            LogDebug("playerController invalid")
+        end
+        local player = UEHelpers.GetPlayer()
+        if player:IsValid() then
+            LogDebug("player: " .. player:GetFullName())
+        else
+            LogDebug("player invalid")
+        end
+        local gameEngine = UEHelpers.GetEngine()
+        if gameEngine:IsValid() then
+            LogDebug("gameEngine: " .. gameEngine:GetFullName())
+        end
+        local gameViewportClient = UEHelpers.GetGameViewportClient()
+        if gameViewportClient:IsValid() then
+            LogDebug("gameViewportClient: " .. gameViewportClient:GetFullName())
+        end
+        local world = UEHelpers.GetWorld()
+        if world:IsValid() then
+            LogDebug("world: " .. world:GetFullName())
+        end
+        LogDebug("WorldDeltaSeconds: " .. UEHelpers.GetGameplayStatics():GetWorldDeltaSeconds(UEHelpers.GetWorldContextObject()))
+        local persistentLevel = UEHelpers.GetPersistentLevel()
+        if persistentLevel:IsValid() then
+            LogDebug("persistentLevel: " .. persistentLevel:GetFullName())
+        else
+            LogDebug("persistentLevel invalid")
+        end
+        local worldSettings = UEHelpers.GetWorldSettings()
+        if worldSettings:IsValid() then
+            LogDebug("worldSettings: " .. worldSettings:GetFullName())
+        else
+            LogDebug("worldSettings invalid")
+        end
+        local gameModeBase = UEHelpers.GetGameModeBase()
+        if gameModeBase:IsValid() then
+            LogDebug("gameModeBase: " .. gameModeBase:GetFullName())
+        else
+            LogDebug("gameModeBase invalid")
+        end
+        local gameStateBase = UEHelpers.GetGameStateBase()
+        if gameStateBase:IsValid() then
+            LogDebug("gameStateBase: " .. gameStateBase:GetFullName())
+        else
+            LogDebug("gameStateBase invalid")
+        end
+        
         -- local aiDirector = AFUtils.GetAIDirector()
         -- if aiDirector then
         --     -- local cooldownInMin = 1.0
@@ -226,14 +301,56 @@ RegisterKeyBind(Key.PAUSE, function()
     end)
 end)
 
-RegisterHook("/Game/Blueprints/Environment/Systems/DayNightManager.DayNightManager_C:CheckPlayersLeftStartingZone", function(Context, LeftZone)
-    local dayNightManager = Context:get()
-    local leftZone = LeftZone:get()
+RegisterHook("/Game/Blueprints/Meta/Abiotic_GameInstance.Abiotic_GameInstance_C:IsCustomizationRowUnlocked", function(Context, RowName, Unlocked)
+    local gameInstance = Context:get()
+    local rowName = RowName:get()
+    local unlocked = Unlocked:get()
 
-    LogDebug("----- [CheckPlayersLeftStartingZone] called -----")
-    LogDebug("LeftZone: ", leftZone)
+    LogDebug("----- [IsCustomizationRowUnlocked] called -----")
+    LogDebug("RowName: " .. rowName:ToString())
+    LogDebug("Unlocked:", unlocked)
+    -- gameInstance:UnlockCustomization(rowName)
     LogDebug("------------------------------")
 end)
+
+-- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:Server_OnLevelLoadUpdated", function(Context, Level)
+--     local playerCharacter = Context:get()
+
+--     LogDebug("----- [Server_OnLevelLoadUpdated] called -----")
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:Owning_OnLevelLoadUpdated", function(Context, Level)
+--     local playerCharacter = Context:get()
+
+--     LogDebug("----- [Owning_OnLevelLoadUpdated] called -----")
+--     LogDebug("------------------------------")
+-- end)
+
+-- ExecuteInGameThread(function()
+--     LoadAsset("/Game/Blueprints/DeployedObjects/Furniture/Deployed_Toilet_Portal.Deployed_Toilet_Portal_C")
+--     RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_Toilet_Portal.Deployed_Toilet_Portal_C:DistantShoreCheck", function(Context, Character, DistantShore)
+--         local deployedToiletPortal = Context:get()
+--         local character = Character:get()
+--         local distantShore = DistantShore:get()
+
+--         LogDebug("----- [DistantShoreCheck] called -----")
+--         LogDebug("DistantShore: ", distantShore)
+--         if not distantShore then
+--             deployedToiletPortal:SendToDistantShore(character)
+--         end
+--         LogDebug("------------------------------")
+--     end)
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Environment/Systems/DayNightManager.DayNightManager_C:CheckPlayersLeftStartingZone", function(Context, LeftZone)
+--     local dayNightManager = Context:get()
+--     local leftZone = LeftZone:get()
+
+--     LogDebug("----- [CheckPlayersLeftStartingZone] called -----")
+--     LogDebug("LeftZone: ", leftZone)
+--     LogDebug("------------------------------")
+-- end)
 
 -- RegisterHook("/Script/Engine.PlayerController:ClientRestart", function(Context, NewPawn)
 --     local playerController = Context:get()
@@ -418,17 +535,51 @@ end)
 -- end)
 
 -- RegisterHook("/Game/Blueprints/Characters/Abiotic_InventoryComponent.Abiotic_InventoryComponent_C:ComputeCurrentInventoryWeight", function(Context, TotalWeight)
---     local inventoryComponent = Context:get()
+--     local inventoryComponent = Context:get() ---@type UAbiotic_InventoryComponent_C
 --     local totalWeight = TotalWeight:get()
 
---     local myPlayer = AFUtils.GetMyPlayer()
---     if myPlayer and myPlayer.CharacterInventory:IsValid() then
---         if myPlayer.CharacterInventory:GetAddress() == inventoryComponent:GetAddress() then
+--     -- local myPlayer = AFUtils.GetMyPlayer()
+--     -- if myPlayer and myPlayer.CharacterInventory:IsValid() then
+--     --     if myPlayer.CharacterInventory:GetAddress() == inventoryComponent:GetAddress() then
 --             LogDebug("[ComputeCurrentInventoryWeight] called: -----")
---             LogDebug("TotalWeight: "..totalWeight)
+--             LogDebug("TotalWeight: ", totalWeight)
+--             LogDebug("inventoryComponent.CurrentTotalInventoryWeight:", inventoryComponent.CurrentTotalInventoryWeight)
 --             LogDebug("------------------------------")
---         end
---     end
+--     --     end
+--     -- end
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Characters/Abiotic_InventoryComponent.Abiotic_InventoryComponent_C:OnRep_CurrentTotalInventoryWeight", function(Context)
+--     local inventoryComponent = Context:get() ---@type UAbiotic_InventoryComponent_C
+
+--     LogDebug("[OnRep_CurrentTotalInventoryWeight] called: -----")
+--     LogDebug("inventoryComponent.CurrentTotalInventoryWeight:", inventoryComponent.CurrentTotalInventoryWeight)
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:Server Refresh New Inventory Weight", function(Context)
+--     local playerCharacter = Context:get()
+
+--     LogDebug("----- [Server Refresh New Inventory Weight] called -----")
+--     AFUtils.LogPlayerCharacter(playerCharacter)
+--     LogDebug("------------------------------")
+-- end)
+
+
+-- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:Refresh Current Max Carry Weight", function(Context)
+--     local playerCharacter = Context:get() ---@type AAbiotic_PlayerCharacter_C
+
+--     LogDebug("[Refresh Current Max Carry Weight] called: -----")
+--     AFUtils.LogPlayerCharacter(playerCharacter)
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:Calculate Total Inventory Carry Weight", function(Context)
+--     local playerCharacter = Context:get() ---@type AAbiotic_PlayerCharacter_C
+
+--     LogDebug("[Calculate Total Inventory Carry Weight] called: -----")
+--     AFUtils.LogPlayerCharacter(playerCharacter)
+--     LogDebug("------------------------------")
 -- end)
 
 -- RegisterHook("/Game/Blueprints/Environment/Systems/DayNightManager.DayNightManager_C:CheckForWeatherRequest", function(Context, Requested)
