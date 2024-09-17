@@ -83,16 +83,15 @@ RegisterKeyBind(Key.L, function()
         --         LogDebug(i .. ": " .. customization:ToString())
         --     end
         -- end
-
-        local myPlayerController = GetMyPlayerController()
+        local myPlayerController = AFUtils.GetMyPlayerController()
         if myPlayerController then
-            LogDebug("myPlayerController: "..myPlayerController:GetFullName())
+            LogDebug("myPlayerController: " .. myPlayerController:GetFullName())
+            LogDebug("ActiveLevelName: " .. myPlayerController.ActiveLevelName:ToString())
         end
         local myPlayer = AFUtils.GetMyPlayer()
         if myPlayer then
-            -- local location = myPlayer:K2_GetActorLocation()
-            -- location.Z = location.Z + 100
-            -- SpawnActorFromClass("/Game/Blueprints/Items/Weapons/Abiotic_Weapon_Melee_ParentBP.Abiotic_Weapon_Melee_ParentBP_C", location)
+            local location = myPlayer:K2_GetActorLocation()
+            LogDebug("myPlayer location: " .. VectorToString(location))
             
             -- myPlayer.DefaultMaxInventoryWeight = 60.0
             -- myPlayer.MaxInventoryWeight = 900.0
@@ -135,6 +134,14 @@ RegisterKeyBind(Key.L, function()
             --     myPlayer.CharacterHotbarInventory:UpdateInventorySlotCount(myPlayer.CharacterHotbarInventory.MaxSlots)
             --     LogDebug("CharacterHotbarInventory.MaxSlots: "..myPlayer.CharacterHotbarInventory.MaxSlots)
             -- end
+        end
+
+        local inventoryCraftingArea = AFUtils.GetMyInventoryCraftingArea()
+        if inventoryCraftingArea then
+            LogDebug("inventoryCraftingArea: " .. inventoryCraftingArea:GetFullName())
+            if inventoryCraftingArea.LastSelectedRecipe:IsValid() then
+                AFUtils.LogCraftingEntryItem(inventoryCraftingArea.LastSelectedRecipe, "LastSelectedRecipe.")
+            end
         end
 
         -- local gameState = GetGameState()
@@ -197,26 +204,25 @@ RegisterKeyBind(Key.Z, function()
                 LogDebug("Location: ", VectorToString(hitActor:K2_GetActorLocation()))
             end
 
-            if hitActor:IsA(AFUtils.GetClassDeployed_Battery_ParentBP_C()) then
-                AFUtils.LogDeployedBattery(hitActor)
-                -- hitActor["Update Current Item Data"]()
-            end
-            if hitActor:IsA(AFUtils.GetClassAbioticDeployed_ParentBP_C()) then
-                ---@cast hitActor AAbioticDeployed_ParentBP_C
-                AFUtils.LogInventoryChangeableDataStruct(hitActor.ChangeableData, "ChangeableData.")
-            end
-            if hitActor:IsA(AFUtils.GetClassNarrativeNPC_ParentBP_C()) then
-                ---@cast hitActor ANarrativeNPC_ParentBP_C
-                AFUtils.LogNarrativeNPC(hitActor)
-            end
-            if hitActor:IsA(AFUtils.GetClassAbiotic_Character_ParentBP_C()) then
-                ---@cast hitActor AAbiotic_Character_ParentBP_C
-                AFUtils.LogCharacterParentBP(hitActor)
-            end
-            if hitActor:IsA(AFUtils.GetClassCharacterCorpse_ParentBP()) then
-                ---@cast hitActor ACharacterCorpse_ParentBP_C
-                
-            end
+            -- if hitActor:IsA(AFUtils.GetClassDeployed_Battery_ParentBP_C()) then
+            --     AFUtils.LogDeployedBattery(hitActor)
+            --     -- hitActor["Update Current Item Data"]()
+            -- end
+            -- if hitActor:IsA(AFUtils.GetClassAbioticDeployed_ParentBP_C()) then
+            --     ---@cast hitActor AAbioticDeployed_ParentBP_C
+            --     AFUtils.LogInventoryChangeableDataStruct(hitActor.ChangeableData, "ChangeableData.")
+            -- end
+            -- if hitActor:IsA(AFUtils.GetClassNarrativeNPC_ParentBP_C()) then
+            --     ---@cast hitActor ANarrativeNPC_ParentBP_C
+            --     AFUtils.LogNarrativeNPC(hitActor)
+            -- end
+            -- if hitActor:IsA(AFUtils.GetClassAbiotic_Character_ParentBP_C()) then
+            --     ---@cast hitActor AAbiotic_Character_ParentBP_C
+            --     AFUtils.LogCharacterParentBP(hitActor)
+            -- end
+            -- if hitActor:IsA(AFUtils.GetClassCharacterCorpse_ParentBP()) then
+            --     ---@cast hitActor ACharacterCorpse_ParentBP_C
+            -- end
             LogDebug("------------------------------")
         end
     end)
