@@ -83,6 +83,7 @@ RegisterKeyBind(Key.L, function()
         --         LogDebug(i .. ": " .. customization:ToString())
         --     end
         -- end
+        
         local myPlayerController = AFUtils.GetMyPlayerController()
         if myPlayerController then
             LogDebug("myPlayerController: " .. myPlayerController:GetFullName())
@@ -92,36 +93,17 @@ RegisterKeyBind(Key.L, function()
         if myPlayer then
             local location = myPlayer:K2_GetActorLocation()
             LogDebug("myPlayer location: " .. VectorToString(location))
-            
-            -- myPlayer.DefaultMaxInventoryWeight = 60.0
-            -- myPlayer.MaxInventoryWeight = 900.0
-            -- myPlayer:OnRep_MaxInventoryWeight()
-            -- AFUtils.LogPlayerCharacter(myPlayer)
-            -- AFUtils.LogCharacterParentBP(myPlayer)
-            -- AFUtils.LogAbioticCharacter(myPlayer)
-            -- LogDebug("DefaultGravityScale: ", myPlayer.DefaultGravityScale)
-            -- LogCharacterMovementComponent(myPlayer.CharacterMovement, "CharacterMovement.")
-            
-            -- local progressionComponent = myPlayer.CharacterProgressionComponent
-            -- if progressionComponent:IsValid() then
-            --     LogDebug("CharacterProgressionComponent.CharacterSkills_Keys Num: " .. #progressionComponent.CharacterSkills_Keys)
-            --     for i = 1, #progressionComponent.CharacterSkills_Keys, 1 do
-            --         local skillKey = progressionComponent.CharacterSkills_Keys[i]
-            --         LogDebug(string.format("%d: %d", i, skillKey))
-            --     end
-
-            --     LogDebug("CharacterProgressionComponent.CharacterSkills_Values Num: " .. #progressionComponent.CharacterSkills_Values)
-            --     for i = 1, #progressionComponent.CharacterSkills_Values, 1 do
-            --         local skillStruct = progressionComponent.CharacterSkills_Values[i]
-            --         -- LogDebug(string.format("%d: %s", i, skillStruct.SkillName_12_151AF436411AC221F1B7A295B82A483E:ToString()))
-            --         -- LogDebug("SkillTooltip: " .. skillStruct.SkillTooltip_19_0D5F12434F2DBC48AE7090961B6F4DF0:ToString())
-            --         LogDebug("CurrentSkillXP: " .. skillStruct.CurrentSkillXP_20_8F7934CD4A4542F036AE5C9649362556)
-            --         LogDebug("CurrentXPMultiplier: " .. skillStruct.CurrentXPMultiplier_15_9DA8B8A24B4F5B134743CDBE828520F0)
-            --     end
+            -- if myPlayer.CharacterEquipSlotInventory:IsValid() then
+            --     AFUtils.LogInventoryComponent(myPlayer.CharacterEquipSlotInventory, "CharacterEquipSlotInventory.")
             -- end
-            -- if myPlayer.ItemInHand_BP:IsValid() then
-            --     AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
-            -- end
+            
+            if myPlayer.ItemInHand_BP:IsValid() then
+                if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
+                    AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
+                else
+                    AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
+                end
+            end
             -- if myPlayer.CharacterInventory:IsValid() then
             --     -- myPlayer.CharacterInventory.MaxSlots = 42
             --     -- myPlayer.CharacterInventory:UpdateInventorySlotCount(myPlayer.CharacterInventory.MaxSlots)
@@ -135,11 +117,19 @@ RegisterKeyBind(Key.L, function()
             --     LogDebug("CharacterHotbarInventory.MaxSlots: "..myPlayer.CharacterHotbarInventory.MaxSlots)
             -- end
         end
-
         local myInventoryComponent = AFUtils.GetMyInventoryComponent()
         if myInventoryComponent then
-            LogDebug("MyInventoryComponent:")
-            AFUtils.LogInventoryComponent(myInventoryComponent)
+            -- LogDebug("MyInventoryComponent:")
+            -- AFUtils.LogInventoryComponent(myInventoryComponent)
+            -- if #myInventoryComponent.CurrentInventory > 1 then
+            --     local itemSlot = myInventoryComponent.CurrentInventory[1]
+            --     if itemSlot.ItemDataTable_18_BF1052F141F66A976F4844AB2B13062B.RowName ~= NAME_None then
+            --         -- local outTryHotbarFirst = {}
+            --         -- AFUtils.GetAbioticFunctionLibrary()["TryPlaceInHotbar?"](itemSlot.ItemDataTable_18_BF1052F141F66A976F4844AB2B13062B, myPlayerController, outTryHotbarFirst)
+            --         local outItemSlotData = {}
+            --         myInventoryComponent:CreateNewItemWithDefaultData(itemSlot.ItemDataTable_18_BF1052F141F66A976F4844AB2B13062B, 1, outItemSlotData)
+            --     end
+            -- end
         end
         -- local inventoryCraftingArea = AFUtils.GetMyInventoryCraftingArea()
         -- if inventoryCraftingArea then
@@ -324,103 +314,117 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
-RegisterHook("/Game/Blueprints/Widgets/Inventory/W_Inventory_CraftingArea.W_Inventory_CraftingArea_C:RefreshCraftingEligibility",
-function(Context)
-    local craftingArea = Context:get() ---@type UW_Inventory_CraftingArea_C
+-- RegisterHook("/Game/Blueprints/Widgets/Inventory/W_Inventory_CraftingArea.W_Inventory_CraftingArea_C:RefreshCraftingEligibility",
+-- function(Context)
+--     local craftingArea = Context:get() ---@type UW_Inventory_CraftingArea_C
 
-    LogDebug("----- [RefreshCraftingEligibility] called -----")
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [RefreshCraftingEligibility] called -----")
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Widgets/Inventory/W_Inventory_CraftingArea.W_Inventory_CraftingArea_C:RefreshRecipeList",
-function(Context)
-    local craftingArea = Context:get() ---@type UW_Inventory_CraftingArea_C
+-- RegisterHook("/Game/Blueprints/Widgets/Inventory/W_Inventory_CraftingArea.W_Inventory_CraftingArea_C:RefreshRecipeList",
+-- function(Context)
+--     local craftingArea = Context:get() ---@type UW_Inventory_CraftingArea_C
 
-    LogDebug("----- [RefreshRecipeList] called -----")
-    LogDebug("CraftingEntries Num:", #craftingArea.CraftingEntries)
-    for i = 1, #craftingArea.CraftingEntries, 1 do
-        local craftingEntry = craftingArea.CraftingEntries[i]
-        local prefix = i .. ": "
-        -- LogDebug(prefix .. "RecipeItems Num:", #craftingEntry.RecipeItems)
-    end
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [RefreshRecipeList] called -----")
+--     LogDebug("CraftingEntries Num:", #craftingArea.CraftingEntries)
+--     for i = 1, #craftingArea.CraftingEntries, 1 do
+--         local craftingEntry = craftingArea.CraftingEntries[i]
+--         local prefix = i .. ": "
+--         -- LogDebug(prefix .. "RecipeItems Num:", #craftingEntry.RecipeItems)
+--         -- for j = 1, #craftingEntry.RecipeItems, 1 do
+--         --     craftingEntry.RecipeItems[j].Count = 0
+--         -- end
+--     end
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Widgets/Inventory/W_Inventory_CraftingArea.W_Inventory_CraftingArea_C:UpdateSelectedRecipeItem",
-function(Context, Recipe, Success)
-    local craftingArea = Context:get() ---@type UW_Inventory_CraftingArea_C
-    local recipe = Recipe:get() ---@type FAbioticRecipe_Struct
-    local success = Success:get() ---@type boolean
+-- RegisterHook("/Game/Blueprints/Widgets/Inventory/W_Inventory_CraftingArea.W_Inventory_CraftingArea_C:UpdateSelectedRecipeItem",
+-- function(Context, Recipe, Success)
+--     local craftingArea = Context:get() ---@type UW_Inventory_CraftingArea_C
+--     local recipe = Recipe:get() ---@type FAbioticRecipe_Struct
+--     local success = Success:get() ---@type boolean
 
-    LogDebug("----- [UpdateSelectedRecipeItem] called -----")
-    AFUtils.LogRecipeStruct(recipe, "Recipe.")
-    LogDebug("Success:", success)
+--     LogDebug("----- [UpdateSelectedRecipeItem] called -----")
+--     AFUtils.LogRecipeStruct(recipe, "Recipe.")
+--     LogDebug("Success:", success)
+--     -- for i = 1, #craftingArea.SelectedRecipe.RecipeItems_7_0F13BA7A407C72065EE926B9D41B8B9E, 1 do
+--     --     craftingArea.SelectedRecipe.RecipeItems_7_0F13BA7A407C72065EE926B9D41B8B9E[i].Count_6_4C6C5BFB4956F9C29A5C2BB6F28B7690 = 0
+--     -- end
+--     -- for i = 1, #craftingArea.LastSelectedRecipe.RecipeItems, 1 do
+--     --     craftingArea.LastSelectedRecipe.RecipeItems[i].Count = 0
+--     -- end
+--     -- local inventoryComponent = AFUtils.GetMyInventoryComponent()
+--     -- if inventoryComponent and #inventoryComponent.CurrentInventory > 3 then
+--     --     for i = 1, #recipe.RecipeItems_7_0F13BA7A407C72065EE926B9D41B8B9E, 1 do
+--     --         local recipeItem = recipe.RecipeItems_7_0F13BA7A407C72065EE926B9D41B8B9E[i]
+--     --         if AFUtils.SetItemSlot(inventoryComponent.CurrentInventory[i], recipeItem.Item_5_5AD3D6B1470ED45BCB2D15BC84BB0F1A.RowName, 99) then
+--     --             LogDebug(i .. ": Item set: " .. recipeItem.Item_5_5AD3D6B1470ED45BCB2D15BC84BB0F1A.RowName:ToString())
+--     --         end
+--     --     end
+--     -- end
+--     LogDebug("------------------------------")
+-- end)
 
-    -- local inventoryComponent = AFUtils.GetMyInventoryComponent()
-    -- if inventoryComponent and #inventoryComponent.CurrentInventory > 3 then
-    --     for i = 1, #recipe.RecipeItems_7_0F13BA7A407C72065EE926B9D41B8B9E, 1 do
-    --         local recipeItem = recipe.RecipeItems_7_0F13BA7A407C72065EE926B9D41B8B9E[i]
-    --         if AFUtils.SetItemSlot(inventoryComponent.CurrentInventory[i], recipeItem.Item_5_5AD3D6B1470ED45BCB2D15BC84BB0F1A.RowName, 99) then
-    --             LogDebug(i .. ": Item set: " .. recipeItem.Item_5_5AD3D6B1470ED45BCB2D15BC84BB0F1A.RowName:ToString())
-    --         end
-    --     end
-    -- end
-    LogDebug("------------------------------")
-end)
+-- RegisterHook("/Game/Blueprints/Widgets/Inventory/W_Inventory_CraftingArea.W_Inventory_CraftingArea_C:UpdateCurrentlySelectedItemInfo",
+-- function(Context, RecipeEntry, SameAsBefore)
+--     local craftingArea = Context:get() ---@type UW_Inventory_CraftingArea_C
+--     local recipeEntry = RecipeEntry:get() ---@type UCraftingEntryItem
+--     local sameAsBefore = SameAsBefore:get() ---@type boolean
 
-RegisterHook("/Game/Blueprints/Widgets/Inventory/W_Inventory_CraftingArea.W_Inventory_CraftingArea_C:UpdateCurrentlySelectedItemInfo",
-function(Context, RecipeEntry, SameAsBefore)
-    local craftingArea = Context:get() ---@type UW_Inventory_CraftingArea_C
-    local recipeEntry = RecipeEntry:get() ---@type UCraftingEntryItem
-    local sameAsBefore = SameAsBefore:get() ---@type boolean
+--     LogDebug("----- [UpdateCurrentlySelectedItemInfo] called -----")
+--     AFUtils.LogCraftingEntryItem(recipeEntry, "RecipeEntry.")
+--     LogDebug("SameAsBefore:", sameAsBefore)
+--     -- for i = 1, #craftingArea.SelectedRecipe.RecipeItems_7_0F13BA7A407C72065EE926B9D41B8B9E, 1 do
+--     --     craftingArea.SelectedRecipe.RecipeItems_7_0F13BA7A407C72065EE926B9D41B8B9E[i].Count_6_4C6C5BFB4956F9C29A5C2BB6F28B7690 = 0
+--     -- end
+--     -- for i = 1, #craftingArea.LastSelectedRecipe.RecipeItems, 1 do
+--     --     craftingArea.LastSelectedRecipe.RecipeItems[i].Count = 0
+--     -- end
+--     LogDebug("------------------------------")
+-- end)
 
-    LogDebug("----- [UpdateCurrentlySelectedItemInfo] called -----")
-    AFUtils.LogCraftingEntryItem(recipeEntry, "RecipeEntry.")
-    LogDebug("SameAsBefore:", sameAsBefore)
-    LogDebug("------------------------------")
-end)
+-- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:Request_CraftItem",
+-- function(Context, ItemDataTableRow, ConsumeItems, CountToCraft, CraftDuration, CraftingBench, RecipeCategory)
+--     local playerCharacter = Context:get()
+--     local itemDataTableRow = ItemDataTableRow:get() ---@type FDataTableRowHandle
+--     local consumeItems = ConsumeItems:get()
+--     local countToCraft = CountToCraft:get()
+--     local craftDuration = CraftDuration:get()
+--     local craftingBench = CraftingBench:get()
+--     local recipeCategory = RecipeCategory:get()
 
-RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:Request_CraftItem",
-function(Context, ItemDataTableRow, ConsumeItems, CountToCraft, CraftDuration, CraftingBench, RecipeCategory)
-    local playerCharacter = Context:get()
-    local itemDataTableRow = ItemDataTableRow:get() ---@type FDataTableRowHandle
-    local consumeItems = ConsumeItems:get()
-    local countToCraft = CountToCraft:get()
-    local craftDuration = CraftDuration:get()
-    local craftingBench = CraftingBench:get()
-    local recipeCategory = RecipeCategory:get()
+--     LogDebug("----- [Request_CraftItem] called -----")
+--     LogDebug("ItemDataTableRow: " .. itemDataTableRow.RowName:ToString())
+--     LogDebug("ConsumeItems Num: " .. #consumeItems)
+--     LogDebug("CountToCraft:", countToCraft)
+--     LogDebug("CraftDuration:", craftDuration)
+--     LogDebug("CraftingBench:", craftingBench)
+--     LogDebug("RecipeCategory: " .. recipeCategory)
+--     LogDebug("------------------------------")
+-- end)
 
-    LogDebug("----- [Request_CraftItem] called -----")
-    LogDebug("ItemDataTableRow: " .. itemDataTableRow.RowName:ToString())
-    LogDebug("ConsumeItems Num: " .. #consumeItems)
-    LogDebug("CountToCraft:", countToCraft)
-    LogDebug("CraftDuration:", craftDuration)
-    LogDebug("CraftingBench:", craftingBench)
-    LogDebug("RecipeCategory: " .. recipeCategory)
-    LogDebug("------------------------------")
-end)
+-- RegisterHook("/Game/Blueprints/Libraries/AbioticFunctionLibrary.AbioticFunctionLibrary_C:CheckAvailableRecipeItems",
+-- function(Context, TargetCharacter, AdditionalInventories, ItemCount, RequireBenches, ItemSlot, PlayerCraftingOnly, WorldContext, AtLeastOneItemIsMissing)
+--     local abioticFunctionLibrary = Context:get() ---@type UAbioticFunctionLibrary_C
+--     local targetCharacter = TargetCharacter:get() ---@type AAbiotic_PlayerCharacter_C
+--     local additionalInventories = AdditionalInventories:get() ---@type UAbiotic_InventoryComponent_C[]
+--     local itemCount = ItemCount:get() ---@type FAbioticItemCount_Struct
+--     local requireBenches = RequireBenches:get() ---@type boolean
+--     local itemSlot = ItemSlot:get() ---@type UW_InventoryItemSlot_C
+--     local playerCraftingOnly = PlayerCraftingOnly:get() ---@type boolean
+--     local worldContext = WorldContext:get() ---@type UObject
+--     local atLeastOneItemIsMissing = AtLeastOneItemIsMissing:get() ---@type boolean
 
-RegisterHook("/Game/Blueprints/Libraries/AbioticFunctionLibrary.AbioticFunctionLibrary_C:CheckAvailableRecipeItems",
-function(Context, TargetCharacter, AdditionalInventories, ItemCount, RequireBenches, ItemSlot, PlayerCraftingOnly, WorldContext, AtLeastOneItemIsMissing)
-    local abioticFunctionLibrary = Context:get() ---@type UAbioticFunctionLibrary_C
-    local targetCharacter = TargetCharacter:get() ---@type AAbiotic_PlayerCharacter_C
-    local additionalInventories = AdditionalInventories:get() ---@type UAbiotic_InventoryComponent_C[]
-    local itemCount = ItemCount:get() ---@type FAbioticItemCount_Struct
-    local requireBenches = RequireBenches:get() ---@type boolean
-    local itemSlot = ItemSlot:get() ---@type UW_InventoryItemSlot_C
-    local playerCraftingOnly = PlayerCraftingOnly:get() ---@type boolean
-    local worldContext = WorldContext:get() ---@type UObject
-    local atLeastOneItemIsMissing = AtLeastOneItemIsMissing:get() ---@type boolean
-
-    LogDebug("----- [CheckAvailableRecipeItems] called -----")
-    LogDebug("AdditionalInventories Num: " .. #additionalInventories)
-    LogDebug("ItemCount.Item.RowName: " .. itemCount.Item_5_5AD3D6B1470ED45BCB2D15BC84BB0F1A.RowName:ToString())
-    LogDebug("ItemCount.Count: " .. itemCount.Count_6_4C6C5BFB4956F9C29A5C2BB6F28B7690)
-    LogDebug("RequireBenches:", requireBenches)
-    LogDebug("PlayerCraftingOnly:", playerCraftingOnly)
-    LogDebug("AtLeastOneItemIsMissing:", atLeastOneItemIsMissing)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [CheckAvailableRecipeItems] called -----")
+--     LogDebug("AdditionalInventories Num: " .. #additionalInventories)
+--     LogDebug("ItemCount.Item.RowName: " .. itemCount.Item_5_5AD3D6B1470ED45BCB2D15BC84BB0F1A.RowName:ToString())
+--     LogDebug("ItemCount.Count: " .. itemCount.Count_6_4C6C5BFB4956F9C29A5C2BB6F28B7690)
+--     LogDebug("RequireBenches:", requireBenches)
+--     LogDebug("PlayerCraftingOnly:", playerCraftingOnly)
+--     LogDebug("AtLeastOneItemIsMissing:", atLeastOneItemIsMissing)
+--     LogDebug("------------------------------")
+-- end)
 
 -- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:Owning_OnLevelLoadUpdated", function(Context, Level)
 --     local playerCharacter = Context:get()
