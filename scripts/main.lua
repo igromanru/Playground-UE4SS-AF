@@ -9,6 +9,7 @@
 ------------------------------
 local AFUtils = require("AFUtils.AFUtils")
 require("AFUtils.AFUtilsDebug")
+require("AFUtils.BaseUtils.LinearColors")
 
 local UEHelpers = require("UEHelpers")
 
@@ -74,6 +75,12 @@ end
 
 RegisterKeyBind(Key.L, function()
     ExecuteInGameThread(function()
+        local color = FLinearColor(0.1111, 0.2222, 0.3333, 0.9999)
+        local compressed = CompressLinearColor(color)
+        local testColor = DecompressLinearColor(compressed)
+        print("color: " .. LinearColorToString(color))
+        print("testColor: " .. LinearColorToString(testColor))
+
         LogDebug("------------ L ---------------")
         -- local gameInstance = GetGameInstance()
         -- if gameInstance and gameInstance.CustomizationUnlocksSaveFile:IsValid() and gameInstance.CustomizationUnlocksSaveFile.CustomizationUnlocks then
@@ -83,7 +90,7 @@ RegisterKeyBind(Key.L, function()
         --         LogDebug(i .. ": " .. customization:ToString())
         --     end
         -- end
-        
+
         local myPlayerController = AFUtils.GetMyPlayerController()
         if myPlayerController then
             LogDebug("myPlayerController: " .. myPlayerController:GetFullName())
@@ -93,28 +100,18 @@ RegisterKeyBind(Key.L, function()
         if myPlayer then
             local location = myPlayer:K2_GetActorLocation()
             LogDebug("myPlayer location: " .. VectorToString(location))
+
+            -- AFUtils.LogCharacterParentBP(myPlayer)
             -- if myPlayer.CharacterEquipSlotInventory:IsValid() then
             --     AFUtils.LogInventoryComponent(myPlayer.CharacterEquipSlotInventory, "CharacterEquipSlotInventory.")
             -- end
             
-            if myPlayer.ItemInHand_BP:IsValid() then
-                if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
-                    AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
-                else
-                    AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
-                end
-            end
-            -- if myPlayer.CharacterInventory:IsValid() then
-            --     -- myPlayer.CharacterInventory.MaxSlots = 42
-            --     -- myPlayer.CharacterInventory:UpdateInventorySlotCount(myPlayer.CharacterInventory.MaxSlots)
-            --     LogDebug("CharacterInventory.MaxSlots: "..myPlayer.CharacterInventory.MaxSlots)
-            -- end
-            -- LogDebug("Trait_FannyPack: " .. tostring(myPlayer.Trait_FannyPack))
-            -- myPlayer.Trait_FannyPack = true
-            -- if myPlayer.CharacterHotbarInventory:IsValid() then
-            --     myPlayer.CharacterHotbarInventory.MaxSlots = 10
-            --     myPlayer.CharacterHotbarInventory:UpdateInventorySlotCount(myPlayer.CharacterHotbarInventory.MaxSlots)
-            --     LogDebug("CharacterHotbarInventory.MaxSlots: "..myPlayer.CharacterHotbarInventory.MaxSlots)
+            -- if myPlayer.ItemInHand_BP:IsValid() then
+            --     if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
+            --         AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
+            --     else
+            --         AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
+            --     end
             -- end
         end
         local myInventoryComponent = AFUtils.GetMyInventoryComponent()
@@ -229,52 +226,52 @@ RegisterKeyBind(Key.U, function()
 
         local playerController = UEHelpers.GetPlayerController()
         if playerController:IsValid() then
-            LogDebug("playerController: " .. playerController:GetFullName())
+            print("playerController: " .. playerController:GetFullName())
         else
-            LogDebug("playerController invalid")
+            print("playerController invalid")
         end
         local player = UEHelpers.GetPlayer()
         if player:IsValid() then
-            LogDebug("player: " .. player:GetFullName())
+            print("player: " .. player:GetFullName())
         else
-            LogDebug("player invalid")
+            print("player invalid")
         end
         local gameEngine = UEHelpers.GetEngine()
         if gameEngine:IsValid() then
-            LogDebug("gameEngine: " .. gameEngine:GetFullName())
+            print("gameEngine: " .. gameEngine:GetFullName())
         end
         local gameViewportClient = UEHelpers.GetGameViewportClient()
         if gameViewportClient:IsValid() then
-            LogDebug("gameViewportClient: " .. gameViewportClient:GetFullName())
+            print("gameViewportClient: " .. gameViewportClient:GetFullName())
         end
         local world = UEHelpers.GetWorld()
         if world:IsValid() then
-            LogDebug("world: " .. world:GetFullName())
+            print("world: " .. world:GetFullName())
         end
-        LogDebug("WorldDeltaSeconds: " .. UEHelpers.GetGameplayStatics():GetWorldDeltaSeconds(UEHelpers.GetWorldContextObject()))
+        print("WorldDeltaSeconds: " .. UEHelpers.GetGameplayStatics():GetWorldDeltaSeconds(UEHelpers.GetWorldContextObject()))
         local persistentLevel = UEHelpers.GetPersistentLevel()
         if persistentLevel:IsValid() then
-            LogDebug("persistentLevel: " .. persistentLevel:GetFullName())
+            print("persistentLevel: " .. persistentLevel:GetFullName())
         else
-            LogDebug("persistentLevel invalid")
+            print("persistentLevel invalid")
         end
         local worldSettings = UEHelpers.GetWorldSettings()
         if worldSettings:IsValid() then
-            LogDebug("worldSettings: " .. worldSettings:GetFullName())
+            print("worldSettings: " .. worldSettings:GetFullName())
         else
-            LogDebug("worldSettings invalid")
+            print("worldSettings invalid")
         end
         local gameModeBase = UEHelpers.GetGameModeBase()
         if gameModeBase:IsValid() then
-            LogDebug("gameModeBase: " .. gameModeBase:GetFullName())
+            print("gameModeBase: " .. gameModeBase:GetFullName())
         else
-            LogDebug("gameModeBase invalid")
+            print("gameModeBase invalid")
         end
         local gameStateBase = UEHelpers.GetGameStateBase()
         if gameStateBase:IsValid() then
-            LogDebug("gameStateBase: " .. gameStateBase:GetFullName())
+            print("gameStateBase: " .. gameStateBase:GetFullName())
         else
-            LogDebug("gameStateBase invalid")
+            print("gameStateBase invalid")
         end
         
         -- local aiDirector = AFUtils.GetAIDirector()
@@ -536,18 +533,18 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
--- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SpawnLeyak", function(Context, Location)
---     local aiDirector = Context:get()
---     local location = Location:get()
+RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SpawnLeyak", function(Context, Location)
+    local aiDirector = Context:get()
+    local location = Location:get()
 
---     LogDebug("----- [SpawnLeyak] called -----")
---     -- local aiControllerLeyak = FindFirstOf("AI_Controller_Leyak_C")
---     -- if aiControllerLeyak and aiControllerLeyak:IsValid() then
---     --     LogDebug("AI_Controller_Leyak_C found, call Despawn")
---     --     aiControllerLeyak:Despawn()
---     -- end
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [SpawnLeyak] called -----")
+    -- local aiControllerLeyak = FindFirstOf("AI_Controller_Leyak_C")
+    -- if aiControllerLeyak and aiControllerLeyak:IsValid() then
+    --     LogDebug("AI_Controller_Leyak_C found, call Despawn")
+    --     aiControllerLeyak:Despawn()
+    -- end
+    LogDebug("------------------------------")
+end)
 
 -- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:LeyakFailsafeRemove", function(Context)
 --     local aIDirector = Context:get()
@@ -556,19 +553,19 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
--- RegisterHook("/Game/Blueprints/Characters/NPCs/AI_Controller_Leyak.AI_Controller_Leyak_C:Despawn", function(Context)
---     local aiControllerLeyak = Context:get()
+RegisterHook("/Game/Blueprints/Characters/NPCs/AI_Controller_Leyak.AI_Controller_Leyak_C:Despawn", function(Context)
+    local aiControllerLeyak = Context:get()
 
---     LogDebug("[AI_Controller_Leyak_C:Despawn] called:")
---     -- local aiDirector = FindFirstOf("Abiotic_AIDirector_C")
---     -- if aiDirector and aiDirector:IsValid() then
---     --     LogDebug("LeyakCooldown: " .. aiDirector.LeyakCooldown)
---     --     if aiDirector.ActiveLeyak:IsValid() then
---     --         AFUtils.LogNPCLeyak(aiDirector.ActiveLeyak, "ActiveLeyak.")
---     --     end
---     -- end
---     LogDebug("------------------------------")
--- end)
+    LogDebug("[AI_Controller_Leyak_C:Despawn] called:")
+    -- local aiDirector = FindFirstOf("Abiotic_AIDirector_C")
+    -- if aiDirector and aiDirector:IsValid() then
+    --     LogDebug("LeyakCooldown: " .. aiDirector.LeyakCooldown)
+    --     if aiDirector.ActiveLeyak:IsValid() then
+    --         AFUtils.LogNPCLeyak(aiDirector.ActiveLeyak, "ActiveLeyak.")
+    --     end
+    -- end
+    LogDebug("------------------------------")
+end)
 
 -- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SetLeyakOnCooldown", function(Context, CooldownReductionMultiplier)
 --     local aiDirector = Context:get()
