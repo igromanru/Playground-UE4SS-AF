@@ -106,13 +106,13 @@ RegisterKeyBind(Key.L, function()
             --     AFUtils.LogInventoryComponent(myPlayer.CharacterEquipSlotInventory, "CharacterEquipSlotInventory.")
             -- end
             
-            -- if myPlayer.ItemInHand_BP:IsValid() then
-            --     if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
-            --         AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
-            --     else
-            --         AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
-            --     end
-            -- end
+            if myPlayer.ItemInHand_BP:IsValid() then
+                if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
+                    AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
+                else
+                    AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
+                end
+            end
         end
         local myInventoryComponent = AFUtils.GetMyInventoryComponent()
         if myInventoryComponent then
@@ -223,6 +223,13 @@ end)
 RegisterKeyBind(Key.U, function()
     ExecuteInGameThread(function()
         LogDebug("------------ U ---------------")
+
+        local blankObject = CreateBlankObject()
+        print("blankObject varibale type: " .. type(blankObject))
+        if blankObject then
+            print("blankObject userdata type: " .. blankObject:type())
+            print("blankObject IsValid:" .. tostring(blankObject:IsValid()))
+        end
 
         local playerController = UEHelpers.GetPlayerController()
         if playerController:IsValid() then
