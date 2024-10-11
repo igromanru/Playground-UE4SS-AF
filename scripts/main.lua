@@ -82,6 +82,12 @@ RegisterKeyBind(Key.L, function()
         print("testColor: " .. LinearColorToString(testColor))
 
         LogDebug("------------ L ---------------")
+        local leyakContainment = FindFirstOf("Deployed_LeyakContainment_C") ---@cast leyakContainment ADeployed_LeyakContainment_C
+        if leyakContainment:IsValid() then
+            leyakContainment:TrapLeyak(0.5)
+            -- leyakContainment["Free Leyak"]()
+            -- leyakContainment:ServerUpdateStabilityLevel(50)
+        end
         -- local gameInstance = GetGameInstance()
         -- if gameInstance and gameInstance.CustomizationUnlocksSaveFile:IsValid() and gameInstance.CustomizationUnlocksSaveFile.CustomizationUnlocks then
         --     LogDebug("CustomizationUnlocks: " .. #(gameInstance.CustomizationUnlocksSaveFile.CustomizationUnlocks))
@@ -89,6 +95,12 @@ RegisterKeyBind(Key.L, function()
         --         local customization = gameInstance.CustomizationUnlocksSaveFile.CustomizationUnlocks[i]
         --         LogDebug(i .. ": " .. customization:ToString())
         --     end
+        -- end
+
+        -- local reaper = FindFirstOf("NPC_Monster_Reaper_C") ---@type ANPC_Monster_Reaper_C
+        -- if reaper:IsValid() then
+        --     LogDebug("Reaper found")
+        --     reaper:Server_PoopOnFloor()
         -- end
 
         local myPlayerController = AFUtils.GetMyPlayerController()
@@ -106,13 +118,13 @@ RegisterKeyBind(Key.L, function()
             --     AFUtils.LogInventoryComponent(myPlayer.CharacterEquipSlotInventory, "CharacterEquipSlotInventory.")
             -- end
             
-            if myPlayer.ItemInHand_BP:IsValid() then
-                if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
-                    AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
-                else
-                    AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
-                end
-            end
+            -- if myPlayer.ItemInHand_BP:IsValid() then
+            --     if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
+            --         AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
+            --     else
+            --         AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
+            --     end
+            -- end
         end
         local myInventoryComponent = AFUtils.GetMyInventoryComponent()
         if myInventoryComponent then
@@ -224,11 +236,11 @@ RegisterKeyBind(Key.U, function()
     ExecuteInGameThread(function()
         LogDebug("------------ U ---------------")
 
-        local blankObject = CreateBlankObject()
-        print("blankObject varibale type: " .. type(blankObject))
-        if blankObject then
-            print("blankObject userdata type: " .. blankObject:type())
-            print("blankObject IsValid:" .. tostring(blankObject:IsValid()))
+        local invalidObject = CreateInvalidObject()
+        print("invalidObject variable type: " .. type(invalidObject))
+        if invalidObject then
+            print("invalidObject userdata type: " .. invalidObject:type())
+            print("invalidObject IsValid: " .. tostring(invalidObject:IsValid()))
         end
 
         local playerController = UEHelpers.GetPlayerController()
@@ -304,6 +316,35 @@ RegisterKeyBind(Key.PAUSE, function()
         end
         LogDebug("------------------------------")
     end)
+end)
+
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:ServerUpdateStabilityLevel",
+function(Context, Value)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+    local value = Value:get()
+
+    LogDebug("----- [ServerUpdateStabilityLevel] called -----")
+    LogDebug("Value:", value)
+    AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+end)
+
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:IsContainmentCurrentlyActive",
+function(Context)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+
+    LogDebug("----- [IsContainmentCurrentlyActive] called -----")
+    AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+end)
+
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:OnRep_Stability Level",
+function(Context)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+
+    LogDebug("----- [OnRep_Stability Level] called -----")
+    AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
 end)
 
 -- RegisterHook("/Game/Blueprints/Meta/Abiotic_GameInstance.Abiotic_GameInstance_C:IsCustomizationRowUnlocked", function(Context, RowName, Unlocked)
@@ -459,20 +500,6 @@ end)
 
 --     LogDebug("----- [CheckPlayersLeftStartingZone] called -----")
 --     LogDebug("LeftZone: ", leftZone)
---     LogDebug("------------------------------")
--- end)
-
--- RegisterHook("/Script/Engine.PlayerController:ClientRestart", function(Context, NewPawn)
---     local playerController = Context:get()
---     local pawn = NewPawn:get()
-
---     LogDebug("----- [ClientRestart] called -----")
---     LogDebug("Pawn.Class: " .. pawn:GetClass():GetFullName())
---     local gameState = GetGameState()
---         if gameState then
---             LogDebug("GameState.Class: " .. gameState:GetClass():GetFullName())
---             LogDebug("MatchState: " .. gameState.MatchState:ToString())
---         end
 --     LogDebug("------------------------------")
 -- end)
 
