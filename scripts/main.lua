@@ -75,19 +75,14 @@ end
 
 RegisterKeyBind(Key.L, function()
     ExecuteInGameThread(function()
-        local color = FLinearColor(0.1111, 0.2222, 0.3333, 0.9999)
-        local compressed = CompressLinearColor(color)
-        local testColor = DecompressLinearColor(compressed)
-        print("color: " .. LinearColorToString(color))
-        print("testColor: " .. LinearColorToString(testColor))
-
         LogDebug("------------ L ---------------")
-        local leyakContainment = FindFirstOf("Deployed_LeyakContainment_C") ---@cast leyakContainment ADeployed_LeyakContainment_C
-        if leyakContainment:IsValid() then
-            leyakContainment:TrapLeyak(0.5)
-            -- leyakContainment["Free Leyak"]()
-            -- leyakContainment:ServerUpdateStabilityLevel(50)
-        end
+        -- local leyakContainment = FindFirstOf("Deployed_LeyakContainment_C") ---@cast leyakContainment ADeployed_LeyakContainment_C
+        -- if leyakContainment:IsValid() then
+        --     -- leyakContainment:TrapLeyak(0.5)
+        --     -- leyakContainment["Free Leyak"]()
+        --     -- leyakContainment:ServerUpdateStabilityLevel(50)
+        --     AFUtils.LogDeployedLeyakContainment(leyakContainment, "LeyakContainment.")
+        -- end
         -- local gameInstance = GetGameInstance()
         -- if gameInstance and gameInstance.CustomizationUnlocksSaveFile:IsValid() and gameInstance.CustomizationUnlocksSaveFile.CustomizationUnlocks then
         --     LogDebug("CustomizationUnlocks: " .. #(gameInstance.CustomizationUnlocksSaveFile.CustomizationUnlocks))
@@ -148,10 +143,20 @@ RegisterKeyBind(Key.L, function()
         --     end
         -- end
 
+        -- local worldMetadataSave = FindFirstOf("Abiotic_WorldMetadataSave_C") ---@cast worldMetadataSave UAbiotic_WorldMetadataSave_C
+        -- if worldMetadataSave:IsValid() then
+        --     LogDebug("GlobalUnlocks.WorldVersion: " .. worldMetadataSave.WorldVersion)
+        --     LogDebug("GlobalUnlocks.MinutesPassed: " .. worldMetadataSave.MinutesPassed)
+        --     LogDebug("GlobalUnlocks.ActiveLeyakContainmentID: " .. worldMetadataSave.GlobalUnlocks.ActiveLeyakContainmentID_48_759AE779473F27DD9483AAB34D22A795:ToString())
+        --     LogDebug("GlobalUnlocks.SaveIdentifier: " .. worldMetadataSave.SaveIdentifier:ToString())
+        --     LogDebug("GlobalUnlocks.SaveVersion: " .. worldMetadataSave.SaveVersion)
+        -- end
+
         -- local gameState = GetGameState()
         -- if gameState then
         --     LogDebug("GameState.Class: " .. gameState:GetClass():GetFullName())
         --     LogDebug("MatchState: " .. gameState.MatchState:ToString())
+        --     LogDebug("ActiveLeyakContainmentID: " .. gameState.ActiveLeyakContainmentID:ToString())
         -- end
 
         -- local myPlayerController = AFUtils.GetMyPlayerController()
@@ -343,6 +348,24 @@ function(Context)
     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
 
     LogDebug("----- [OnRep_Stability Level] called -----")
+    AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+end)
+
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:Free Leyak",
+function(Context)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+
+    LogDebug("----- [Free Leyak] called -----")
+    AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+end)
+
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:TrapLeyak",
+function(Context)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+
+    LogDebug("----- [TrapLeyak] called -----")
     AFUtils.LogDeployedLeyakContainment(leyakContainment)
     LogDebug("------------------------------")
 end)
