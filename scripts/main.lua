@@ -200,17 +200,27 @@ RegisterKeyBind(Key.L, function()
     end)
 end)
 
+local TraceType = 3
 RegisterKeyBind(Key.Z, function()
     ExecuteInGameThread(function()
-        local hitActor = ForwardLineTraceByChannel(3)
-        if hitActor then
+        LogDebug("Fire ForwardLineTraceByChannel with type: " .. TraceType)
+        local hitActor = ForwardLineTraceByChannel(TraceType)
+        if hitActor:IsValid() then
             LogDebug("--- [ForwardLineTraceByChannel]:")
             LogDebug("HitActor: " .. hitActor:GetFullName())
             LogDebug("ClassName: " .. hitActor:GetClass():GetFullName())
             
-            if hitActor:IsA(AFUtils.GetClassActor()) then
+            if hitActor:IsA(GetStaticClassActor()) then
                 ---@cast hitActor AActor
                 LogDebug("Location: ", VectorToString(hitActor:K2_GetActorLocation()))
+            end
+            if hitActor:IsA(GetStaticClassStaticMeshComponent()) then
+                ---@cast hitActor UStaticMeshComponent
+                local actor = hitActor:GetOwner()
+                if actor:IsValid() then
+                    LogDebug("Owner: ", actor:GetFullName())
+                    -- actor:K2_DestroyActor()
+                end
             end
 
             -- if hitActor:IsA(AFUtils.GetClassDeployed_Battery_ParentBP_C()) then
@@ -237,7 +247,53 @@ RegisterKeyBind(Key.Z, function()
     end)
 end)
 
+
 RegisterKeyBind(Key.U, function()
+    ExecuteInGameThread(function()
+        LogDebug("Fire ForwardLineTraceByObject with type: " .. TraceType)
+        local hitActor = ForwardLineTraceByObject(TraceType)
+        if hitActor:IsValid() then
+            LogDebug("--- [ForwardLineTraceByObject]:")
+            LogDebug("HitActor: " .. hitActor:GetFullName())
+            LogDebug("ClassName: " .. hitActor:GetClass():GetFullName())
+            
+            if hitActor:IsA(GetStaticClassActor()) then
+                ---@cast hitActor AActor
+                LogDebug("Location: ", VectorToString(hitActor:K2_GetActorLocation()))
+            end
+            if hitActor:IsA(GetStaticClassStaticMeshComponent()) then
+                ---@cast hitActor UStaticMeshComponent
+                local actor = hitActor:GetOwner()
+                if actor:IsValid() then
+                    LogDebug("Owner: ", actor:GetFullName())
+                end
+            end
+            LogDebug("------------------------------")
+        end
+    end)
+end)
+
+RegisterKeyBind(Key.PAGE_UP, function()
+    TraceType = TraceType + 1
+    if TraceType > 32 then
+        TraceType = 0
+    elseif TraceType < 0 then
+        TraceType = 32
+    end
+    LogDebug("Trace type: " .. TraceType)
+end)
+
+RegisterKeyBind(Key.PAGE_DOWN, function()
+    TraceType = TraceType - 1
+    if TraceType > 32 then
+        TraceType = 0
+    elseif TraceType < 0 then
+        TraceType = 32
+    end
+    LogDebug("Trace type: " .. TraceType)
+end)
+
+RegisterKeyBind(Key.I, function()
     ExecuteInGameThread(function()
         LogDebug("------------ U ---------------")
 
