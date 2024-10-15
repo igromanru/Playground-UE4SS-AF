@@ -241,61 +241,96 @@ RegisterKeyBind(Key.U, function()
     ExecuteInGameThread(function()
         LogDebug("------------ U ---------------")
 
-        local invalidObject = CreateInvalidObject()
-        print("invalidObject variable type: " .. type(invalidObject))
-        if invalidObject then
-            print("invalidObject userdata type: " .. invalidObject:type())
-            print("invalidObject IsValid: " .. tostring(invalidObject:IsValid()))
-        end
+        -- local invalidObject = CreateInvalidObject()
+        -- print("invalidObject variable type: " .. type(invalidObject))
+        -- if invalidObject then
+        --     print("invalidObject userdata type: " .. invalidObject:type())
+        --     print("invalidObject IsValid: " .. tostring(invalidObject:IsValid()))
+        -- end
 
-        local playerController = UEHelpers.GetPlayerController()
-        if playerController:IsValid() then
-            print("playerController: " .. playerController:GetFullName())
-        else
-            print("playerController invalid")
-        end
-        local player = UEHelpers.GetPlayer()
-        if player:IsValid() then
-            print("player: " .. player:GetFullName())
-        else
-            print("player invalid")
-        end
-        local gameEngine = UEHelpers.GetEngine()
-        if gameEngine:IsValid() then
-            print("gameEngine: " .. gameEngine:GetFullName())
-        end
-        local gameViewportClient = UEHelpers.GetGameViewportClient()
-        if gameViewportClient:IsValid() then
-            print("gameViewportClient: " .. gameViewportClient:GetFullName())
-        end
-        local world = UEHelpers.GetWorld()
-        if world:IsValid() then
-            print("world: " .. world:GetFullName())
-        end
-        print("WorldDeltaSeconds: " .. UEHelpers.GetGameplayStatics():GetWorldDeltaSeconds(UEHelpers.GetWorldContextObject()))
-        local persistentLevel = UEHelpers.GetPersistentLevel()
-        if persistentLevel:IsValid() then
-            print("persistentLevel: " .. persistentLevel:GetFullName())
-        else
-            print("persistentLevel invalid")
-        end
-        local worldSettings = UEHelpers.GetWorldSettings()
-        if worldSettings:IsValid() then
-            print("worldSettings: " .. worldSettings:GetFullName())
-        else
-            print("worldSettings invalid")
-        end
-        local gameModeBase = UEHelpers.GetGameModeBase()
-        if gameModeBase:IsValid() then
-            print("gameModeBase: " .. gameModeBase:GetFullName())
-        else
-            print("gameModeBase invalid")
-        end
-        local gameStateBase = UEHelpers.GetGameStateBase()
-        if gameStateBase:IsValid() then
-            print("gameStateBase: " .. gameStateBase:GetFullName())
-        else
-            print("gameStateBase invalid")
+        -- local playerController = UEHelpers.GetPlayerController()
+        -- if playerController:IsValid() then
+        --     print("playerController: " .. playerController:GetFullName())
+        -- else
+        --     print("playerController invalid")
+        -- end
+        -- local player = UEHelpers.GetPlayer()
+        -- if player:IsValid() then
+        --     print("player: " .. player:GetFullName())
+        -- else
+        --     print("player invalid")
+        -- end
+        -- local gameEngine = UEHelpers.GetEngine()
+        -- if gameEngine:IsValid() then
+        --     print("gameEngine: " .. gameEngine:GetFullName())
+        -- end
+        -- local gameViewportClient = UEHelpers.GetGameViewportClient()
+        -- if gameViewportClient:IsValid() then
+        --     print("gameViewportClient: " .. gameViewportClient:GetFullName())
+        -- end
+        -- local world = UEHelpers.GetWorld()
+        -- if world:IsValid() then
+        --     print("world: " .. world:GetFullName())
+        -- end
+        -- print("WorldDeltaSeconds: " .. UEHelpers.GetGameplayStatics():GetWorldDeltaSeconds(UEHelpers.GetWorldContextObject()))
+        -- local persistentLevel = UEHelpers.GetPersistentLevel()
+        -- if persistentLevel:IsValid() then
+        --     print("persistentLevel: " .. persistentLevel:GetFullName())
+        -- else
+        --     print("persistentLevel invalid")
+        -- end
+        -- local worldSettings = UEHelpers.GetWorldSettings()
+        -- if worldSettings:IsValid() then
+        --     print("worldSettings: " .. worldSettings:GetFullName())
+        -- else
+        --     print("worldSettings invalid")
+        -- end
+        -- local gameModeBase = UEHelpers.GetGameModeBase()
+        -- if gameModeBase:IsValid() then
+        --     print("gameModeBase: " .. gameModeBase:GetFullName())
+        -- else
+        --     print("gameModeBase invalid")
+        -- end
+        -- local gameStateBase = UEHelpers.GetGameStateBase()
+        -- if gameStateBase:IsValid() then
+        --     print("gameStateBase: " .. gameStateBase:GetFullName())
+        -- else
+        --     print("gameStateBase invalid")
+        -- end
+
+        local npcSpawns = FindAllOf("Abiotic_NPCSpawn_ParentBP_C") ---@type AAbiotic_NPCSpawn_ParentBP_C[]?
+        if npcSpawns then
+            LogDebug("NPCSpawn's count:", #npcSpawns)
+            local npcSpawned = 0
+            for i = 1, #npcSpawns do
+                local npcSpawn = npcSpawns[i]
+                local IsOnCooldown = npcSpawn:IsOnCooldown()
+                LogDebug(i .. ": IsOnCooldown:",IsOnCooldown)
+                LogDebug("AllowableSpawnHours (enum 0-3):",npcSpawn.AllowableSpawnHours)
+                -- LogDebug("NPCsAllowedFromSpawn:",npcSpawn.NPCsAllowedFromSpawn)
+                -- LogDebug("CanSpawnInLineOfSight:",npcSpawn.CanSpawnInLineOfSight)
+                -- LogDebug("ShouldSpawnSkipPlayerChecks:",npcSpawn.ShouldSpawnSkipPlayerChecks)
+                -- LogDebug("AlwaysPassDistanceCheck:",npcSpawn.AlwaysPassDistanceCheck)
+                LogDebug("NPC Level:",npcSpawn['NPC Level'])
+                LogDebug("NoLoot:",npcSpawn.NoLoot)
+                local outSuccess = { Success = false }
+                local outSpawnedNPC = { SpawnedNPC = CreateInvalidObject() }
+                local outDebugMessage = { DebugMessage = CreateInvalidObject() }
+                local outResponse = { Response = 0 }
+                npcSpawn:TrySpawnNPCNew(true, true, false, outSuccess, outSpawnedNPC, outDebugMessage, outResponse)
+                LogDebug(i .. ": Spawn result:")
+                LogDebug("  Success:", outSuccess.Success)
+                LogDebug("  SpawnedNPC:IsValid:", outSpawnedNPC.SpawnedNPC:IsValid())
+                if outSuccess.Success == true then
+                    npcSpawned = npcSpawned + 1
+                end
+                -- LogDebug("  DebugMessage type:", outDebugMessage.DebugMessage:type())
+                -- if outDebugMessage.DebugMessage and outDebugMessage.DebugMessage:IsValid() then
+                -- end
+                -- LogDebug("  Response:", outResponse.Response)
+                
+            end
+            LogDebug("NPCs Spawned:", npcSpawned)
         end
         
         -- local aiDirector = AFUtils.GetAIDirector()
@@ -303,9 +338,8 @@ RegisterKeyBind(Key.U, function()
         --     -- local cooldownInMin = 1.0
         --     -- aiDirector.LeyakCooldown = cooldownInMin * 60.0
         --     -- aiDirector:SetLeyakOnCooldown(1.0)
-        --     LogDebug("LeyakCooldown set to: "..aiDirector.LeyakCooldown.." ("..cooldownInMin.." min)")
+        --     -- LogDebug("LeyakCooldown set to: "..aiDirector.LeyakCooldown.." ("..cooldownInMin.." min)")
         -- end
-        -- AFUtils.TriggerWeatherEvent(AFUtils.WeatherEvents.RadLeak)
         LogDebug("------------------------------")
     end)
 end)
@@ -321,6 +355,20 @@ RegisterKeyBind(Key.PAUSE, function()
         end
         LogDebug("------------------------------")
     end)
+end)
+
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/AbioticDeployed_CraftingBench_ParentBP.AbioticDeployed_CraftingBench_ParentBP_C:UpdateUpgradeComponents",
+function(Context)
+    local craftingBench = Context:get() ---@type AAbioticDeployed_CraftingBench_ParentBP_C
+
+    LogDebug("----- [UpdateUpgradeComponents] called -----")
+    LogDebug("GameplayTags Num:", #craftingBench.UpgradeTagContainer.GameplayTags)
+    for i = 1, #craftingBench.UpgradeTagContainer.GameplayTags do
+        local gameplayTag = craftingBench.UpgradeTagContainer.GameplayTags[i]
+        LogDebug(i .. ": .GameplayTags:", gameplayTag.TagName:ToString())
+    end
+    LogDebug("ParentTags Num:", #craftingBench.UpgradeTagContainer.ParentTags)
+    LogDebug("------------------------------")
 end)
 
 RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:ServerUpdateStabilityLevel",
