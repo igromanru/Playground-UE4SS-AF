@@ -214,12 +214,12 @@ RegisterKeyBind(Key.Z, function()
                 ---@cast hitActor AActor
                 LogDebug("Location: ", VectorToString(hitActor:K2_GetActorLocation()))
             end
-            if hitActor:IsA(GetStaticClassStaticMeshComponent()) then
-                ---@cast hitActor UStaticMeshComponent
+            if hitActor:IsA(GetStaticClassStaticMeshComponent()) or hitActor:IsA(GetStaticClassSkeletalMeshComponent()) then
+                ---@cast hitActor UMeshComponent
                 local actor = hitActor:GetOwner()
                 if actor:IsValid() then
                     LogDebug("Owner: ", actor:GetFullName())
-                    -- actor:K2_DestroyActor()
+                    LogDebug("Owner class: ", actor:GetClass():GetFullName())
                 end
             end
 
@@ -261,11 +261,12 @@ RegisterKeyBind(Key.U, function()
                 ---@cast hitActor AActor
                 LogDebug("Location: ", VectorToString(hitActor:K2_GetActorLocation()))
             end
-            if hitActor:IsA(GetStaticClassStaticMeshComponent()) then
-                ---@cast hitActor UStaticMeshComponent
+            if hitActor:IsA(GetStaticClassStaticMeshComponent()) or hitActor:IsA(GetStaticClassSkeletalMeshComponent()) then
+                ---@cast hitActor UMeshComponent
                 local actor = hitActor:GetOwner()
                 if actor:IsValid() then
                     LogDebug("Owner: ", actor:GetFullName())
+                    LogDebug("Owner class: ", actor:GetClass():GetFullName())
                 end
             end
             LogDebug("------------------------------")
@@ -413,19 +414,19 @@ RegisterKeyBind(Key.PAUSE, function()
     end)
 end)
 
-RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/AbioticDeployed_CraftingBench_ParentBP.AbioticDeployed_CraftingBench_ParentBP_C:UpdateUpgradeComponents",
-function(Context)
-    local craftingBench = Context:get() ---@type AAbioticDeployed_CraftingBench_ParentBP_C
+-- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/AbioticDeployed_CraftingBench_ParentBP.AbioticDeployed_CraftingBench_ParentBP_C:UpdateUpgradeComponents",
+-- function(Context)
+--     local craftingBench = Context:get() ---@type AAbioticDeployed_CraftingBench_ParentBP_C
 
-    LogDebug("----- [UpdateUpgradeComponents] called -----")
-    LogDebug("GameplayTags Num:", #craftingBench.UpgradeTagContainer.GameplayTags)
-    for i = 1, #craftingBench.UpgradeTagContainer.GameplayTags do
-        local gameplayTag = craftingBench.UpgradeTagContainer.GameplayTags[i]
-        LogDebug(i .. ": .GameplayTags:", gameplayTag.TagName:ToString())
-    end
-    LogDebug("ParentTags Num:", #craftingBench.UpgradeTagContainer.ParentTags)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [UpdateUpgradeComponents] called -----")
+--     LogDebug("GameplayTags Num:", #craftingBench.UpgradeTagContainer.GameplayTags)
+--     for i = 1, #craftingBench.UpgradeTagContainer.GameplayTags do
+--         local gameplayTag = craftingBench.UpgradeTagContainer.GameplayTags[i]
+--         LogDebug(i .. ": .GameplayTags:", gameplayTag.TagName:ToString())
+--     end
+--     LogDebug("ParentTags Num:", #craftingBench.UpgradeTagContainer.ParentTags)
+--     LogDebug("------------------------------")
+-- end)
 
 RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:ServerUpdateStabilityLevel",
 function(Context, Value)
