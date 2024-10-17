@@ -297,7 +297,7 @@ end)
 
 RegisterKeyBind(Key.O, function()
     ExecuteInGameThread(function()
-        LogDebug("------------ U ---------------")
+        LogDebug("------------ O ---------------")
         local playerController = UEHelpers.GetPlayerController()
         if playerController:IsValid() then
             print(string.format("playerController: %s\n", playerController:GetFullName()))
@@ -310,17 +310,29 @@ RegisterKeyBind(Key.O, function()
         else
             print("player invalid\n")
         end
-        local gameEngine = UEHelpers.GetEngine()
-        if gameEngine:IsValid() then
-            print(string.format("gameEngine: %s\n", gameEngine:GetFullName()))
+        local engine = UEHelpers.GetEngine()
+        if engine:IsValid() then
+            print(string.format("engine: %s\n", engine:GetFullName()))
+        else
+            print("engine invalid\n")
+        end
+        local gameInstance = UEHelpers.GetGameInstance()
+        if gameInstance:IsValid() then
+            print(string.format("gameInstance: %s\n", gameInstance:GetFullName()))
+        else
+            print("gameInstance invalid\n")
         end
         local gameViewportClient = UEHelpers.GetGameViewportClient()
         if gameViewportClient:IsValid() then
             print(string.format("gameViewportClient: %s\n", gameViewportClient:GetFullName()))
+        else
+            print("gameViewportClient invalid\n")
         end
         local world = UEHelpers.GetWorld()
         if world:IsValid() then
             print(string.format("world: %s\n", world:GetFullName()))
+        else
+            print("world invalid\n")
         end
         print(string.format("WorldDeltaSeconds: %f\n", UEHelpers.GetGameplayStatics():GetWorldDeltaSeconds(UEHelpers.GetWorldContextObject())))
         local persistentLevel = UEHelpers.GetPersistentLevel()
