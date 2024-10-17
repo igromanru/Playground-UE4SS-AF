@@ -100,12 +100,12 @@ RegisterKeyBind(Key.L, function()
         LogDebug("IsServer:", IsServer())
 
         local myPlayerController = AFUtils.GetMyPlayerController()
-        if myPlayerController then
+        if myPlayerController:IsValid() then
             LogDebug("myPlayerController: " .. myPlayerController:GetFullName())
             LogDebug("ActiveLevelName: " .. myPlayerController.ActiveLevelName:ToString())
         end
         local myPlayer = AFUtils.GetMyPlayer()
-        if myPlayer then
+        if myPlayer:IsValid() then
             local location = myPlayer:K2_GetActorLocation()
             LogDebug("myPlayer location: " .. VectorToString(location))
 
@@ -123,7 +123,7 @@ RegisterKeyBind(Key.L, function()
             -- end
         end
         local myInventoryComponent = AFUtils.GetMyInventoryComponent()
-        if myInventoryComponent then
+        if myInventoryComponent:IsValid() then
             -- LogDebug("MyInventoryComponent:")
             -- AFUtils.LogInventoryComponent(myInventoryComponent)
             -- if #myInventoryComponent.CurrentInventory > 1 then
@@ -298,6 +298,56 @@ end)
 RegisterKeyBind(Key.O, function()
     ExecuteInGameThread(function()
         LogDebug("------------ U ---------------")
+        local playerController = UEHelpers.GetPlayerController()
+        if playerController:IsValid() then
+            print(string.format("playerController: %s\n", playerController:GetFullName()))
+        else
+            print("playerController invalid\n")
+        end
+        local player = UEHelpers.GetPlayer()
+        if player:IsValid() then
+            print(string.format("player: %s\n", player:GetFullName()))
+        else
+            print("player invalid\n")
+        end
+        local gameEngine = UEHelpers.GetEngine()
+        if gameEngine:IsValid() then
+            print(string.format("gameEngine: %s\n", gameEngine:GetFullName()))
+        end
+        local gameViewportClient = UEHelpers.GetGameViewportClient()
+        if gameViewportClient:IsValid() then
+            print(string.format("gameViewportClient: %s\n", gameViewportClient:GetFullName()))
+        end
+        local world = UEHelpers.GetWorld()
+        if world:IsValid() then
+            print(string.format("world: %s\n", world:GetFullName()))
+        end
+        print(string.format("WorldDeltaSeconds: %f\n", UEHelpers.GetGameplayStatics():GetWorldDeltaSeconds(UEHelpers.GetWorldContextObject())))
+        local persistentLevel = UEHelpers.GetPersistentLevel()
+        if persistentLevel:IsValid() then
+            print(string.format("persistentLevel: %s\n", persistentLevel:GetFullName()))
+        else
+            print("persistentLevel invalid\n")
+        end
+        local worldSettings = UEHelpers.GetWorldSettings()
+        if worldSettings:IsValid() then
+            print(string.format("worldSettings: %s\n", worldSettings:GetFullName()))
+        else
+            print("worldSettings invalid\n")
+        end
+        local gameModeBase = UEHelpers.GetGameModeBase()
+        if gameModeBase:IsValid() then
+            print(string.format("gameModeBase: %s\n", gameModeBase:GetFullName()))
+        else
+            print("gameModeBase invalid\n")
+        end
+        local gameStateBase = UEHelpers.GetGameStateBase()
+        if gameStateBase:IsValid() then
+            print(string.format("gameStateBase: %s\n", gameStateBase:GetFullName()))
+        else
+            print("gameStateBase invalid\n")
+        end
+
         -- local npcSpawns = FindAllOf("Abiotic_NPCSpawn_ParentBP_C") ---@type AAbiotic_NPCSpawn_ParentBP_C[]?
         -- if npcSpawns then
         --     LogDebug("NPCSpawn's count:", #npcSpawns)
