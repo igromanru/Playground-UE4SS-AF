@@ -419,6 +419,27 @@ RegisterKeyBind(Key.PAUSE, function()
     end)
 end)
 
+RegisterProcessConsoleExecPreHook(function(Context, FullCommand, CommandParts, Ar, Executor)
+    print("RegisterProcessConsoleExecPreHook:\n")
+    local ContextObject = Context:get()
+    local ExecutorObject = Executor:get()
+
+    print(string.format("Context FullName: %s\n", ContextObject:GetFullName()))
+    if ExecutorObject:IsValid() then
+        print(string.format("Executor FullName: %s\n", ExecutorObject:GetFullName()))
+    end
+    print(string.format("Command: %s\n", FullCommand))
+    print(string.format("Number of command parts: %i\n", #CommandParts))
+    
+    if #CommandParts > 0 then
+        print(string.format("Command Name: %s\n", CommandParts[1]))
+        for PartNumber, CommandPart in ipairs(CommandParts) do
+            print(string.format("CommandPart: #%i -> '%s'\n", PartNumber, CommandPart))
+        end
+    end
+    return true
+end)
+
 -- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/AbioticDeployed_CraftingBench_ParentBP.AbioticDeployed_CraftingBench_ParentBP_C:UpdateUpgradeComponents",
 -- function(Context)
 --     local craftingBench = Context:get() ---@type AAbioticDeployed_CraftingBench_ParentBP_C
@@ -498,28 +519,28 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
-RegisterHook("/Game/Blueprints/Meta/Abiotic_GameInstance.Abiotic_GameInstance_C:IsCustomizationRowUnlocked", function(Context, RowName, Unlocked)
-    local gameInstance = Context:get() ---@type UAbiotic_GameInstance_C
-    local rowName = RowName:get()
-    local unlocked = Unlocked:get()
+-- RegisterHook("/Game/Blueprints/Meta/Abiotic_GameInstance.Abiotic_GameInstance_C:IsCustomizationRowUnlocked", function(Context, RowName, Unlocked)
+--     local gameInstance = Context:get() ---@type UAbiotic_GameInstance_C
+--     local rowName = RowName:get()
+--     local unlocked = Unlocked:get()
 
-    LogDebug("----- [IsCustomizationRowUnlocked] called -----")
-    LogDebug("RowName: " .. rowName:ToString())
-    LogDebug("Unlocked:", unlocked)
-    -- gameInstance:UnlockCustomization(rowName)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [IsCustomizationRowUnlocked] called -----")
+--     LogDebug("RowName: " .. rowName:ToString())
+--     LogDebug("Unlocked:", unlocked)
+--     -- gameInstance:UnlockCustomization(rowName)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Meta/Abiotic_GameInstance.Abiotic_GameInstance_C:CheckCustomizationSpecialConditions", function(Context, Conditions, Unlocked)
-    local gameInstance = Context:get() ---@type UAbiotic_GameInstance_C
-    local conditions = Conditions:get()
-    local unlocked = Unlocked:get()
+-- RegisterHook("/Game/Blueprints/Meta/Abiotic_GameInstance.Abiotic_GameInstance_C:CheckCustomizationSpecialConditions", function(Context, Conditions, Unlocked)
+--     local gameInstance = Context:get() ---@type UAbiotic_GameInstance_C
+--     local conditions = Conditions:get()
+--     local unlocked = Unlocked:get()
 
-    LogDebug("----- [CheckCustomizationSpecialConditions] called -----")
-    LogDebug("Conditions: " .. conditions:ToString())
-    LogDebug("Unlocked:", unlocked)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [CheckCustomizationSpecialConditions] called -----")
+--     LogDebug("Conditions: " .. conditions:ToString())
+--     LogDebug("Unlocked:", unlocked)
+--     LogDebug("------------------------------")
+-- end)
 
 -- RegisterHook("/Game/Blueprints/Widgets/Inventory/W_Inventory_CraftingArea.W_Inventory_CraftingArea_C:RefreshCraftingEligibility",
 -- function(Context)
@@ -729,39 +750,39 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
-RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SpawnLeyak", function(Context, Location)
-    local aiDirector = Context:get()
-    local location = Location:get()
+-- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SpawnLeyak", function(Context, Location)
+--     local aiDirector = Context:get()
+--     local location = Location:get()
 
-    LogDebug("----- [SpawnLeyak] called -----")
-    -- local aiControllerLeyak = FindFirstOf("AI_Controller_Leyak_C")
-    -- if aiControllerLeyak and aiControllerLeyak:IsValid() then
-    --     LogDebug("AI_Controller_Leyak_C found, call Despawn")
-    --     aiControllerLeyak:Despawn()
-    -- end
-    LogDebug("------------------------------")
-end)
-
--- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:LeyakFailsafeRemove", function(Context)
---     local aIDirector = Context:get()
-
---     LogDebug("[Abiotic_AIDirector_C:LeyakFailsafeRemove] called:")
+--     LogDebug("----- [SpawnLeyak] called -----")
+--     -- local aiControllerLeyak = FindFirstOf("AI_Controller_Leyak_C")
+--     -- if aiControllerLeyak and aiControllerLeyak:IsValid() then
+--     --     LogDebug("AI_Controller_Leyak_C found, call Despawn")
+--     --     aiControllerLeyak:Despawn()
+--     -- end
 --     LogDebug("------------------------------")
 -- end)
 
-RegisterHook("/Game/Blueprints/Characters/NPCs/AI_Controller_Leyak.AI_Controller_Leyak_C:Despawn", function(Context)
-    local aiControllerLeyak = Context:get()
+-- -- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:LeyakFailsafeRemove", function(Context)
+-- --     local aIDirector = Context:get()
 
-    LogDebug("[AI_Controller_Leyak_C:Despawn] called:")
-    -- local aiDirector = FindFirstOf("Abiotic_AIDirector_C")
-    -- if aiDirector and aiDirector:IsValid() then
-    --     LogDebug("LeyakCooldown: " .. aiDirector.LeyakCooldown)
-    --     if aiDirector.ActiveLeyak:IsValid() then
-    --         AFUtils.LogNPCLeyak(aiDirector.ActiveLeyak, "ActiveLeyak.")
-    --     end
-    -- end
-    LogDebug("------------------------------")
-end)
+-- --     LogDebug("[Abiotic_AIDirector_C:LeyakFailsafeRemove] called:")
+-- --     LogDebug("------------------------------")
+-- -- end)
+
+-- RegisterHook("/Game/Blueprints/Characters/NPCs/AI_Controller_Leyak.AI_Controller_Leyak_C:Despawn", function(Context)
+--     local aiControllerLeyak = Context:get()
+
+--     LogDebug("[AI_Controller_Leyak_C:Despawn] called:")
+--     -- local aiDirector = FindFirstOf("Abiotic_AIDirector_C")
+--     -- if aiDirector and aiDirector:IsValid() then
+--     --     LogDebug("LeyakCooldown: " .. aiDirector.LeyakCooldown)
+--     --     if aiDirector.ActiveLeyak:IsValid() then
+--     --         AFUtils.LogNPCLeyak(aiDirector.ActiveLeyak, "ActiveLeyak.")
+--     --     end
+--     -- end
+--     LogDebug("------------------------------")
+-- end)
 
 -- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SetLeyakOnCooldown", function(Context, CooldownReductionMultiplier)
 --     local aiDirector = Context:get()
