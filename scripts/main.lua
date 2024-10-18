@@ -98,6 +98,7 @@ RegisterKeyBind(Key.L, function()
         --     reaper:Server_PoopOnFloor()
         -- end
         LogDebug("IsServer:", IsServer())
+        LogDebug("IsDedicatedServer:", IsDedicatedServer())
 
         local myPlayerController = AFUtils.GetMyPlayerController()
         if myPlayerController:IsValid() then
