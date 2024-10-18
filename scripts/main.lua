@@ -81,6 +81,7 @@ RegisterKeyBind(Key.L, function()
         --     -- leyakContainment:TrapLeyak(0.5)
         --     -- leyakContainment["Free Leyak"]()
         --     -- leyakContainment:ServerUpdateStabilityLevel(50)
+        --     -- leyakContainment:ProduceLeyakEssence()
         --     AFUtils.LogDeployedLeyakContainment(leyakContainment, "LeyakContainment.")
         -- end
         -- local gameInstance = UEHelpers.GetGameInstance() ---@cast gameInstance UAbiotic_GameInstance_C
@@ -153,21 +154,27 @@ RegisterKeyBind(Key.L, function()
         --     LogDebug("GlobalUnlocks.SaveVersion: " .. worldMetadataSave.SaveVersion)
         -- end
 
-        -- local gameState = GetGameState()
-        -- if gameState then
-        --     LogDebug("GameState.Class: " .. gameState:GetClass():GetFullName())
-        --     LogDebug("MatchState: " .. gameState.MatchState:ToString())
-        --     LogDebug("ActiveLeyakContainmentID: " .. gameState.ActiveLeyakContainmentID:ToString())
-        -- end
+        local gameState = AFUtils.GetSurvivalGameState()
+        if gameState:IsValid() then
+            LogDebug("GameState.Class: " .. gameState:GetClass():GetFullName())
+            LogDebug("MatchState: " .. gameState.MatchState:ToString())
+            -- gameState["Set Leyak Containment ID"]("")
+            LogDebug("ActiveLeyakContainmentID: " .. gameState.ActiveLeyakContainmentID:ToString())
+        end
 
         -- local myPlayerController = AFUtils.GetMyPlayerController()
-        -- if myPlayerController then
+        -- if myPlayerController:IsValid() then
         --     LogDebug("ActiveLevelName: " .. myPlayerController.ActiveLevelName:ToString())
-        --     -- if myPlayerController.DayNightManager:IsValid() then
-        --     --     -- myPlayerController.DayNightManager.IsNight = false
-        --     --     AFUtils.LogDayNightManager(myPlayerController.DayNightManager, "DayNightManager.")
-        --     --     -- AFUtils.SetNextWeatherEvent(AFUtils.WeatherEvents.Fog)
-        --     -- end
+        --     if myPlayerController.DayNightManager:IsValid() then
+        --         local dayNightManager = myPlayerController.DayNightManager
+        --         -- dayNightManager.IsNight = false
+        --         -- AFUtils.SetNextWeatherEvent(AFUtils.WeatherEvents.Fog)
+        --         -- 5:40 o'clock
+        --         -- dayNightManager.CurrentTimeInSeconds = 20400.0
+        --         -- dayNightManager.IsNight = true
+        --         -- dayNightManager:OnRep_CurrentTimeInSeconds()
+        --         AFUtils.LogDayNightManager(dayNightManager, "DayNightManager.")
+        --     end
         -- end
         -- local powerSockets = FindAllOf("PowerSocket_ParentBP_C")
         -- ---@cast powerSockets APowerSocket_ParentBP_C[]?
@@ -419,26 +426,26 @@ RegisterKeyBind(Key.PAUSE, function()
     end)
 end)
 
-RegisterProcessConsoleExecPreHook(function(Context, FullCommand, CommandParts, Ar, Executor)
-    print("RegisterProcessConsoleExecPreHook:\n")
-    local ContextObject = Context:get()
-    local ExecutorObject = Executor:get()
+-- RegisterProcessConsoleExecPreHook(function(Context, FullCommand, CommandParts, Ar, Executor)
+--     print("RegisterProcessConsoleExecPreHook:\n")
+--     local ContextObject = Context:get()
+--     local ExecutorObject = Executor:get()
 
-    print(string.format("Context FullName: %s\n", ContextObject:GetFullName()))
-    if ExecutorObject:IsValid() then
-        print(string.format("Executor FullName: %s\n", ExecutorObject:GetFullName()))
-    end
-    print(string.format("Command: %s\n", FullCommand))
-    print(string.format("Number of command parts: %i\n", #CommandParts))
+--     print(string.format("Context FullName: %s\n", ContextObject:GetFullName()))
+--     if ExecutorObject:IsValid() then
+--         print(string.format("Executor FullName: %s\n", ExecutorObject:GetFullName()))
+--     end
+--     print(string.format("Command: %s\n", FullCommand))
+--     print(string.format("Number of command parts: %i\n", #CommandParts))
     
-    if #CommandParts > 0 then
-        print(string.format("Command Name: %s\n", CommandParts[1]))
-        for PartNumber, CommandPart in ipairs(CommandParts) do
-            print(string.format("CommandPart: #%i -> '%s'\n", PartNumber, CommandPart))
-        end
-    end
-    return true
-end)
+--     if #CommandParts > 0 then
+--         print(string.format("Command Name: %s\n", CommandParts[1]))
+--         for PartNumber, CommandPart in ipairs(CommandParts) do
+--             print(string.format("CommandPart: #%i -> '%s'\n", PartNumber, CommandPart))
+--         end
+--     end
+--     return true
+-- end)
 
 -- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/AbioticDeployed_CraftingBench_ParentBP.AbioticDeployed_CraftingBench_ParentBP_C:UpdateUpgradeComponents",
 -- function(Context)
@@ -454,70 +461,81 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
--- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:ServerUpdateStabilityLevel",
--- function(Context, Value)
---     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
---     local value = Value:get()
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:ServerUpdateStabilityLevel",
+function(Context, Value)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+    local value = Value:get()
 
---     LogDebug("----- [ServerUpdateStabilityLevel] called -----")
---     LogDebug("Value:", value)
---     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [ServerUpdateStabilityLevel] called -----")
+    LogDebug("Value:", value)
+    -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+end)
 
--- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:IsContainmentCurrentlyActive",
--- function(Context)
---     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:IsContainmentCurrentlyActive",
+function(Context, RetrunValue)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
 
---     LogDebug("----- [IsContainmentCurrentlyActive] called -----")
---     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [IsContainmentCurrentlyActive] called -----")
+    AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+    return leyakContainment.ContainsLeyak == true
+end)
 
--- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:OnRep_Stability Level",
--- function(Context)
---     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:OnRep_Stability Level",
+function(Context)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
 
---     LogDebug("----- [OnRep_Stability Level] called -----")
---     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [OnRep_Stability Level] called -----")
+    -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+end)
 
--- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:OnRep_ContainsLeyak",
--- function(Context)
---     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:OnRep_ContainsLeyak",
+function(Context)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
 
---     LogDebug("----- [OnRep_ContainsLeyak] called -----")
---     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [OnRep_ContainsLeyak] called -----")
+    -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+end)
 
--- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:Free Leyak",
--- function(Context)
---     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:Free Leyak",
+function(Context)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
 
---     LogDebug("----- [Free Leyak] called -----")
---     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [Free Leyak] called -----")
+    -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+end)
 
--- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:TrapLeyak",
--- function(Context)
---     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:TrapLeyak",
+function(Context)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
 
---     LogDebug("----- [TrapLeyak] called -----")
---     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [TrapLeyak] called -----")
+    -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+end)
 
--- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:NewDayUpdate",
--- function(Context)
---     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:NewDayUpdate",
+function(Context)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
 
---     LogDebug("----- [NewDayUpdate] called -----")
---     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [NewDayUpdate] called -----")
+    AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+end)
+
+
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:ProduceLeyakEssence",
+function(Context)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+
+    LogDebug("----- [ProduceLeyakEssence] called -----")
+    -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+end)
 
 -- RegisterHook("/Game/Blueprints/Meta/Abiotic_GameInstance.Abiotic_GameInstance_C:IsCustomizationRowUnlocked", function(Context, RowName, Unlocked)
 --     local gameInstance = Context:get() ---@type UAbiotic_GameInstance_C
@@ -750,39 +768,39 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
--- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SpawnLeyak", function(Context, Location)
---     local aiDirector = Context:get()
---     local location = Location:get()
+RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SpawnLeyak", function(Context, Location)
+    local aiDirector = Context:get()
+    local location = Location:get()
 
---     LogDebug("----- [SpawnLeyak] called -----")
---     -- local aiControllerLeyak = FindFirstOf("AI_Controller_Leyak_C")
---     -- if aiControllerLeyak and aiControllerLeyak:IsValid() then
---     --     LogDebug("AI_Controller_Leyak_C found, call Despawn")
---     --     aiControllerLeyak:Despawn()
---     -- end
+    LogDebug("----- [SpawnLeyak] called -----")
+    -- local aiControllerLeyak = FindFirstOf("AI_Controller_Leyak_C")
+    -- if aiControllerLeyak and aiControllerLeyak:IsValid() then
+    --     LogDebug("AI_Controller_Leyak_C found, call Despawn")
+    --     aiControllerLeyak:Despawn()
+    -- end
+    LogDebug("------------------------------")
+end)
+
+-- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:LeyakFailsafeRemove", function(Context)
+--     local aIDirector = Context:get()
+
+--     LogDebug("[Abiotic_AIDirector_C:LeyakFailsafeRemove] called:")
 --     LogDebug("------------------------------")
 -- end)
 
--- -- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:LeyakFailsafeRemove", function(Context)
--- --     local aIDirector = Context:get()
+RegisterHook("/Game/Blueprints/Characters/NPCs/AI_Controller_Leyak.AI_Controller_Leyak_C:Despawn", function(Context)
+    local aiControllerLeyak = Context:get()
 
--- --     LogDebug("[Abiotic_AIDirector_C:LeyakFailsafeRemove] called:")
--- --     LogDebug("------------------------------")
--- -- end)
-
--- RegisterHook("/Game/Blueprints/Characters/NPCs/AI_Controller_Leyak.AI_Controller_Leyak_C:Despawn", function(Context)
---     local aiControllerLeyak = Context:get()
-
---     LogDebug("[AI_Controller_Leyak_C:Despawn] called:")
---     -- local aiDirector = FindFirstOf("Abiotic_AIDirector_C")
---     -- if aiDirector and aiDirector:IsValid() then
---     --     LogDebug("LeyakCooldown: " .. aiDirector.LeyakCooldown)
---     --     if aiDirector.ActiveLeyak:IsValid() then
---     --         AFUtils.LogNPCLeyak(aiDirector.ActiveLeyak, "ActiveLeyak.")
---     --     end
---     -- end
---     LogDebug("------------------------------")
--- end)
+    LogDebug("[AI_Controller_Leyak_C:Despawn] called:")
+    -- local aiDirector = FindFirstOf("Abiotic_AIDirector_C")
+    -- if aiDirector and aiDirector:IsValid() then
+    --     LogDebug("LeyakCooldown: " .. aiDirector.LeyakCooldown)
+    --     if aiDirector.ActiveLeyak:IsValid() then
+    --         AFUtils.LogNPCLeyak(aiDirector.ActiveLeyak, "ActiveLeyak.")
+    --     end
+    -- end
+    LogDebug("------------------------------")
+end)
 
 -- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SetLeyakOnCooldown", function(Context, CooldownReductionMultiplier)
 --     local aiDirector = Context:get()
