@@ -76,14 +76,16 @@ end
 RegisterKeyBind(Key.L, function()
     ExecuteInGameThread(function()
         LogDebug("------------ L ---------------")
-        -- local leyakContainment = FindFirstOf("Deployed_LeyakContainment_C") ---@cast leyakContainment ADeployed_LeyakContainment_C
-        -- if leyakContainment:IsValid() then
-        --     -- leyakContainment:TrapLeyak(0.5)
-        --     -- leyakContainment["Free Leyak"]()
-        --     -- leyakContainment:ServerUpdateStabilityLevel(50)
-        --     -- leyakContainment:ProduceLeyakEssence()
-        --     AFUtils.LogDeployedLeyakContainment(leyakContainment, "LeyakContainment.")
-        -- end
+        local leyakContainment = FindFirstOf("Deployed_LeyakContainment_C") ---@cast leyakContainment ADeployed_LeyakContainment_C
+        if leyakContainment:IsValid() then
+            -- leyakContainment:TrapLeyak(0.5)
+            -- leyakContainment["Free Leyak"]()
+            -- leyakContainment:ServerUpdateStabilityLevel(50)
+            -- leyakContainment:ProduceLeyakEssence()
+            AFUtils.LogDeployedLeyakContainment(leyakContainment, "LeyakContainment.")
+            -- AFUtils.LogFurnitureParentBP(leyakContainment, "LeyakContainment.")
+            -- AFUtils.LogDeployedParentBP(leyakContainment, "LeyakContainment.")
+        end
         -- local gameInstance = UEHelpers.GetGameInstance() ---@cast gameInstance UAbiotic_GameInstance_C
         -- if gameInstance and gameInstance.CustomizationUnlocksSaveFile:IsValid() and gameInstance.CustomizationUnlocksSaveFile.CustomizationUnlocks then
         --     LogDebug("CustomizationUnlocks: " .. #(gameInstance.CustomizationUnlocksSaveFile.CustomizationUnlocks))
@@ -106,6 +108,11 @@ RegisterKeyBind(Key.L, function()
         --     LogDebug("myPlayerController: " .. myPlayerController:GetFullName())
         --     LogDebug("ActiveLevelName: " .. myPlayerController.ActiveLevelName:ToString())
         -- end
+
+        local playerState = AFUtils.GetMyPlayerState()
+        if IsValid(playerState) then
+            
+        end
         local myPlayer = AFUtils.GetMyPlayer()
         if myPlayer:IsValid() then
             local location = myPlayer:K2_GetActorLocation()
@@ -155,13 +162,13 @@ RegisterKeyBind(Key.L, function()
         --     LogDebug("GlobalUnlocks.SaveVersion: " .. worldMetadataSave.SaveVersion)
         -- end
 
-        -- local gameState = AFUtils.GetSurvivalGameState()
-        -- if gameState:IsValid() then
-        --     LogDebug("GameState.Class: " .. gameState:GetClass():GetFullName())
-        --     LogDebug("MatchState: " .. gameState.MatchState:ToString())
-        --     -- gameState["Set Leyak Containment ID"]("")
-        --     LogDebug("ActiveLeyakContainmentID: " .. gameState.ActiveLeyakContainmentID:ToString())
-        -- end
+        local gameState = AFUtils.GetSurvivalGameState()
+        if gameState:IsValid() then
+            LogDebug("GameState.Class: " .. gameState:GetClass():GetFullName())
+            LogDebug("MatchState: " .. gameState.MatchState:ToString())
+            -- gameState["Set Leyak Containment ID"]("")
+            LogDebug("ActiveLeyakContainmentID: " .. gameState.ActiveLeyakContainmentID:ToString())
+        end
 
         -- local myPlayerController = AFUtils.GetMyPlayerController()
         -- if myPlayerController:IsValid() then
@@ -205,6 +212,155 @@ RegisterKeyBind(Key.L, function()
         --     LogDebug(string.format("%d: RowName: %s", i, rowHandle.RowName:ToString()))
         -- end
         -- LeyakTest()
+        LogDebug("------------------------------")
+    end)
+end)
+
+RegisterKeyBind(Key.O, function()
+    ExecuteInGameThread(function()
+        LogDebug("------------ O ---------------")
+        -- local playerController = UEHelpers.GetPlayerController()
+        -- if playerController:IsValid() then
+        --     print(string.format("playerController: %s\n", playerController:GetFullName()))
+        -- else
+        --     print("playerController invalid\n")
+        -- end
+        -- local player = UEHelpers.GetPlayer()
+        -- if player:IsValid() then
+        --     print(string.format("player: %s\n", player:GetFullName()))
+        -- else
+        --     print("player invalid\n")
+        -- end
+        -- local engine = UEHelpers.GetEngine()
+        -- if engine:IsValid() then
+        --     print(string.format("engine: %s\n", engine:GetFullName()))
+        -- else
+        --     print("engine invalid\n")
+        -- end
+        -- local gameInstance = UEHelpers.GetGameInstance()
+        -- if gameInstance:IsValid() then
+        --     print(string.format("gameInstance: %s\n", gameInstance:GetFullName()))
+        -- else
+        --     print("gameInstance invalid\n")
+        -- end
+        -- local gameViewportClient = UEHelpers.GetGameViewportClient()
+        -- if gameViewportClient:IsValid() then
+        --     print(string.format("gameViewportClient: %s\n", gameViewportClient:GetFullName()))
+        -- else
+        --     print("gameViewportClient invalid\n")
+        -- end
+        -- local world = UEHelpers.GetWorld()
+        -- if world:IsValid() then
+        --     print(string.format("world: %s\n", world:GetFullName()))
+        -- else
+        --     print("world invalid\n")
+        -- end
+        -- print(string.format("WorldDeltaSeconds: %f\n", UEHelpers.GetGameplayStatics():GetWorldDeltaSeconds(UEHelpers.GetWorldContextObject())))
+        -- local persistentLevel = UEHelpers.GetPersistentLevel()
+        -- if persistentLevel:IsValid() then
+        --     print(string.format("persistentLevel: %s\n", persistentLevel:GetFullName()))
+        -- else
+        --     print("persistentLevel invalid\n")
+        -- end
+        -- local worldSettings = UEHelpers.GetWorldSettings()
+        -- if worldSettings:IsValid() then
+        --     print(string.format("worldSettings: %s\n", worldSettings:GetFullName()))
+        -- else
+        --     print("worldSettings invalid\n")
+        -- end
+        -- local gameModeBase = UEHelpers.GetGameModeBase()
+        -- if gameModeBase:IsValid() then
+        --     print(string.format("gameModeBase: %s\n", gameModeBase:GetFullName()))
+        -- else
+        --     print("gameModeBase invalid\n")
+        -- end
+        -- local gameStateBase = UEHelpers.GetGameStateBase()
+        -- if gameStateBase:IsValid() then
+        --     print(string.format("gameStateBase: %s\n", gameStateBase:GetFullName()))
+        -- else
+        --     print("gameStateBase invalid\n")
+        -- end
+        -- local playerStates = UEHelpers.GetAllPlayerStates()
+        -- print(string.format("playerStates Count: %d\n", #playerStates))
+        -- for i, playerState in ipairs(playerStates) do
+        --     if playerState:IsValid() then
+        --         print(string.format("%d: playerState: %s\n", i, playerState:GetFullName()))
+        --         print(string.format("%d: playerState Class: %s\n", i, playerState:GetClass():GetFullName()))
+        --     end
+        -- end
+        -- local players = UEHelpers.GetAllPlayers()
+        -- print(string.format("players Count: %d\n", #players))
+        -- for i, player in ipairs(players) do
+        --     if player:IsValid() then
+        --         print(string.format("%d: player: %s\n", i, player:GetFullName()))
+        --         print(string.format("%d: player Class: %s\n", i, player:GetClass():GetFullName()))
+        --     end
+        -- end
+
+        -- local myPlayerController = AFUtils.GetMyPlayerController()
+        -- if myPlayerController:IsValid() then
+        --     LogDebug("ActiveLevelName: " .. myPlayerController.ActiveLevelName:ToString())
+        --     if myPlayerController.DayNightManager:IsValid() then
+        --         local dayNightManager = myPlayerController.DayNightManager
+        --         AFUtils.LogDayNightManager(dayNightManager, "DayNightManager.")
+        --     end
+        -- end
+
+        -- local npcSpawns = FindAllOf("Abiotic_NPCSpawn_ParentBP_C") ---@type AAbiotic_NPCSpawn_ParentBP_C[]?
+        -- if npcSpawns then
+        --     LogDebug("NPCSpawn's count:", #npcSpawns)
+        --     local npcSpawned = 0
+        --     for i = 1, #npcSpawns do
+        --         local npcSpawn = npcSpawns[i]
+        --         local IsOnCooldown = npcSpawn:IsOnCooldown()
+        --         LogDebug(i .. ": IsOnCooldown:",IsOnCooldown)
+        --         LogDebug("AllowableSpawnHours (enum 0-3):",npcSpawn.AllowableSpawnHours)
+        --         -- LogDebug("NPCsAllowedFromSpawn:",npcSpawn.NPCsAllowedFromSpawn)
+        --         -- LogDebug("CanSpawnInLineOfSight:",npcSpawn.CanSpawnInLineOfSight)
+        --         -- LogDebug("ShouldSpawnSkipPlayerChecks:",npcSpawn.ShouldSpawnSkipPlayerChecks)
+        --         -- LogDebug("AlwaysPassDistanceCheck:",npcSpawn.AlwaysPassDistanceCheck)
+        --         LogDebug("NPC Level:",npcSpawn['NPC Level'])
+        --         LogDebug("NoLoot:",npcSpawn.NoLoot)
+        --         local outSuccess = { Success = false }
+        --         local outSpawnedNPC = { SpawnedNPC = CreateInvalidObject() }
+        --         local outDebugMessage = { DebugMessage = CreateInvalidObject() }
+        --         local outResponse = { Response = 0 }
+        --         npcSpawn:TrySpawnNPCNew(true, true, false, outSuccess, outSpawnedNPC, outDebugMessage, outResponse)
+        --         LogDebug(i .. ": Spawn result:")
+        --         LogDebug("  Success:", outSuccess.Success)
+        --         LogDebug("  SpawnedNPC:IsValid:", outSpawnedNPC.SpawnedNPC:IsValid())
+        --         if outSuccess.Success == true then
+        --             npcSpawned = npcSpawned + 1
+        --         end
+        --         -- LogDebug("  DebugMessage type:", outDebugMessage.DebugMessage:type())
+        --         -- if outDebugMessage.DebugMessage and outDebugMessage.DebugMessage:IsValid() then
+        --         -- end
+        --         -- LogDebug("  Response:", outResponse.Response)
+                
+        --     end
+        --     LogDebug("NPCs Spawned:", npcSpawned)
+        -- end
+        
+        -- local aiDirector = AFUtils.GetAIDirector()
+        -- if aiDirector then
+        --     -- local cooldownInMin = 1.0
+        --     -- aiDirector.LeyakCooldown = cooldownInMin * 60.0
+        --     -- aiDirector:SetLeyakOnCooldown(1.0)
+        --     -- LogDebug("LeyakCooldown set to: "..aiDirector.LeyakCooldown.." ("..cooldownInMin.." min)")
+        -- end
+
+        -- local leyakContainment = FindFirstOf("Deployed_LeyakContainment_C") ---@cast leyakContainment ADeployed_LeyakContainment_C
+        -- if leyakContainment:IsValid() then
+        --     LogDebug("TrapLeyak:",AFUtils.TrapLeyak(leyakContainment))
+        -- end
+        -- local leyakContainments = FindAllOf("Deployed_LeyakContainment_C") ---@cast leyakContainments ADeployed_LeyakContainment_C[]?
+        -- if leyakContainments then
+        --     for i = 1, #leyakContainments do
+        --         local leyakContainment = leyakContainments[i]
+        --         leyakContainment:TrapLeyak(0.1)
+        --         break
+        --     end
+        -- end
         LogDebug("------------------------------")
     end)
 end)
@@ -303,142 +459,6 @@ RegisterKeyBind(Key.PAGE_DOWN, function()
     LogDebug("Trace type: " .. TraceType)
 end)
 
-RegisterKeyBind(Key.O, function()
-    ExecuteInGameThread(function()
-        LogDebug("------------ O ---------------")
-        local playerController = UEHelpers.GetPlayerController()
-        if playerController:IsValid() then
-            print(string.format("playerController: %s\n", playerController:GetFullName()))
-        else
-            print("playerController invalid\n")
-        end
-        local player = UEHelpers.GetPlayer()
-        if player:IsValid() then
-            print(string.format("player: %s\n", player:GetFullName()))
-        else
-            print("player invalid\n")
-        end
-        local engine = UEHelpers.GetEngine()
-        if engine:IsValid() then
-            print(string.format("engine: %s\n", engine:GetFullName()))
-        else
-            print("engine invalid\n")
-        end
-        local gameInstance = UEHelpers.GetGameInstance()
-        if gameInstance:IsValid() then
-            print(string.format("gameInstance: %s\n", gameInstance:GetFullName()))
-        else
-            print("gameInstance invalid\n")
-        end
-        local gameViewportClient = UEHelpers.GetGameViewportClient()
-        if gameViewportClient:IsValid() then
-            print(string.format("gameViewportClient: %s\n", gameViewportClient:GetFullName()))
-        else
-            print("gameViewportClient invalid\n")
-        end
-        local world = UEHelpers.GetWorld()
-        if world:IsValid() then
-            print(string.format("world: %s\n", world:GetFullName()))
-        else
-            print("world invalid\n")
-        end
-        print(string.format("WorldDeltaSeconds: %f\n", UEHelpers.GetGameplayStatics():GetWorldDeltaSeconds(UEHelpers.GetWorldContextObject())))
-        local persistentLevel = UEHelpers.GetPersistentLevel()
-        if persistentLevel:IsValid() then
-            print(string.format("persistentLevel: %s\n", persistentLevel:GetFullName()))
-        else
-            print("persistentLevel invalid\n")
-        end
-        local worldSettings = UEHelpers.GetWorldSettings()
-        if worldSettings:IsValid() then
-            print(string.format("worldSettings: %s\n", worldSettings:GetFullName()))
-        else
-            print("worldSettings invalid\n")
-        end
-        local gameModeBase = UEHelpers.GetGameModeBase()
-        if gameModeBase:IsValid() then
-            print(string.format("gameModeBase: %s\n", gameModeBase:GetFullName()))
-        else
-            print("gameModeBase invalid\n")
-        end
-        local gameStateBase = UEHelpers.GetGameStateBase()
-        if gameStateBase:IsValid() then
-            print(string.format("gameStateBase: %s\n", gameStateBase:GetFullName()))
-        else
-            print("gameStateBase invalid\n")
-        end
-        local playerStates = UEHelpers.GetAllPlayerStates()
-        print(string.format("playerStates Count: %d\n", #playerStates))
-        for i, playerState in ipairs(playerStates) do
-            if playerState:IsValid() then
-                print(string.format("%d: playerState: %s\n", i, playerState:GetFullName()))
-                print(string.format("%d: playerState Class: %s\n", i, playerState:GetClass():GetFullName()))
-            end
-        end
-        local players = UEHelpers.GetAllPlayers()
-        print(string.format("players Count: %d\n", #players))
-        for i, player in ipairs(players) do
-            if player:IsValid() then
-                print(string.format("%d: player: %s\n", i, player:GetFullName()))
-                print(string.format("%d: player Class: %s\n", i, player:GetClass():GetFullName()))
-            end
-        end
-
-        -- local myPlayerController = AFUtils.GetMyPlayerController()
-        -- if myPlayerController:IsValid() then
-        --     LogDebug("ActiveLevelName: " .. myPlayerController.ActiveLevelName:ToString())
-        --     if myPlayerController.DayNightManager:IsValid() then
-        --         local dayNightManager = myPlayerController.DayNightManager
-        --         AFUtils.LogDayNightManager(dayNightManager, "DayNightManager.")
-        --     end
-        -- end
-
-        -- local npcSpawns = FindAllOf("Abiotic_NPCSpawn_ParentBP_C") ---@type AAbiotic_NPCSpawn_ParentBP_C[]?
-        -- if npcSpawns then
-        --     LogDebug("NPCSpawn's count:", #npcSpawns)
-        --     local npcSpawned = 0
-        --     for i = 1, #npcSpawns do
-        --         local npcSpawn = npcSpawns[i]
-        --         local IsOnCooldown = npcSpawn:IsOnCooldown()
-        --         LogDebug(i .. ": IsOnCooldown:",IsOnCooldown)
-        --         LogDebug("AllowableSpawnHours (enum 0-3):",npcSpawn.AllowableSpawnHours)
-        --         -- LogDebug("NPCsAllowedFromSpawn:",npcSpawn.NPCsAllowedFromSpawn)
-        --         -- LogDebug("CanSpawnInLineOfSight:",npcSpawn.CanSpawnInLineOfSight)
-        --         -- LogDebug("ShouldSpawnSkipPlayerChecks:",npcSpawn.ShouldSpawnSkipPlayerChecks)
-        --         -- LogDebug("AlwaysPassDistanceCheck:",npcSpawn.AlwaysPassDistanceCheck)
-        --         LogDebug("NPC Level:",npcSpawn['NPC Level'])
-        --         LogDebug("NoLoot:",npcSpawn.NoLoot)
-        --         local outSuccess = { Success = false }
-        --         local outSpawnedNPC = { SpawnedNPC = CreateInvalidObject() }
-        --         local outDebugMessage = { DebugMessage = CreateInvalidObject() }
-        --         local outResponse = { Response = 0 }
-        --         npcSpawn:TrySpawnNPCNew(true, true, false, outSuccess, outSpawnedNPC, outDebugMessage, outResponse)
-        --         LogDebug(i .. ": Spawn result:")
-        --         LogDebug("  Success:", outSuccess.Success)
-        --         LogDebug("  SpawnedNPC:IsValid:", outSpawnedNPC.SpawnedNPC:IsValid())
-        --         if outSuccess.Success == true then
-        --             npcSpawned = npcSpawned + 1
-        --         end
-        --         -- LogDebug("  DebugMessage type:", outDebugMessage.DebugMessage:type())
-        --         -- if outDebugMessage.DebugMessage and outDebugMessage.DebugMessage:IsValid() then
-        --         -- end
-        --         -- LogDebug("  Response:", outResponse.Response)
-                
-        --     end
-        --     LogDebug("NPCs Spawned:", npcSpawned)
-        -- end
-        
-        -- local aiDirector = AFUtils.GetAIDirector()
-        -- if aiDirector then
-        --     -- local cooldownInMin = 1.0
-        --     -- aiDirector.LeyakCooldown = cooldownInMin * 60.0
-        --     -- aiDirector:SetLeyakOnCooldown(1.0)
-        --     -- LogDebug("LeyakCooldown set to: "..aiDirector.LeyakCooldown.." ("..cooldownInMin.." min)")
-        -- end
-        LogDebug("------------------------------")
-    end)
-end)
-
 RegisterKeyBind(Key.PAUSE, function()
     ExecuteInGameThread(function()
         LogDebug("------- NoClip (Pause) -------")
@@ -487,81 +507,71 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
--- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:ServerUpdateStabilityLevel",
--- function(Context, Value)
---     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
---     local value = Value:get()
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:ServerUpdateStabilityLevel",
+function(Context, Value)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+    local value = Value:get()
 
---     LogDebug("----- [ServerUpdateStabilityLevel] called -----")
---     LogDebug("Value:", value)
---     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [ServerUpdateStabilityLevel] called -----")
+    LogDebug("Value:", value)
+    -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+end)
 
--- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:IsContainmentCurrentlyActive",
--- function(Context, RetrunValue)
---     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:OnRep_Stability Level",
+function(Context)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
 
---     LogDebug("----- [IsContainmentCurrentlyActive] called -----")
---     AFUtils.LogDeployedLeyakContainment(leyakContainment)
---     LogDebug("------------------------------")
---     return leyakContainment.ContainsLeyak == true
--- end)
+    LogDebug("----- [OnRep_Stability Level] called -----")
+    -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+end)
 
--- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:OnRep_Stability Level",
--- function(Context)
---     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:OnRep_ContainsLeyak",
+function(Context)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
 
---     LogDebug("----- [OnRep_Stability Level] called -----")
---     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [OnRep_ContainsLeyak] called -----")
+    AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+end)
 
--- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:OnRep_ContainsLeyak",
--- function(Context)
---     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:Free Leyak",
+function(Context)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
 
---     LogDebug("----- [OnRep_ContainsLeyak] called -----")
---     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [Free Leyak] called -----")
+    AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+end)
 
--- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:Free Leyak",
--- function(Context)
---     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:TrapLeyak",
+function(Context)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
 
---     LogDebug("----- [Free Leyak] called -----")
---     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [TrapLeyak] called -----")
+    -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+end)
 
--- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:TrapLeyak",
--- function(Context)
---     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:NewDayUpdate",
+function(Context)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
 
---     LogDebug("----- [TrapLeyak] called -----")
---     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
---     LogDebug("------------------------------")
--- end)
-
--- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:NewDayUpdate",
--- function(Context)
---     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
-
---     LogDebug("----- [NewDayUpdate] called -----")
---     AFUtils.LogDeployedLeyakContainment(leyakContainment)
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [NewDayUpdate] called -----")
+    AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+end)
 
 
--- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:ProduceLeyakEssence",
--- function(Context)
---     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:ProduceLeyakEssence",
+function(Context)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
 
---     LogDebug("----- [ProduceLeyakEssence] called -----")
---     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [ProduceLeyakEssence] called -----")
+    -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+end)
 
 RegisterHook("/Game/Blueprints/Meta/Abiotic_GameInstance.Abiotic_GameInstance_C:IsCustomizationRowUnlocked", function(Context, RowName, Unlocked)
     local gameInstance = Context:get() ---@type UAbiotic_GameInstance_C
