@@ -502,6 +502,28 @@ end)
 --     return true
 -- end)
 
+RegisterHook("/Game/Blueprints/Meta/Abiotic_Survival_GameMode.Abiotic_Survival_GameMode_C:RCON_AddChatMessage",
+function(Context, Prefix, Message)
+    local gameMode = Context:get() ---@type AAbiotic_Survival_GameMode_C
+    local prefix = Prefix:get() ---@type FString
+    local message = Message:get() ---@type FString
+
+    LogDebug("----- [RCON_AddChatMessage] called -----")
+    LogDebug("Prefix:",prefix:ToString())
+    LogDebug("Message:",message:ToString())
+    LogDebug("------------------------------")
+end)
+
+RegisterHook("/Game/Blueprints/Meta/Abiotic_Survival_GameMode.Abiotic_Survival_GameMode_C:RCON_HeartBeat_GetPlayers",
+function(Context, Data)
+    local gameMode = Context:get() ---@type AAbiotic_Survival_GameMode_C
+    local data = Data:get() ---@type FString
+
+    LogDebug("----- [RCON_AddChatMessage] called -----")
+    LogDebug("Data:",data:ToString())
+    LogDebug("------------------------------")
+end)
+
 -- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:Server_TrySwapItems",
 -- function(Context, Inventory1, SlotIndex1, Inventory2, SlotIndex2)
 --     local playerCharacter = Context:get() ---@type AAbiotic_PlayerCharacter_C
