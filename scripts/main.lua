@@ -524,6 +524,40 @@ function(Context, Data)
     LogDebug("------------------------------")
 end)
 
+RegisterHook("/Game/Blueprints/Meta/Abiotic_Survival_GameMode.Abiotic_Survival_GameMode_C:OnReciveRCONConnection",
+function(Context, Type, Success, Message, SessionID, ServerID)
+    local gameMode = Context:get() ---@type AAbiotic_Survival_GameMode_C
+    local type = Type:get() ---@type uint8
+    local success = Success:get() ---@type boolean
+    local message = Message:get() ---@type FString
+    local sessionID = SessionID:get() ---@type FString
+    local serverID = ServerID:get() ---@type FString
+
+    LogDebug("----- [OnReciveRCONConnection] called -----")
+    LogDebug("Type:", type)
+    LogDebug("Success:", success)
+    LogDebug("Message:", message:ToString())
+    LogDebug("SessionID:", sessionID:ToString())
+    LogDebug("ServerID:", serverID:ToString())
+    LogDebug("------------------------------")
+end)
+
+RegisterHook("/Game/Blueprints/Meta/Abiotic_Survival_GameMode.Abiotic_Survival_GameMode_C:OnReciveRCONRequest",
+function(Context, SessionID, ServerID, RequestID, Request)
+    local gameMode = Context:get() ---@type AAbiotic_Survival_GameMode_C
+    local dessionID = SessionID:get() ---@type FString
+    local serverID = ServerID:get() ---@type FString
+    local requestID = RequestID:get() ---@type integer
+    local request = Request:get() ---@type FString
+
+    LogDebug("----- [OnReciveRCONRequest] called -----")
+    LogDebug("SessionID:", dessionID:ToString())
+    LogDebug("ServerID:", serverID:ToString())
+    LogDebug("RequestID:", requestID)
+    LogDebug("Request:", request:ToString())
+    LogDebug("------------------------------")
+end)
+
 -- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:Server_TrySwapItems",
 -- function(Context, Inventory1, SlotIndex1, Inventory2, SlotIndex2)
 --     local playerCharacter = Context:get() ---@type AAbiotic_PlayerCharacter_C
