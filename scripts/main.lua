@@ -76,16 +76,25 @@ end
 RegisterKeyBind(Key.L, function()
     ExecuteInGameThread(function()
         LogDebug("------------ L ---------------")
-        local leyakContainment = FindFirstOf("Deployed_LeyakContainment_C") ---@cast leyakContainment ADeployed_LeyakContainment_C
-        if leyakContainment:IsValid() then
-            -- leyakContainment:TrapLeyak(0.5)
-            -- leyakContainment["Free Leyak"]()
-            -- leyakContainment:ServerUpdateStabilityLevel(50)
-            -- leyakContainment:ProduceLeyakEssence()
-            AFUtils.LogDeployedLeyakContainment(leyakContainment, "LeyakContainment.")
-            -- AFUtils.LogFurnitureParentBP(leyakContainment, "LeyakContainment.")
-            -- AFUtils.LogDeployedParentBP(leyakContainment, "LeyakContainment.")
-        end
+        -- local defaultInventoryComponent = StaticFindObject("/Game/Blueprints/Characters/Abiotic_InventoryComponent.Default__Abiotic_InventoryComponent_C")
+        -- ---@cast defaultInventoryComponent UAbiotic_InventoryComponent_C
+        -- if IsValid(defaultInventoryComponent) then
+        --     LogDebug("InitialInventorySize:", defaultInventoryComponent.InitialInventorySize)
+        --     LogDebug("MaxSlots:", defaultInventoryComponent.MaxSlots)
+        --     defaultInventoryComponent.InitialInventorySize = 42
+        --     defaultInventoryComponent.MaxSlots = 42
+        -- end
+
+        -- local leyakContainment = FindFirstOf("Deployed_LeyakContainment_C") ---@cast leyakContainment ADeployed_LeyakContainment_C
+        -- if leyakContainment:IsValid() then
+        --     -- leyakContainment:TrapLeyak(0.5)
+        --     -- leyakContainment["Free Leyak"]()
+        --     -- leyakContainment:ServerUpdateStabilityLevel(50)
+        --     -- leyakContainment:ProduceLeyakEssence()
+        --     AFUtils.LogDeployedLeyakContainment(leyakContainment, "LeyakContainment.")
+        --     -- AFUtils.LogFurnitureParentBP(leyakContainment, "LeyakContainment.")
+        --     -- AFUtils.LogDeployedParentBP(leyakContainment, "LeyakContainment.")
+        -- end
         -- local gameInstance = UEHelpers.GetGameInstance() ---@cast gameInstance UAbiotic_GameInstance_C
         -- if gameInstance and gameInstance.CustomizationUnlocksSaveFile:IsValid() and gameInstance.CustomizationUnlocksSaveFile.CustomizationUnlocks then
         --     LogDebug("CustomizationUnlocks: " .. #(gameInstance.CustomizationUnlocksSaveFile.CustomizationUnlocks))
@@ -109,12 +118,12 @@ RegisterKeyBind(Key.L, function()
         --     LogDebug("ActiveLevelName: " .. myPlayerController.ActiveLevelName:ToString())
         -- end
 
-        local playerState = AFUtils.GetMyPlayerState()
-        if IsValid(playerState) then
+        -- local playerState = AFUtils.GetMyPlayerState()
+        -- if IsValid(playerState) then
             
-        end
+        -- end
         local myPlayer = AFUtils.GetMyPlayer()
-        if myPlayer:IsValid() then
+        if IsValid(myPlayer) then
             local location = myPlayer:K2_GetActorLocation()
             LogDebug("myPlayer location: " .. VectorToString(location))
 
@@ -123,7 +132,7 @@ RegisterKeyBind(Key.L, function()
             --     AFUtils.LogInventoryComponent(myPlayer.CharacterEquipSlotInventory, "CharacterEquipSlotInventory.")
             -- end
             
-            -- if myPlayer.ItemInHand_BP:IsValid() then
+            -- if IsValid(myPlayer.ItemInHand_BP) then
             --     if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
             --         AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
             --     else
@@ -491,6 +500,24 @@ end)
 --         end
 --     end
 --     return true
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:Server_TrySwapItems",
+-- function(Context, Inventory1, SlotIndex1, Inventory2, SlotIndex2)
+--     local playerCharacter = Context:get() ---@type AAbiotic_PlayerCharacter_C
+--     local originInventory = Inventory1:get() ---@type UAbiotic_InventoryComponent_C
+--     local originSlotIndex = SlotIndex1:get() ---@type integer
+--     local targetInventory = Inventory2:get() ---@type UAbiotic_InventoryComponent_C
+--     local targetSlotIndex = SlotIndex2:get() ---@type integer
+
+--     LogDebug("----- [Server_TrySwapItems] called -----")
+--     if IsValid(targetInventory) then
+--         local owner = targetInventory:GetOwner()
+--         if IsValid(owner) then
+--             LogDebug("TargetInventory Owner:",owner:GetClass():GetFullName())
+--         end
+--     end
+--     LogDebug("------------------------------")
 -- end)
 
 -- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/AbioticDeployed_CraftingBench_ParentBP.AbioticDeployed_CraftingBench_ParentBP_C:UpdateUpgradeComponents",
@@ -884,26 +911,29 @@ end)
 -- end)
 
 -- RegisterHook("/Game/Blueprints/Characters/Abiotic_InventoryComponent.Abiotic_InventoryComponent_C:UpdateInventorySlotCount", function(Context, NewMaxSlots)
---     local inventoryComponent = Context:get()
+--     local inventoryComponent = Context:get() ---@type UAbiotic_InventoryComponent_C
 --     local newMaxSlots = NewMaxSlots:get()
 
 --     local myPlayer = AFUtils.GetMyPlayer()
---     if myPlayer and myPlayer.CharacterInventory:IsValid() and myPlayer.CharacterHotbarInventory:IsValid() then
+--     if IsValid(myPlayer) and myPlayer.CharacterInventory:IsValid() and myPlayer.CharacterHotbarInventory:IsValid() then
 --         if myPlayer.CharacterInventory:GetAddress() == inventoryComponent:GetAddress() then
 --             LogDebug("[UpdateInventorySlotCount] called: -----")
 --             LogDebug("NewMaxSlots: "..newMaxSlots)
+--             AFUtils.LogInventoryComponent(inventoryComponent)
 --             LogDebug("------------------------------")
 --             -- local targetMaxSlots = 42
 --             -- if newMaxSlots < targetMaxSlots then
+--             --     inventoryComponent.InitialInventorySize = targetMaxSlots
 --             --     inventoryComponent.MaxSlots = targetMaxSlots
---             --     -- inventoryComponent:UpdateInventorySlotCount(targetMaxSlots)
+--             --     inventoryComponent.InventoryUpdateLocked = true
+--             --     inventoryComponent:UpdateInventorySlotCount(targetMaxSlots)
 --             -- end
 --         end
---         if myPlayer.CharacterHotbarInventory:GetAddress() == inventoryComponent:GetAddress() then
---             LogDebug("[UpdateInventorySlotCount] called: -----")
---             LogDebug("NewMaxSlots: "..newMaxSlots)
---             LogDebug("------------------------------")
---         end
+--         -- if myPlayer.CharacterHotbarInventory:GetAddress() == inventoryComponent:GetAddress() then
+--         --     LogDebug("[UpdateInventorySlotCount] called: -----")
+--         --     LogDebug("NewMaxSlots: "..newMaxSlots)
+--         --     LogDebug("------------------------------")
+--         -- end
 --     end
 -- end)
 
