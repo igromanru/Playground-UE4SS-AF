@@ -56,7 +56,7 @@ local function LeyakTest()
     end
 end
 
-function LogRecoilStuff(myPlayer)
+local function LogRecoilStuff(myPlayer)
     LogDebug("AimRecoilAdditive: "..myPlayer.AimRecoilAdditive)
     LogDebug("ControllerRecoilTimeline_NewTrack: "..myPlayer.ControllerRecoilTimeline_NewTrack_0_AFC3F42148DFC42265088DA509116D45)
     AFUtils.LogTimelineComponent(myPlayer.ControllerRecoilTimeline, "ControllerRecoilTimeline.")
@@ -154,6 +154,15 @@ RegisterKeyBind(Key.L, function()
             --     end
             -- end
         end
+        local characterProgressionComponent = AFUtils.GetMyCharacterProgressionComponent()
+        if IsValid(characterProgressionComponent) then
+            LogDebug("Traits:",#characterProgressionComponent.Traits)
+            for i = 1, #characterProgressionComponent.Traits do
+                local trait = characterProgressionComponent.Traits[i]
+                LogDebug(i .. ": ", trait:ToString())
+            end
+        end
+
         -- local inventoryCraftingArea = AFUtils.GetMyInventoryCraftingArea()
         -- if inventoryCraftingArea then
         --     LogDebug("inventoryCraftingArea: " .. inventoryCraftingArea:GetFullName())
@@ -519,7 +528,7 @@ function(Context, Data)
     local gameMode = Context:get() ---@type AAbiotic_Survival_GameMode_C
     local data = Data:get() ---@type FString
 
-    LogDebug("----- [RCON_AddChatMessage] called -----")
+    LogDebug("----- [RCON_HeartBeat_GetPlayers] called -----")
     LogDebug("Data:",data:ToString())
     LogDebug("------------------------------")
 end)
