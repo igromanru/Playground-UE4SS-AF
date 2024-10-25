@@ -140,28 +140,33 @@ RegisterKeyBind(Key.L, function()
             --     end
             -- end
         end
-        local myInventoryComponent = AFUtils.GetMyInventoryComponent()
-        if myInventoryComponent:IsValid() then
-            -- LogDebug("MyInventoryComponent:")
-            -- AFUtils.LogInventoryComponent(myInventoryComponent)
-            -- if #myInventoryComponent.CurrentInventory > 1 then
-            --     local itemSlot = myInventoryComponent.CurrentInventory[1]
-            --     if itemSlot.ItemDataTable_18_BF1052F141F66A976F4844AB2B13062B.RowName ~= NAME_None then
-            --         -- local outTryHotbarFirst = {}
-            --         -- AFUtils.GetAbioticFunctionLibrary()["TryPlaceInHotbar?"](itemSlot.ItemDataTable_18_BF1052F141F66A976F4844AB2B13062B, myPlayerController, outTryHotbarFirst)
-            --         local outItemSlotData = {}
-            --         myInventoryComponent:CreateNewItemWithDefaultData(itemSlot.ItemDataTable_18_BF1052F141F66A976F4844AB2B13062B, 1, outItemSlotData)
-            --     end
-            -- end
-        end
-        local characterProgressionComponent = AFUtils.GetMyCharacterProgressionComponent()
-        if IsValid(characterProgressionComponent) then
-            LogDebug("Traits:",#characterProgressionComponent.Traits)
-            for i = 1, #characterProgressionComponent.Traits do
-                local trait = characterProgressionComponent.Traits[i]
-                LogDebug(i .. ": ", trait:ToString())
-            end
-        end
+        
+        -- local myInventoryComponent = AFUtils.GetMyInventoryComponent()
+        -- if myInventoryComponent:IsValid() then
+        --     LogDebug("MyInventoryComponent:")
+        --     AFUtils.LogInventoryComponent(myInventoryComponent)
+        --     if #myInventoryComponent.CurrentInventory > 1 then
+        --         local itemSlot = myInventoryComponent.CurrentInventory[1]
+        --         if itemSlot.ItemDataTable_18_BF1052F141F66A976F4844AB2B13062B.RowName ~= NAME_None then
+        --             -- local outItemSlotData = {}
+        --             -- myInventoryComponent:CreateNewItemWithDefaultData(itemSlot.ItemDataTable_18_BF1052F141F66A976F4844AB2B13062B, 1, outItemSlotData)
+        --         end
+        --     end
+        -- end
+
+        -- local characterProgressionComponent = AFUtils.GetMyCharacterProgressionComponent()
+        -- if IsValid(characterProgressionComponent) then
+        --     LogDebug("Traits:", #characterProgressionComponent.Traits)
+        --     for i = 1, #characterProgressionComponent.Traits do
+        --         local trait = characterProgressionComponent.Traits[i]
+        --         LogDebug(i .. ": ", trait:ToString())
+        --     end
+
+        --     -- local newTrait = UEHelpers.FindFName("Trait_SteelBladder")
+        --     -- if newTrait ~= NAME_None then
+        --     --     characterProgressionComponent.Traits[#characterProgressionComponent.Traits + 1] = newTrait
+        --     -- end
+        -- end
 
         -- local inventoryCraftingArea = AFUtils.GetMyInventoryCraftingArea()
         -- if inventoryCraftingArea then
@@ -180,13 +185,13 @@ RegisterKeyBind(Key.L, function()
         --     LogDebug("GlobalUnlocks.SaveVersion: " .. worldMetadataSave.SaveVersion)
         -- end
 
-        local gameState = AFUtils.GetSurvivalGameState()
-        if gameState:IsValid() then
-            LogDebug("GameState.Class: " .. gameState:GetClass():GetFullName())
-            LogDebug("MatchState: " .. gameState.MatchState:ToString())
-            -- gameState["Set Leyak Containment ID"]("")
-            LogDebug("ActiveLeyakContainmentID: " .. gameState.ActiveLeyakContainmentID:ToString())
-        end
+        -- local gameState = AFUtils.GetSurvivalGameState()
+        -- if gameState:IsValid() then
+        --     LogDebug("GameState.Class: " .. gameState:GetClass():GetFullName())
+        --     LogDebug("MatchState: " .. gameState.MatchState:ToString())
+        --     -- gameState["Set Leyak Containment ID"]("")
+        --     LogDebug("ActiveLeyakContainmentID: " .. gameState.ActiveLeyakContainmentID:ToString())
+        -- end
 
         -- local myPlayerController = AFUtils.GetMyPlayerController()
         -- if myPlayerController:IsValid() then
@@ -229,7 +234,6 @@ RegisterKeyBind(Key.L, function()
         --     local rowHandle = outRowHandles[i]:get()
         --     LogDebug(string.format("%d: RowName: %s", i, rowHandle.RowName:ToString()))
         -- end
-        -- LeyakTest()
         LogDebug("------------------------------")
     end)
 end)
