@@ -112,11 +112,19 @@ RegisterKeyBind(Key.L, function()
         -- LogDebug("IsServer:", IsServer())
         -- LogDebug("IsDedicatedServer:", IsDedicatedServer())
 
-        -- local myPlayerController = AFUtils.GetMyPlayerController()
-        -- if myPlayerController:IsValid() then
-        --     LogDebug("myPlayerController: " .. myPlayerController:GetFullName())
-        --     LogDebug("ActiveLevelName: " .. myPlayerController.ActiveLevelName:ToString())
-        -- end
+        local myPlayerController = AFUtils.GetMyPlayerController()
+        if myPlayerController:IsValid() then
+            -- LogDebug("myPlayerController: " .. myPlayerController:GetFullName())
+            LogDebug("ActiveLevelName: " .. myPlayerController.ActiveLevelName:ToString())
+            local viewTarget = myPlayerController:GetViewTarget()
+            if IsValid(viewTarget) then
+                LogDebug("ViewTarget class:", viewTarget:GetClass():GetFullName())
+            end
+            local pawn = myPlayerController.Pawn
+            if IsValid(pawn) then
+                LogDebug("Controlled Pawn class:", pawn:GetClass():GetFullName())
+            end
+        end
 
         -- local playerState = AFUtils.GetMyPlayerState()
         -- if IsValid(playerState) then
@@ -514,6 +522,22 @@ end)
 --     end
 --     return true
 -- end)
+
+RegisterHook("/Script/Engine.Controller:OnPossessedPawnChanged",
+function(Context, OldPawn, NewPawn)
+    local gameMode = Context:get() ---@type AController
+    local oldPawn = OldPawn:get() ---@type APawn
+    local newPawn = NewPawn:get() ---@type APawn
+
+    LogDebug("----- [OnPossessedPawnChanged] called -----")
+    if IsValid(oldPawn) then
+        LogDebug("oldPawn class:", oldPawn:GetClass():GetFullName())
+    end
+    if IsValid(newPawn) then
+        LogDebug("newPawn class:", newPawn:GetClass():GetFullName())
+    end
+    LogDebug("------------------------------")
+end)
 
 RegisterHook("/Game/Blueprints/Meta/Abiotic_Survival_GameMode.Abiotic_Survival_GameMode_C:RCON_AddChatMessage",
 function(Context, Prefix, Message)
