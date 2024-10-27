@@ -95,12 +95,37 @@ RegisterKeyBind(Key.L, function()
         --     -- AFUtils.LogFurnitureParentBP(leyakContainment, "LeyakContainment.")
         --     -- AFUtils.LogDeployedParentBP(leyakContainment, "LeyakContainment.")
         -- end
+        
+        -- local myCharacterSave = AFUtils.GetMyCharacterSave()
+        -- if IsValid(myCharacterSave) then
+        --     LogDebug("SaveIdentifier:", myCharacterSave.SaveIdentifier:ToString())
+        --     LogDebug("SaveVersion:", myCharacterSave.SaveVersion)
+        --     local traits = myCharacterSave.CharacterSaveData.Traits_15_0039F2B34D2A43327122E9960B328E55
+
+        --     -- local newTrait = UEHelpers.FindFName("Trait_SelfDefense")
+        --     -- if newTrait ~= NAME_None then
+        --     --     traits[#traits + 1] = newTrait
+        --     -- end
+
+        --     -- local gameInstance = AFUtils.GetGameInstance()
+        --     -- if IsValid(gameInstance) then
+        --     --     gameInstance:AddPlayerSaveToQueue(myCharacterSave)
+        --     --     LogDebug("Added save to queue")
+        --     -- end
+
+        --     LogDebug("Traits:", #traits)
+        --     for i = 1, #traits do
+        --         local trait = traits[i]
+        --         LogDebug(i .. ": ", trait:ToString())
+        --     end
+        -- end
+
         -- local gameInstance = UEHelpers.GetGameInstance() ---@cast gameInstance UAbiotic_GameInstance_C
-        -- if gameInstance and gameInstance.CustomizationUnlocksSaveFile:IsValid() and gameInstance.CustomizationUnlocksSaveFile.CustomizationUnlocks then
-        --     LogDebug("CustomizationUnlocks: " .. #(gameInstance.CustomizationUnlocksSaveFile.CustomizationUnlocks))
-        --     for i = 1, #(gameInstance.CustomizationUnlocksSaveFile.CustomizationUnlocks), 1 do
-        --         local customization = gameInstance.CustomizationUnlocksSaveFile.CustomizationUnlocks[i]
-        --         LogDebug(i .. ": " .. customization:ToString())
+        -- if IsValid(gameInstance) then
+        --     LogDebug("PendingPlayerSaves:", #gameInstance.PendingPlayerSaves)
+        --     for i = 1, #gameInstance.PendingPlayerSaves, 1 do
+        --         local playerSave = gameInstance.PendingPlayerSaves[i]
+        --         LogDebug(i .. ": Class:", playerSave:GetClass():GetFullName())
         --     end
         -- end
 
@@ -170,10 +195,10 @@ RegisterKeyBind(Key.L, function()
         --         LogDebug(i .. ": ", trait:ToString())
         --     end
 
-        --     -- local newTrait = UEHelpers.FindFName("Trait_SteelBladder")
-        --     -- if newTrait ~= NAME_None then
-        --     --     characterProgressionComponent.Traits[#characterProgressionComponent.Traits + 1] = newTrait
-        --     -- end
+            -- local newTrait = UEHelpers.FindFName("Trait_SteelBladder")
+            -- if newTrait ~= NAME_None then
+            --     characterProgressionComponent.Traits[#characterProgressionComponent.Traits + 1] = newTrait
+            -- end
         -- end
 
         -- local inventoryCraftingArea = AFUtils.GetMyInventoryCraftingArea()
