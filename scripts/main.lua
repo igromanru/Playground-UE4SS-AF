@@ -523,18 +523,14 @@ end)
 --     return true
 -- end)
 
-RegisterHook("/Script/Engine.Controller:OnPossessedPawnChanged",
-function(Context, OldPawn, NewPawn)
+RegisterHook("/Script/Engine.Controller:Possess",
+function(Context, InPawn)
     local gameMode = Context:get() ---@type AController
-    local oldPawn = OldPawn:get() ---@type APawn
-    local newPawn = NewPawn:get() ---@type APawn
+    local pawm = InPawn:get() ---@type APawn
 
-    LogDebug("----- [OnPossessedPawnChanged] called -----")
-    if IsValid(oldPawn) then
-        LogDebug("oldPawn class:", oldPawn:GetClass():GetFullName())
-    end
-    if IsValid(newPawn) then
-        LogDebug("newPawn class:", newPawn:GetClass():GetFullName())
+    LogDebug("----- [Possess] called -----")
+    if IsValid(pawm) then
+        LogDebug("Pawn class:", oldPawn:GetClass():GetFullName())
     end
     LogDebug("------------------------------")
 end)
