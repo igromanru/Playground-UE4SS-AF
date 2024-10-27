@@ -96,38 +96,40 @@ RegisterKeyBind(Key.L, function()
         --     -- AFUtils.LogDeployedParentBP(leyakContainment, "LeyakContainment.")
         -- end
         
-        -- local myCharacterSave = AFUtils.GetMyCharacterSave()
-        -- if IsValid(myCharacterSave) then
-        --     LogDebug("SaveIdentifier:", myCharacterSave.SaveIdentifier:ToString())
-        --     LogDebug("SaveVersion:", myCharacterSave.SaveVersion)
-        --     local traits = myCharacterSave.CharacterSaveData.Traits_15_0039F2B34D2A43327122E9960B328E55
+        local myCharacterSave = AFUtils.GetMyPendingCharacterSave()
+        if IsValid(myCharacterSave) then
+            LogDebug("SaveIdentifier:", myCharacterSave.SaveIdentifier:ToString())
+            LogDebug("SaveVersion:", myCharacterSave.SaveVersion)
+            local traits = myCharacterSave.CharacterSaveData.Traits_15_0039F2B34D2A43327122E9960B328E55
 
-        --     -- local newTrait = UEHelpers.FindFName("Trait_SelfDefense")
-        --     -- if newTrait ~= NAME_None then
-        --     --     traits[#traits + 1] = newTrait
-        --     -- end
+            -- local newTrait = UEHelpers.FindFName("Trait_Moist")
+            -- if newTrait ~= NAME_None then
+            --     -- traits[#traits + 1] = newTrait
+            --     traits[#traits] = newTrait
+            -- end
 
-        --     -- local gameInstance = AFUtils.GetGameInstance()
-        --     -- if IsValid(gameInstance) then
-        --     --     gameInstance:AddPlayerSaveToQueue(myCharacterSave)
-        --     --     LogDebug("Added save to queue")
-        --     -- end
+            -- local gameInstance = AFUtils.GetGameInstance()
+            -- if IsValid(gameInstance) then
+            --     gameInstance:AddPlayerSaveToQueue(myCharacterSave)
+            --     LogDebug("Added save to queue")
+            -- end
 
-        --     LogDebug("Traits:", #traits)
-        --     for i = 1, #traits do
-        --         local trait = traits[i]
-        --         LogDebug(i .. ": ", trait:ToString())
-        --     end
-        -- end
+            LogDebug("Traits:", #traits)
+            LogDebug("Traits Max:", traits:GetArrayMax())
+            for i = 1, #traits do
+                local trait = traits[i]
+                LogDebug(i .. ": ", trait:ToString())
+            end
+        end
 
-        -- local gameInstance = UEHelpers.GetGameInstance() ---@cast gameInstance UAbiotic_GameInstance_C
-        -- if IsValid(gameInstance) then
-        --     LogDebug("PendingPlayerSaves:", #gameInstance.PendingPlayerSaves)
-        --     for i = 1, #gameInstance.PendingPlayerSaves, 1 do
-        --         local playerSave = gameInstance.PendingPlayerSaves[i]
-        --         LogDebug(i .. ": Class:", playerSave:GetClass():GetFullName())
-        --     end
-        -- end
+        local gameInstance = UEHelpers.GetGameInstance() ---@cast gameInstance UAbiotic_GameInstance_C
+        if IsValid(gameInstance) then
+            LogDebug("PendingPlayerSaves:", #gameInstance.PendingPlayerSaves)
+            for i = 1, #gameInstance.PendingPlayerSaves, 1 do
+                local playerSave = gameInstance.PendingPlayerSaves[i]
+                LogDebug(i .. ": Class:", playerSave:GetClass():GetFullName())
+            end
+        end
 
         -- local reaper = FindFirstOf("NPC_Monster_Reaper_C") ---@type ANPC_Monster_Reaper_C
         -- if reaper:IsValid() then
@@ -159,6 +161,14 @@ RegisterKeyBind(Key.L, function()
         if IsValid(myPlayer) then
             local location = myPlayer:K2_GetActorLocation()
             LogDebug("myPlayer location: " .. VectorToString(location))
+
+            if IsValid(myPlayer.BuffComponent) then
+                LogDebug("CurrentBuffs:", #myPlayer.BuffComponent.CurrentBuffs)
+                for i = 1, #myPlayer.BuffComponent.CurrentBuffs do
+                    local buff = myPlayer.BuffComponent.CurrentBuffs[i]
+                    LogDebug(i .. ": BuffRow:", buff.BuffRow.RowName:ToString())
+                end
+            end
 
             -- AFUtils.LogCharacterParentBP(myPlayer)
             -- if myPlayer.CharacterEquipSlotInventory:IsValid() then
