@@ -96,40 +96,40 @@ RegisterKeyBind(Key.L, function()
         --     -- AFUtils.LogDeployedParentBP(leyakContainment, "LeyakContainment.")
         -- end
         
-        local myCharacterSave = AFUtils.GetMyPendingCharacterSave()
-        if IsValid(myCharacterSave) then
-            LogDebug("SaveIdentifier:", myCharacterSave.SaveIdentifier:ToString())
-            LogDebug("SaveVersion:", myCharacterSave.SaveVersion)
-            local traits = myCharacterSave.CharacterSaveData.Traits_15_0039F2B34D2A43327122E9960B328E55
+        -- local myCharacterSave = AFUtils.GetMyPendingCharacterSave()
+        -- if IsValid(myCharacterSave) then
+        --     LogDebug("SaveIdentifier:", myCharacterSave.SaveIdentifier:ToString())
+        --     LogDebug("SaveVersion:", myCharacterSave.SaveVersion)
+        --     local traits = myCharacterSave.CharacterSaveData.Traits_15_0039F2B34D2A43327122E9960B328E55
 
-            -- local newTrait = UEHelpers.FindFName("Trait_Moist")
-            -- if newTrait ~= NAME_None then
-            --     -- traits[#traits + 1] = newTrait
-            --     traits[#traits] = newTrait
-            -- end
+        --     -- local newTrait = UEHelpers.FindFName("Trait_Moist")
+        --     -- if newTrait ~= NAME_None then
+        --     --     -- traits[#traits + 1] = newTrait
+        --     --     traits[#traits] = newTrait
+        --     -- end
 
-            -- local gameInstance = AFUtils.GetGameInstance()
-            -- if IsValid(gameInstance) then
-            --     gameInstance:AddPlayerSaveToQueue(myCharacterSave)
-            --     LogDebug("Added save to queue")
-            -- end
+        --     -- local gameInstance = AFUtils.GetGameInstance()
+        --     -- if IsValid(gameInstance) then
+        --     --     gameInstance:AddPlayerSaveToQueue(myCharacterSave)
+        --     --     LogDebug("Added save to queue")
+        --     -- end
 
-            LogDebug("Traits:", #traits)
-            LogDebug("Traits Max:", traits:GetArrayMax())
-            for i = 1, #traits do
-                local trait = traits[i]
-                LogDebug(i .. ": ", trait:ToString())
-            end
-        end
+        --     LogDebug("Traits:", #traits)
+        --     LogDebug("Traits Max:", traits:GetArrayMax())
+        --     for i = 1, #traits do
+        --         local trait = traits[i]
+        --         LogDebug(i .. ": ", trait:ToString())
+        --     end
+        -- end
 
-        local gameInstance = UEHelpers.GetGameInstance() ---@cast gameInstance UAbiotic_GameInstance_C
-        if IsValid(gameInstance) then
-            LogDebug("PendingPlayerSaves:", #gameInstance.PendingPlayerSaves)
-            for i = 1, #gameInstance.PendingPlayerSaves, 1 do
-                local playerSave = gameInstance.PendingPlayerSaves[i]
-                LogDebug(i .. ": Class:", playerSave:GetClass():GetFullName())
-            end
-        end
+        -- local gameInstance = UEHelpers.GetGameInstance() ---@cast gameInstance UAbiotic_GameInstance_C
+        -- if IsValid(gameInstance) then
+        --     LogDebug("PendingPlayerSaves:", #gameInstance.PendingPlayerSaves)
+        --     for i = 1, #gameInstance.PendingPlayerSaves, 1 do
+        --         local playerSave = gameInstance.PendingPlayerSaves[i]
+        --         LogDebug(i .. ": Class:", playerSave:GetClass():GetFullName())
+        --     end
+        -- end
 
         -- local reaper = FindFirstOf("NPC_Monster_Reaper_C") ---@type ANPC_Monster_Reaper_C
         -- if reaper:IsValid() then
@@ -162,26 +162,26 @@ RegisterKeyBind(Key.L, function()
             local location = myPlayer:K2_GetActorLocation()
             LogDebug("myPlayer location: " .. VectorToString(location))
 
-            if IsValid(myPlayer.BuffComponent) then
-                LogDebug("CurrentBuffs:", #myPlayer.BuffComponent.CurrentBuffs)
-                for i = 1, #myPlayer.BuffComponent.CurrentBuffs do
-                    local buff = myPlayer.BuffComponent.CurrentBuffs[i]
-                    LogDebug(i .. ": BuffRow:", buff.BuffRow.RowName:ToString())
-                end
-            end
+            -- if IsValid(myPlayer.BuffComponent) then
+            --     LogDebug("CurrentBuffs:", #myPlayer.BuffComponent.CurrentBuffs)
+            --     for i = 1, #myPlayer.BuffComponent.CurrentBuffs do
+            --         local buff = myPlayer.BuffComponent.CurrentBuffs[i]
+            --         LogDebug(i .. ": BuffRow:", buff.BuffRow.RowName:ToString())
+            --     end
+            -- end
 
             -- AFUtils.LogCharacterParentBP(myPlayer)
             -- if myPlayer.CharacterEquipSlotInventory:IsValid() then
             --     AFUtils.LogInventoryComponent(myPlayer.CharacterEquipSlotInventory, "CharacterEquipSlotInventory.")
             -- end
             
-            -- if IsValid(myPlayer.ItemInHand_BP) then
-            --     if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
-            --         AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
-            --     else
-            --         AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
-            --     end
-            -- end
+            if IsValid(myPlayer.ItemInHand_BP) then
+                if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
+                    AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
+                else
+                    AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
+                end
+            end
         end
         
         -- local myInventoryComponent = AFUtils.GetMyInventoryComponent()
@@ -558,73 +558,110 @@ end)
 --     return true
 -- end)
 
-RegisterHook("/Script/Engine.Controller:Possess",
-function(Context, InPawn)
-    local gameMode = Context:get() ---@type AController
-    local pawm = InPawn:get() ---@type APawn
 
-    LogDebug("----- [Possess] called -----")
-    if IsValid(pawm) then
-        LogDebug("Pawn class:", oldPawn:GetClass():GetFullName())
-    end
+RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_FishingReward",
+function(Context, Reward, Lucky)
+    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+    local reward = Reward:get() ---@type FFishRowHandle
+    local lucky = Lucky:get() ---@type boolean
+
+    LogDebug("----- [Request_FishingReward] called -----")
+    LogDebug("Reward.RowName:", reward.RowName:ToString())
+    LogDebug("Lucky:", lucky)
     LogDebug("------------------------------")
 end)
 
-RegisterHook("/Game/Blueprints/Meta/Abiotic_Survival_GameMode.Abiotic_Survival_GameMode_C:RCON_AddChatMessage",
-function(Context, Prefix, Message)
-    local gameMode = Context:get() ---@type AAbiotic_Survival_GameMode_C
-    local prefix = Prefix:get() ---@type FString
-    local message = Message:get() ---@type FString
+-- RegisterHook("/Script/AbioticFactor.AbioticFunctionLibrary:CalculateFishingReward",
+-- function (Context, FishingZone, TimeOfDayHour, RodTags, BaitTags, PlayerTags, WeatherTags, bHotspot, bNoRares, WorldFlags, bDebug, bWasJunkCatch, OutJunkSalvage, OutFishReward)
+--     local functionLibrary = Context:get() ---@type UAbioticFunctionLibrary
 
-    LogDebug("----- [RCON_AddChatMessage] called -----")
-    LogDebug("Prefix:",prefix:ToString())
-    LogDebug("Message:",message:ToString())
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [CalculateFishingReward Pre] called -----")
+--     LogDebug("------------------------------")
+-- end,
+-- function(Context, FishingZone, TimeOfDayHour, RodTags, BaitTags, PlayerTags, WeatherTags, bHotspot, bNoRares, WorldFlags, bDebug, bWasJunkCatch, OutJunkSalvage, OutFishReward)
+--     local functionLibrary = Context:get() ---@type UAbioticFunctionLibrary
+--     local timeOfDayHour = TimeOfDayHour:get() ---@type integer
+--     local hotspot = bHotspot:get() ---@type boolean
+--     local noRares = bNoRares:get() ---@type boolean
+--     local debug = bDebug:get() ---@type boolean
+--     local wasJunkCatch = bWasJunkCatch:get() ---@type boolean
 
-RegisterHook("/Game/Blueprints/Meta/Abiotic_Survival_GameMode.Abiotic_Survival_GameMode_C:RCON_HeartBeat_GetPlayers",
-function(Context, Data)
-    local gameMode = Context:get() ---@type AAbiotic_Survival_GameMode_C
-    local data = Data:get() ---@type FString
+--     LogDebug("----- [CalculateFishingReward Post] called -----")
+--     LogDebug("TimeOfDayHour:", timeOfDayHour)
+--     LogDebug("bHotspot:", hotspot)
+--     LogDebug("bNoRares:", noRares)
+--     LogDebug("bDebug:", debug)
+--     LogDebug("bWasJunkCatch:", wasJunkCatch)
+--     LogDebug("------------------------------")
+-- end)
 
-    LogDebug("----- [RCON_HeartBeat_GetPlayers] called -----")
-    LogDebug("Data:",data:ToString())
-    LogDebug("------------------------------")
-end)
+-- RegisterHook("/Script/Engine.Controller:Possess",
+-- function(Context, InPawn)
+--     local gameMode = Context:get() ---@type AController
+--     local pawm = InPawn:get() ---@type APawn
 
-RegisterHook("/Game/Blueprints/Meta/Abiotic_Survival_GameMode.Abiotic_Survival_GameMode_C:OnReciveRCONConnection",
-function(Context, Type, Success, Message, SessionID, ServerID)
-    local gameMode = Context:get() ---@type AAbiotic_Survival_GameMode_C
-    local type = Type:get() ---@type uint8
-    local success = Success:get() ---@type boolean
-    local message = Message:get() ---@type FString
-    local sessionID = SessionID:get() ---@type FString
-    local serverID = ServerID:get() ---@type FString
+--     LogDebug("----- [Possess] called -----")
+--     if IsValid(pawm) then
+--         LogDebug("Pawn class:", oldPawn:GetClass():GetFullName())
+--     end
+--     LogDebug("------------------------------")
+-- end)
 
-    LogDebug("----- [OnReciveRCONConnection] called -----")
-    LogDebug("Type:", type)
-    LogDebug("Success:", success)
-    LogDebug("Message:", message:ToString())
-    LogDebug("SessionID:", sessionID:ToString())
-    LogDebug("ServerID:", serverID:ToString())
-    LogDebug("------------------------------")
-end)
+-- RegisterHook("/Game/Blueprints/Meta/Abiotic_Survival_GameMode.Abiotic_Survival_GameMode_C:RCON_AddChatMessage",
+-- function(Context, Prefix, Message)
+--     local gameMode = Context:get() ---@type AAbiotic_Survival_GameMode_C
+--     local prefix = Prefix:get() ---@type FString
+--     local message = Message:get() ---@type FString
 
-RegisterHook("/Game/Blueprints/Meta/Abiotic_Survival_GameMode.Abiotic_Survival_GameMode_C:OnReciveRCONRequest",
-function(Context, SessionID, ServerID, RequestID, Request)
-    local gameMode = Context:get() ---@type AAbiotic_Survival_GameMode_C
-    local dessionID = SessionID:get() ---@type FString
-    local serverID = ServerID:get() ---@type FString
-    local requestID = RequestID:get() ---@type integer
-    local request = Request:get() ---@type FString
+--     LogDebug("----- [RCON_AddChatMessage] called -----")
+--     LogDebug("Prefix:",prefix:ToString())
+--     LogDebug("Message:",message:ToString())
+--     LogDebug("------------------------------")
+-- end)
 
-    LogDebug("----- [OnReciveRCONRequest] called -----")
-    LogDebug("SessionID:", dessionID:ToString())
-    LogDebug("ServerID:", serverID:ToString())
-    LogDebug("RequestID:", requestID)
-    LogDebug("Request:", request:ToString())
-    LogDebug("------------------------------")
-end)
+-- RegisterHook("/Game/Blueprints/Meta/Abiotic_Survival_GameMode.Abiotic_Survival_GameMode_C:RCON_HeartBeat_GetPlayers",
+-- function(Context, Data)
+--     local gameMode = Context:get() ---@type AAbiotic_Survival_GameMode_C
+--     local data = Data:get() ---@type FString
+
+--     LogDebug("----- [RCON_HeartBeat_GetPlayers] called -----")
+--     LogDebug("Data:",data:ToString())
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Meta/Abiotic_Survival_GameMode.Abiotic_Survival_GameMode_C:OnReciveRCONConnection",
+-- function(Context, Type, Success, Message, SessionID, ServerID)
+--     local gameMode = Context:get() ---@type AAbiotic_Survival_GameMode_C
+--     local type = Type:get() ---@type uint8
+--     local success = Success:get() ---@type boolean
+--     local message = Message:get() ---@type FString
+--     local sessionID = SessionID:get() ---@type FString
+--     local serverID = ServerID:get() ---@type FString
+
+--     LogDebug("----- [OnReciveRCONConnection] called -----")
+--     LogDebug("Type:", type)
+--     LogDebug("Success:", success)
+--     LogDebug("Message:", message:ToString())
+--     LogDebug("SessionID:", sessionID:ToString())
+--     LogDebug("ServerID:", serverID:ToString())
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Meta/Abiotic_Survival_GameMode.Abiotic_Survival_GameMode_C:OnReciveRCONRequest",
+-- function(Context, SessionID, ServerID, RequestID, Request)
+--     local gameMode = Context:get() ---@type AAbiotic_Survival_GameMode_C
+--     local dessionID = SessionID:get() ---@type FString
+--     local serverID = ServerID:get() ---@type FString
+--     local requestID = RequestID:get() ---@type integer
+--     local request = Request:get() ---@type FString
+
+--     LogDebug("----- [OnReciveRCONRequest] called -----")
+--     LogDebug("SessionID:", dessionID:ToString())
+--     LogDebug("ServerID:", serverID:ToString())
+--     LogDebug("RequestID:", requestID)
+--     LogDebug("Request:", request:ToString())
+--     LogDebug("------------------------------")
+-- end)
 
 -- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:Server_TrySwapItems",
 -- function(Context, Inventory1, SlotIndex1, Inventory2, SlotIndex2)
@@ -658,93 +695,93 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
-RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:ServerUpdateStabilityLevel",
-function(Context, Value)
-    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
-    local value = Value:get()
+-- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:ServerUpdateStabilityLevel",
+-- function(Context, Value)
+--     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+--     local value = Value:get()
 
-    LogDebug("----- [ServerUpdateStabilityLevel] called -----")
-    LogDebug("Value:", value)
-    -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [ServerUpdateStabilityLevel] called -----")
+--     LogDebug("Value:", value)
+--     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:OnRep_Stability Level",
-function(Context)
-    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+-- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:OnRep_Stability Level",
+-- function(Context)
+--     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
 
-    LogDebug("----- [OnRep_Stability Level] called -----")
-    -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [OnRep_Stability Level] called -----")
+--     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:OnRep_ContainsLeyak",
-function(Context)
-    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+-- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:OnRep_ContainsLeyak",
+-- function(Context)
+--     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
 
-    LogDebug("----- [OnRep_ContainsLeyak] called -----")
-    AFUtils.LogDeployedLeyakContainment(leyakContainment)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [OnRep_ContainsLeyak] called -----")
+--     AFUtils.LogDeployedLeyakContainment(leyakContainment)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:Free Leyak",
-function(Context)
-    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+-- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:Free Leyak",
+-- function(Context)
+--     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
 
-    LogDebug("----- [Free Leyak] called -----")
-    AFUtils.LogDeployedLeyakContainment(leyakContainment)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [Free Leyak] called -----")
+--     AFUtils.LogDeployedLeyakContainment(leyakContainment)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:TrapLeyak",
-function(Context)
-    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+-- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:TrapLeyak",
+-- function(Context)
+--     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
 
-    LogDebug("----- [TrapLeyak] called -----")
-    -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [TrapLeyak] called -----")
+--     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:NewDayUpdate",
-function(Context)
-    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+-- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:NewDayUpdate",
+-- function(Context)
+--     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
 
-    LogDebug("----- [NewDayUpdate] called -----")
-    AFUtils.LogDeployedLeyakContainment(leyakContainment)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [NewDayUpdate] called -----")
+--     AFUtils.LogDeployedLeyakContainment(leyakContainment)
+--     LogDebug("------------------------------")
+-- end)
 
 
-RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:ProduceLeyakEssence",
-function(Context)
-    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+-- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:ProduceLeyakEssence",
+-- function(Context)
+--     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
 
-    LogDebug("----- [ProduceLeyakEssence] called -----")
-    -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [ProduceLeyakEssence] called -----")
+--     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Meta/Abiotic_GameInstance.Abiotic_GameInstance_C:IsCustomizationRowUnlocked", function(Context, RowName, Unlocked)
-    local gameInstance = Context:get() ---@type UAbiotic_GameInstance_C
-    local rowName = RowName:get()
-    local unlocked = Unlocked:get()
+-- RegisterHook("/Game/Blueprints/Meta/Abiotic_GameInstance.Abiotic_GameInstance_C:IsCustomizationRowUnlocked", function(Context, RowName, Unlocked)
+--     local gameInstance = Context:get() ---@type UAbiotic_GameInstance_C
+--     local rowName = RowName:get()
+--     local unlocked = Unlocked:get()
 
-    LogDebug("----- [IsCustomizationRowUnlocked] called -----")
-    LogDebug("RowName: " .. rowName:ToString())
-    LogDebug("Unlocked:", unlocked)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [IsCustomizationRowUnlocked] called -----")
+--     LogDebug("RowName: " .. rowName:ToString())
+--     LogDebug("Unlocked:", unlocked)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Meta/Abiotic_GameInstance.Abiotic_GameInstance_C:CheckCustomizationSpecialConditions", function(Context, Conditions, Unlocked)
-    local gameInstance = Context:get() ---@type UAbiotic_GameInstance_C
-    local conditions = Conditions:get()
-    local unlocked = Unlocked:get()
+-- RegisterHook("/Game/Blueprints/Meta/Abiotic_GameInstance.Abiotic_GameInstance_C:CheckCustomizationSpecialConditions", function(Context, Conditions, Unlocked)
+--     local gameInstance = Context:get() ---@type UAbiotic_GameInstance_C
+--     local conditions = Conditions:get()
+--     local unlocked = Unlocked:get()
 
-    LogDebug("----- [CheckCustomizationSpecialConditions] called -----")
-    LogDebug("Conditions: " .. conditions:ToString())
-    LogDebug("Unlocked:", unlocked)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [CheckCustomizationSpecialConditions] called -----")
+--     LogDebug("Conditions: " .. conditions:ToString())
+--     LogDebug("Unlocked:", unlocked)
+--     LogDebug("------------------------------")
+-- end)
 
 -- RegisterHook("/Game/Blueprints/Widgets/Inventory/W_Inventory_CraftingArea.W_Inventory_CraftingArea_C:RefreshCraftingEligibility",
 -- function(Context)
@@ -954,18 +991,18 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
-RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SpawnLeyak", function(Context, Location)
-    local aiDirector = Context:get()
-    local location = Location:get()
+-- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SpawnLeyak", function(Context, Location)
+--     local aiDirector = Context:get()
+--     local location = Location:get()
 
-    LogDebug("----- [SpawnLeyak] called -----")
-    -- local aiControllerLeyak = FindFirstOf("AI_Controller_Leyak_C")
-    -- if aiControllerLeyak and aiControllerLeyak:IsValid() then
-    --     LogDebug("AI_Controller_Leyak_C found, call Despawn")
-    --     aiControllerLeyak:Despawn()
-    -- end
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [SpawnLeyak] called -----")
+--     -- local aiControllerLeyak = FindFirstOf("AI_Controller_Leyak_C")
+--     -- if aiControllerLeyak and aiControllerLeyak:IsValid() then
+--     --     LogDebug("AI_Controller_Leyak_C found, call Despawn")
+--     --     aiControllerLeyak:Despawn()
+--     -- end
+--     LogDebug("------------------------------")
+-- end)
 
 -- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:LeyakFailsafeRemove", function(Context)
 --     local aIDirector = Context:get()
@@ -974,19 +1011,19 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
-RegisterHook("/Game/Blueprints/Characters/NPCs/AI_Controller_Leyak.AI_Controller_Leyak_C:Despawn", function(Context)
-    local aiControllerLeyak = Context:get()
+-- RegisterHook("/Game/Blueprints/Characters/NPCs/AI_Controller_Leyak.AI_Controller_Leyak_C:Despawn", function(Context)
+--     local aiControllerLeyak = Context:get()
 
-    LogDebug("[AI_Controller_Leyak_C:Despawn] called:")
-    -- local aiDirector = FindFirstOf("Abiotic_AIDirector_C")
-    -- if aiDirector and aiDirector:IsValid() then
-    --     LogDebug("LeyakCooldown: " .. aiDirector.LeyakCooldown)
-    --     if aiDirector.ActiveLeyak:IsValid() then
-    --         AFUtils.LogNPCLeyak(aiDirector.ActiveLeyak, "ActiveLeyak.")
-    --     end
-    -- end
-    LogDebug("------------------------------")
-end)
+--     LogDebug("[AI_Controller_Leyak_C:Despawn] called:")
+--     -- local aiDirector = FindFirstOf("Abiotic_AIDirector_C")
+--     -- if aiDirector and aiDirector:IsValid() then
+--     --     LogDebug("LeyakCooldown: " .. aiDirector.LeyakCooldown)
+--     --     if aiDirector.ActiveLeyak:IsValid() then
+--     --         AFUtils.LogNPCLeyak(aiDirector.ActiveLeyak, "ActiveLeyak.")
+--     --     end
+--     -- end
+--     LogDebug("------------------------------")
+-- end)
 
 -- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SetLeyakOnCooldown", function(Context, CooldownReductionMultiplier)
 --     local aiDirector = Context:get()
