@@ -284,6 +284,25 @@ end)
 RegisterKeyBind(Key.O, function()
     ExecuteInGameThread(function()
         LogDebug("------------ O ---------------")
+        -- local PlayerController = UEHelpers.GetPlayerController()
+        -- if PlayerController:IsValid() then
+        --     print(string.format("PlayerController address: %s\n", tostring(PlayerController:GetAddress())))
+        --     print(string.format("PlayerController world address: %s\n", tostring(PlayerController:GetWorld():GetAddress())))
+        -- end
+        -- local GameInstance = UEHelpers.GetGameInstance()
+        -- if GameInstance:IsValid() then
+        --     print(string.format("GameInstance address: %s\n", tostring(GameInstance:GetAddress())))
+        --     print(string.format("GameInstance world address: %s\n", tostring(GameInstance:GetWorld():GetAddress())))
+        -- end
+        -- local World = UEHelpers.GetWorld()
+        -- if World:IsValid() then
+        --     print(string.format("World address: %s\n", tostring(World:GetAddress())))
+        -- end
+        -- local Player = UEHelpers.GetPlayer()
+        -- if Player:IsValid() then
+        --     print(string.format("Player address: %s\n", tostring(Player:GetAddress())))
+        --     print(string.format("Player world address: %s\n", tostring(Player:GetWorld():GetAddress())))
+        -- end
         -- local playerController = UEHelpers.GetPlayerController()
         -- if playerController:IsValid() then
         --     print(string.format("playerController: %s\n", playerController:GetFullName()))
