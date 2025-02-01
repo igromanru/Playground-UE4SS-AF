@@ -577,18 +577,28 @@ end)
 --     return true
 -- end)
 
+-- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:CanCrouchRoll?",
+-- function(Context, CanRoll)
+--     local player = Context:get() ---@type AAbiotic_PlayerCharacter_C
+--     local canRoll = CanRoll:get() ---@type boolean
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_FishingReward",
-function(Context, Reward, Lucky)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
-    local reward = Reward:get() ---@type FFishRowHandle
-    local lucky = Lucky:get() ---@type boolean
+--     LogDebug("----- [CanCrouchRoll?] called -----")
+--     LogDebug("CanRoll:", canRoll)
+--     CanRoll:set(true)
+--     LogDebug("------------------------------")
+-- end)
 
-    LogDebug("----- [Request_FishingReward] called -----")
-    LogDebug("Reward.RowName:", reward.RowName:ToString())
-    LogDebug("Lucky:", lucky)
-    LogDebug("------------------------------")
-end)
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_FishingReward",
+-- function(Context, Reward, Lucky)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+--     local reward = Reward:get() ---@type FFishRowHandle
+--     local lucky = Lucky:get() ---@type boolean
+
+--     LogDebug("----- [Request_FishingReward] called -----")
+--     LogDebug("Reward.RowName:", reward.RowName:ToString())
+--     LogDebug("Lucky:", lucky)
+--     LogDebug("------------------------------")
+-- end)
 
 -- RegisterHook("/Script/AbioticFactor.AbioticFunctionLibrary:CalculateFishingReward",
 -- function (Context, FishingZone, TimeOfDayHour, RodTags, BaitTags, PlayerTags, WeatherTags, bHotspot, bNoRares, WorldFlags, bDebug, bWasJunkCatch, OutJunkSalvage, OutFishReward)
