@@ -284,6 +284,28 @@ end)
 RegisterKeyBind(Key.O, function()
     ExecuteInGameThread(function()
         LogDebug("------------ O ---------------")
+
+        -- local transform = {
+        --     Rotation = {
+        --         X = 1.0,
+        --         Y = 2.0,
+        --         Z = 3.0,
+        --         W = 4.0
+        --     },
+        --     Translation = {
+        --         X = 11.0,
+        --         Y = 22.0,
+        --         Z = 33.0
+        --     },
+        --     Scale3D = {
+        --         X = 21.0,
+        --         Y = 32.0,
+        --         Z = 43.0
+        --     }
+        -- }
+        -- local transformString = UEHelpers.GetKismetStringLibrary():Conv_TransformToString(transform)
+        -- print("transformString: " .. transformString:ToString() .. "\n")
+
         -- local PlayerController = UEHelpers.GetPlayerController()
         -- if PlayerController:IsValid() then
         --     print(string.format("PlayerController address: %s\n", tostring(PlayerController:GetAddress())))
@@ -302,6 +324,18 @@ RegisterKeyBind(Key.O, function()
         -- if Player:IsValid() then
         --     print(string.format("Player address: %s\n", tostring(Player:GetAddress())))
         --     print(string.format("Player world address: %s\n", tostring(Player:GetWorld():GetAddress())))
+            
+        --     local spawnedActor = SpawnActorFromClass("/Game/Blueprints/DeployedObjects/Furniture/Deployed_StorageCrate_Makeshift_T2.Deployed_StorageCrate_Makeshift_T2_C", Player:K2_GetActorLocation(), Player:K2_GetActorRotation())
+        --     if IsValid(spawnedActor) then
+        --         LogDebug("spawnedActor location:", VectorToString(spawnedActor:K2_GetActorLocation()))
+        --         LogDebug("spawnedActor rotation:", RotatorToString(spawnedActor:K2_GetActorRotation()))
+        --     end
+            
+        --     -- local spawnedActorByClassName = SpawnActorByClassName("/Game/Blueprints/DeployedObjects/Furniture/Deployed_StorageCrate_Makeshift_T2.Deployed_StorageCrate_Makeshift_T2_C", Player:K2_GetActorLocation(), Player:K2_GetActorRotation())
+        --     -- if spawnedActorByClassName:IsValid() then
+        --     --     LogDebug("spawnedActorByClassName location:", VectorToString(spawnedActorByClassName:K2_GetActorLocation()))
+        --     --     LogDebug("spawnedActorByClassName rotation:", RotatorToString(spawnedActorByClassName:K2_GetActorRotation()))
+        --     -- end
         -- end
         -- local playerController = UEHelpers.GetPlayerController()
         -- if playerController:IsValid() then
