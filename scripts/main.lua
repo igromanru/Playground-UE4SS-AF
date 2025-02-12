@@ -40,7 +40,7 @@ local function LeyakTest()
             --     local lookDirection = cameraManager:GetActorForwardVector()
             --     local lookDirOffset = GetKismetMathLibrary():Multiply_VectorFloat(lookDirection, MToUnits(spawnDistanceInM))
             --     local spawnLocation = GetKismetMathLibrary():Add_VectorVector(cameraManager:GetCameraLocation(), lookDirOffset)
-            --     aiDirector:SpawnLeyak(VectorToUserdata(spawnLocation));
+            --     aiDirector:SpawnLeyak(VectorToTable(spawnLocation));
             -- end
         end
     else
@@ -139,19 +139,19 @@ RegisterKeyBind(Key.L, function()
         -- LogDebug("IsServer:", IsServer())
         -- LogDebug("IsDedicatedServer:", IsDedicatedServer())
 
-        local myPlayerController = AFUtils.GetMyPlayerController()
-        if myPlayerController:IsValid() then
-            -- LogDebug("myPlayerController: " .. myPlayerController:GetFullName())
-            LogDebug("ActiveLevelName: " .. myPlayerController.ActiveLevelName:ToString())
-            local viewTarget = myPlayerController:GetViewTarget()
-            if IsValid(viewTarget) then
-                LogDebug("ViewTarget class:", viewTarget:GetClass():GetFullName())
-            end
-            local pawn = myPlayerController.Pawn
-            if IsValid(pawn) then
-                LogDebug("Controlled Pawn class:", pawn:GetClass():GetFullName())
-            end
-        end
+        -- local myPlayerController = AFUtils.GetMyPlayerController()
+        -- if myPlayerController:IsValid() then
+        --     -- LogDebug("myPlayerController: " .. myPlayerController:GetFullName())
+        --     LogDebug("ActiveLevelName: " .. myPlayerController.ActiveLevelName:ToString())
+        --     local viewTarget = myPlayerController:GetViewTarget()
+        --     if IsValid(viewTarget) then
+        --         LogDebug("ViewTarget class:", viewTarget:GetClass():GetFullName())
+        --     end
+        --     local pawn = myPlayerController.Pawn
+        --     if IsValid(pawn) then
+        --         LogDebug("Controlled Pawn class:", pawn:GetClass():GetFullName())
+        --     end
+        -- end
 
         -- local playerState = AFUtils.GetMyPlayerState()
         -- if IsValid(playerState) then
@@ -175,13 +175,21 @@ RegisterKeyBind(Key.L, function()
             --     AFUtils.LogInventoryComponent(myPlayer.CharacterEquipSlotInventory, "CharacterEquipSlotInventory.")
             -- end
             
-            if IsValid(myPlayer.ItemInHand_BP) then
-                if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
-                    AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
-                else
-                    AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
-                end
-            end
+            -- if IsValid(myPlayer.ItemInHand_BP) then
+            --     if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
+            --         AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
+            --     else
+            --         AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
+            --     end
+            -- end
+
+            -- local components = {}
+            -- myPlayer:GetHighlightComponents(components)
+            -- LogDebug("HighlightComponents count: ", #components)
+            -- for i = 1, #components do
+            --     local component = components[i]:get()
+            --     LogDebug(i .. ":", component:GetFullName())
+            -- end
         end
         
         -- local myInventoryComponent = AFUtils.GetMyInventoryComponent()
@@ -284,18 +292,17 @@ end)
 RegisterKeyBind(Key.O, function()
     ExecuteInGameThread(function()
         LogDebug("------------ O ---------------")
-
         -- local transform = {
+        --     Translation = {
+        --         X = 11.0,
+        --         Y = 22.0,
+        --         Z = 33.0
+        --     },
         --     Rotation = {
         --         X = 1.0,
         --         Y = 2.0,
         --         Z = 3.0,
         --         W = 4.0
-        --     },
-        --     Translation = {
-        --         X = 11.0,
-        --         Y = 22.0,
-        --         Z = 33.0
         --     },
         --     Scale3D = {
         --         X = 21.0,
@@ -303,6 +310,8 @@ RegisterKeyBind(Key.O, function()
         --         Z = 43.0
         --     }
         -- }
+        -- local transform = GetKismetMathLibrary():MakeTransform(FVector(12.0, 13.0, 14.0), FRotator(22.0, 33.0, 44.0), FVector(1.0, 1.0, 1.0))
+        -- LogDebug("transform:", TableToString(transform))
         -- local transformString = UEHelpers.GetKismetStringLibrary():Conv_TransformToString(transform)
         -- print("transformString: " .. transformString:ToString() .. "\n")
 
@@ -320,23 +329,23 @@ RegisterKeyBind(Key.O, function()
         -- if World:IsValid() then
         --     print(string.format("World address: %s\n", tostring(World:GetAddress())))
         -- end
-        -- local Player = UEHelpers.GetPlayer()
-        -- if Player:IsValid() then
-        --     print(string.format("Player address: %s\n", tostring(Player:GetAddress())))
-        --     print(string.format("Player world address: %s\n", tostring(Player:GetWorld():GetAddress())))
+        local Player = UEHelpers.GetPlayer()
+        if Player:IsValid() then
+            print(string.format("Player address: %s\n", tostring(Player:GetAddress())))
+            print(string.format("Player world address: %s\n", tostring(Player:GetWorld():GetAddress())))
             
-        --     local spawnedActor = SpawnActorFromClass("/Game/Blueprints/DeployedObjects/Furniture/Deployed_StorageCrate_Makeshift_T2.Deployed_StorageCrate_Makeshift_T2_C", Player:K2_GetActorLocation(), Player:K2_GetActorRotation())
-        --     if IsValid(spawnedActor) then
-        --         LogDebug("spawnedActor location:", VectorToString(spawnedActor:K2_GetActorLocation()))
-        --         LogDebug("spawnedActor rotation:", RotatorToString(spawnedActor:K2_GetActorRotation()))
-        --     end
+            -- local spawnedActor = SpawnActorFromClass("/Game/Blueprints/DeployedObjects/Furniture/Deployed_StorageCrate_Makeshift_T2.Deployed_StorageCrate_Makeshift_T2_C", Player:K2_GetActorLocation(), Player:K2_GetActorRotation())
+            -- if IsValid(spawnedActor) then
+            --     LogDebug("spawnedActor location:", VectorToString(spawnedActor:K2_GetActorLocation()))
+            --     LogDebug("spawnedActor rotation:", RotatorToString(spawnedActor:K2_GetActorRotation()))
+            -- end
             
-        --     -- local spawnedActorByClassName = SpawnActorByClassName("/Game/Blueprints/DeployedObjects/Furniture/Deployed_StorageCrate_Makeshift_T2.Deployed_StorageCrate_Makeshift_T2_C", Player:K2_GetActorLocation(), Player:K2_GetActorRotation())
-        --     -- if spawnedActorByClassName:IsValid() then
-        --     --     LogDebug("spawnedActorByClassName location:", VectorToString(spawnedActorByClassName:K2_GetActorLocation()))
-        --     --     LogDebug("spawnedActorByClassName rotation:", RotatorToString(spawnedActorByClassName:K2_GetActorRotation()))
-        --     -- end
-        -- end
+            -- local spawnedActorByClassName = SpawnActorByClassName("/Game/Blueprints/DeployedObjects/Furniture/Deployed_StorageCrate_Makeshift_T2.Deployed_StorageCrate_Makeshift_T2_C", Player:K2_GetActorLocation(), Player:K2_GetActorRotation())
+            -- if spawnedActorByClassName:IsValid() then
+            --     LogDebug("spawnedActorByClassName location:", VectorToString(spawnedActorByClassName:K2_GetActorLocation()))
+            --     LogDebug("spawnedActorByClassName rotation:", RotatorToString(spawnedActorByClassName:K2_GetActorRotation()))
+            -- end
+        end
         -- local playerController = UEHelpers.GetPlayerController()
         -- if playerController:IsValid() then
         --     print(string.format("playerController: %s\n", playerController:GetFullName()))
@@ -503,6 +512,11 @@ RegisterKeyBind(Key.Z, function()
                 if actor:IsValid() then
                     LogDebug("Owner: ", actor:GetFullName())
                     LogDebug("Owner class: ", actor:GetClass():GetFullName())
+
+                    -- if actor:IsA(AFUtils.GetClassNPC_Base_ParentBP_C()) then
+                    --     ---@cast actor ANPC_Base_ParentBP_C
+                    --     AFUtils.LogOutlineComponent(actor.OutlineComponent, "OutlineComponent.")
+                    -- end
                 end
             end
 
