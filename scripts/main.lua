@@ -83,16 +83,37 @@ RegisterKeyBind(Key.L, function()
         --     LogDebug("IsSingleplayer:", gameInstance.IsSingleplayer)
         -- end
 
-        -- local players = FindAllOf("Abiotic_PlayerCharacter_C") ---@type AAbiotic_PlayerCharacter_C[]?
-        -- if players and #players > 0 then
-        --     for i = 1, #players do
-        --         local player = players[i]
-        --         if IsValid(player.OutlineComponent) then
-        --             AFUtils.LogOutlineComponent(player.OutlineComponent, i .. ": OutlineComponent.")
-        --             player.OutlineComponent.OutlineMask = AFUtils.OutlineMask.White
-        --             player.OutlineComponent:UpdateHighlightedComponents()
-        --         end
-        --     end
+        local players = FindAllOf("Abiotic_PlayerCharacter_C") ---@type AAbiotic_PlayerCharacter_C[]?
+        if players and #players > 0 then
+            for i = 1, #players do
+                local player = players[i]
+                LogDebug(i ..": Faction:", player.Faction)
+                -- if IsValid(player.OutlineComponent) then
+                --     AFUtils.LogOutlineComponent(player.OutlineComponent, i .. ": OutlineComponent.")
+                --     player.OutlineComponent.OutlineMask = AFUtils.OutlineMask.White
+                --     player.OutlineComponent:UpdateHighlightedComponents()
+                -- end
+            end
+        end
+
+        local npcs = FindAllOf("NPC_Base_ParentBP_C") ---@type ANPC_Base_ParentBP_C[]?
+        if npcs and #npcs > 0 then
+            for i, npc in ipairs(npcs) do
+                LogDebug(i ..": Class:", npc:GetClass():GetFullName())
+                LogDebug(i ..": IsDisabled:", npc.IsDisabled)
+                LogDebug(i ..": Faction:", npc.Faction)
+                if IsValid(npc.OutlineComponent) then
+                    AFUtils.LogOutlineComponent(npc.OutlineComponent, i .. ": OutlineComponent.")
+                    npc.OutlineComponent.OutlineMask = AFUtils.OutlineMask.White
+                    npc.OutlineComponent:UpdateHighlightedComponents()
+                end
+            end
+        end
+
+        -- local gameState = AFUtils.GetSurvivalGameState()
+        -- if IsValid(gameState) then
+        --     LogDebug("PlayerCharacterInGame count:", #gameState.PlayerCharacterInGame)
+        --     LogDebug("AlivePlayerCharacters count:", #gameState.AlivePlayerCharacters)
         -- end
 
         -- local defaultInventoryComponent = StaticFindObject("/Game/Blueprints/Characters/Abiotic_InventoryComponent.Default__Abiotic_InventoryComponent_C")
