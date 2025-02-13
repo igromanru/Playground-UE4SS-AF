@@ -76,6 +76,25 @@ end
 RegisterKeyBind(Key.L, function()
     ExecuteInGameThread(function()
         LogDebug("------------ L ---------------")
+        -- local gameInstance = UEHelpers.GetGameInstance() ---@cast gameInstance UAbiotic_GameInstance_C
+        -- if IsValid(gameInstance) then
+        --     LogDebug("bCanPlayOnline:", gameInstance.bCanPlayOnline)
+        --     LogDebug("bIsSoloOrLanPlayOnly:", gameInstance.bIsSoloOrLanPlayOnly)
+        --     LogDebug("IsSingleplayer:", gameInstance.IsSingleplayer)
+        -- end
+
+        -- local players = FindAllOf("Abiotic_PlayerCharacter_C") ---@type AAbiotic_PlayerCharacter_C[]?
+        -- if players and #players > 0 then
+        --     for i = 1, #players do
+        --         local player = players[i]
+        --         if IsValid(player.OutlineComponent) then
+        --             AFUtils.LogOutlineComponent(player.OutlineComponent, i .. ": OutlineComponent.")
+        --             player.OutlineComponent.OutlineMask = AFUtils.OutlineMask.White
+        --             player.OutlineComponent:UpdateHighlightedComponents()
+        --         end
+        --     end
+        -- end
+
         -- local defaultInventoryComponent = StaticFindObject("/Game/Blueprints/Characters/Abiotic_InventoryComponent.Default__Abiotic_InventoryComponent_C")
         -- ---@cast defaultInventoryComponent UAbiotic_InventoryComponent_C
         -- if IsValid(defaultInventoryComponent) then
