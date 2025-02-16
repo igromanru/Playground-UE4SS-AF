@@ -536,6 +536,10 @@ RegisterKeyBind(Key.Z, function()
                     --     ---@cast actor ANPC_Base_ParentBP_C
                     --     AFUtils.LogOutlineComponent(actor.OutlineComponent, "OutlineComponent.")
                     -- end
+                    if actor:IsA(AFUtils.GetClassGardenPlot_ParentBP_C()) then
+                        ---@cast actor AGardenPlot_ParentBP_C
+                        AFUtils.LogGardenPlot(actor)
+                    end
                 end
             end
 
