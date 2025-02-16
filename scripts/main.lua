@@ -83,46 +83,37 @@ RegisterKeyBind(Key.L, function()
         --     LogDebug("IsSingleplayer:", gameInstance.IsSingleplayer)
         -- end
 
-        local players = FindAllOf("Abiotic_PlayerCharacter_C") ---@type AAbiotic_PlayerCharacter_C[]?
-        if players and #players > 0 then
-            for i = 1, #players do
-                local player = players[i]
-                LogDebug(i ..": Faction:", player.Faction)
-                -- if IsValid(player.OutlineComponent) then
-                --     AFUtils.LogOutlineComponent(player.OutlineComponent, i .. ": OutlineComponent.")
-                --     player.OutlineComponent.OutlineMask = AFUtils.OutlineMask.White
-                --     player.OutlineComponent:UpdateHighlightedComponents()
-                -- end
-            end
-        end
+        -- local players = FindAllOf("Abiotic_PlayerCharacter_C") ---@type AAbiotic_PlayerCharacter_C[]?
+        -- if players and #players > 0 then
+        --     for i = 1, #players do
+        --         local player = players[i]
+        --         LogDebug(i ..": Faction:", player.Faction)
+        --         -- if IsValid(player.OutlineComponent) then
+        --         --     AFUtils.LogOutlineComponent(player.OutlineComponent, i .. ": OutlineComponent.")
+        --         --     player.OutlineComponent.OutlineMask = AFUtils.OutlineMask.White
+        --         --     player.OutlineComponent:UpdateHighlightedComponents()
+        --         -- end
+        --     end
+        -- end
 
-        local npcs = FindAllOf("NPC_Base_ParentBP_C") ---@type ANPC_Base_ParentBP_C[]?
-        if npcs and #npcs > 0 then
-            for i, npc in ipairs(npcs) do
-                LogDebug(i ..": Class:", npc:GetClass():GetFullName())
-                LogDebug(i ..": IsDisabled:", npc.IsDisabled)
-                LogDebug(i ..": Faction:", npc.Faction)
-                if IsValid(npc.OutlineComponent) then
-                    AFUtils.LogOutlineComponent(npc.OutlineComponent, i .. ": OutlineComponent.")
-                    npc.OutlineComponent.OutlineMask = AFUtils.OutlineMask.White
-                    npc.OutlineComponent:UpdateHighlightedComponents()
-                end
-            end
-        end
+        -- local npcs = FindAllOf("NPC_Base_ParentBP_C") ---@type ANPC_Base_ParentBP_C[]?
+        -- if npcs and #npcs > 0 then
+        --     for i, npc in ipairs(npcs) do
+        --         LogDebug(i ..": Class:", npc:GetClass():GetFullName())
+        --         LogDebug(i ..": IsDisabled:", npc.IsDisabled)
+        --         LogDebug(i ..": Faction:", npc.Faction)
+        --         if IsValid(npc.OutlineComponent) then
+        --             AFUtils.LogOutlineComponent(npc.OutlineComponent, i .. ": OutlineComponent.")
+        --             npc.OutlineComponent.OutlineMask = AFUtils.OutlineMask.White
+        --             npc.OutlineComponent:UpdateHighlightedComponents()
+        --         end
+        --     end
+        -- end
 
         -- local gameState = AFUtils.GetSurvivalGameState()
         -- if IsValid(gameState) then
         --     LogDebug("PlayerCharacterInGame count:", #gameState.PlayerCharacterInGame)
         --     LogDebug("AlivePlayerCharacters count:", #gameState.AlivePlayerCharacters)
-        -- end
-
-        -- local defaultInventoryComponent = StaticFindObject("/Game/Blueprints/Characters/Abiotic_InventoryComponent.Default__Abiotic_InventoryComponent_C")
-        -- ---@cast defaultInventoryComponent UAbiotic_InventoryComponent_C
-        -- if IsValid(defaultInventoryComponent) then
-        --     LogDebug("InitialInventorySize:", defaultInventoryComponent.InitialInventorySize)
-        --     LogDebug("MaxSlots:", defaultInventoryComponent.MaxSlots)
-        --     defaultInventoryComponent.InitialInventorySize = 42
-        --     defaultInventoryComponent.MaxSlots = 42
         -- end
 
         -- local leyakContainment = FindFirstOf("Deployed_LeyakContainment_C") ---@cast leyakContainment ADeployed_LeyakContainment_C
@@ -171,27 +162,33 @@ RegisterKeyBind(Key.L, function()
         --     end
         -- end
 
-        -- local reaper = FindFirstOf("NPC_Monster_Reaper_C") ---@type ANPC_Monster_Reaper_C
-        -- if reaper:IsValid() then
-        --     LogDebug("Reaper found")
-        --     reaper:Server_PoopOnFloor()
-        -- end
         -- LogDebug("IsServer:", IsServer())
         -- LogDebug("IsDedicatedServer:", IsDedicatedServer())
 
-        -- local myPlayerController = AFUtils.GetMyPlayerController()
-        -- if myPlayerController:IsValid() then
-        --     -- LogDebug("myPlayerController: " .. myPlayerController:GetFullName())
-        --     LogDebug("ActiveLevelName: " .. myPlayerController.ActiveLevelName:ToString())
-        --     local viewTarget = myPlayerController:GetViewTarget()
-        --     if IsValid(viewTarget) then
-        --         LogDebug("ViewTarget class:", viewTarget:GetClass():GetFullName())
-        --     end
-        --     local pawn = myPlayerController.Pawn
-        --     if IsValid(pawn) then
-        --         LogDebug("Controlled Pawn class:", pawn:GetClass():GetFullName())
-        --     end
-        -- end
+        local myPlayerController = AFUtils.GetMyPlayerController()
+        if myPlayerController:IsValid() then
+            -- LogDebug("myPlayerController: " .. myPlayerController:GetFullName())
+            -- LogDebug("ActiveLevelName: " .. myPlayerController.ActiveLevelName:ToString())
+            -- local viewTarget = myPlayerController:GetViewTarget()
+            -- if IsValid(viewTarget) then
+            --     LogDebug("ViewTarget class:", viewTarget:GetClass():GetFullName())
+            -- end
+            -- local pawn = myPlayerController.Pawn
+            -- if IsValid(pawn) then
+            --     LogDebug("Controlled Pawn class:", pawn:GetClass():GetFullName())
+            -- end
+
+            -- if myPlayerController.DayNightManager:IsValid() then
+            --     local dayNightManager = myPlayerController.DayNightManager
+            --     AFUtils.TriggerWeatherEvent(AFUtils.WeatherEvents.Fog)
+            --     -- dayNightManager.IsNight = false
+            --     -- AFUtils.SetNextWeatherEvent(AFUtils.WeatherEvents.Fog)
+            --     -- 5:40 o'clock
+            --     -- AFUtils.SetGameTime(6, 50)
+            --     -- AFUtils.SetGameTime(0.0)
+            --     AFUtils.LogDayNightManager(dayNightManager, "DayNightManager.")
+            -- end
+        end
 
         -- local playerState = AFUtils.GetMyPlayerState()
         -- if IsValid(playerState) then
@@ -202,26 +199,20 @@ RegisterKeyBind(Key.L, function()
             local location = myPlayer:K2_GetActorLocation()
             LogDebug("myPlayer location: " .. VectorToString(location))
 
-            -- if IsValid(myPlayer.BuffComponent) then
-            --     LogDebug("CurrentBuffs:", #myPlayer.BuffComponent.CurrentBuffs)
-            --     for i = 1, #myPlayer.BuffComponent.CurrentBuffs do
-            --         local buff = myPlayer.BuffComponent.CurrentBuffs[i]
-            --         LogDebug(i .. ": BuffRow:", buff.BuffRow.RowName:ToString())
-            --     end
-            -- end
-
+            -- myPlayer.CustomTimeDilation = 3.0
+            -- LogDebug("CustomTimeDilation:", myPlayer.CustomTimeDilation)
             -- AFUtils.LogCharacterParentBP(myPlayer)
             -- if myPlayer.CharacterEquipSlotInventory:IsValid() then
             --     AFUtils.LogInventoryComponent(myPlayer.CharacterEquipSlotInventory, "CharacterEquipSlotInventory.")
             -- end
             
-            -- if IsValid(myPlayer.ItemInHand_BP) then
-            --     if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
-            --         AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
-            --     else
-            --         AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
-            --     end
-            -- end
+            if IsValid(myPlayer.ItemInHand_BP) then
+                if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
+                    AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
+                else
+                    AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
+                end
+            end
 
             -- local components = {}
             -- myPlayer:GetHighlightComponents(components)
@@ -284,20 +275,6 @@ RegisterKeyBind(Key.L, function()
         --     LogDebug("ActiveLeyakContainmentID: " .. gameState.ActiveLeyakContainmentID:ToString())
         -- end
 
-        -- local myPlayerController = AFUtils.GetMyPlayerController()
-        -- if myPlayerController:IsValid() then
-        --     LogDebug("ActiveLevelName: " .. myPlayerController.ActiveLevelName:ToString())
-        --     if myPlayerController.DayNightManager:IsValid() then
-        --         local dayNightManager = myPlayerController.DayNightManager
-        --         -- dayNightManager.IsNight = false
-        --         -- AFUtils.SetNextWeatherEvent(AFUtils.WeatherEvents.Fog)
-        --         -- 5:40 o'clock
-        --         -- AFUtils.SetGameTime(6, 50)
-
-        --         -- AFUtils.SetGameTime(0.0)
-        --         AFUtils.LogDayNightManager(dayNightManager, "DayNightManager.")
-        --     end
-        -- end
         -- local powerSockets = FindAllOf("PowerSocket_ParentBP_C")
         -- ---@cast powerSockets APowerSocket_ParentBP_C[]?
         -- if powerSockets then
@@ -374,6 +351,8 @@ RegisterKeyBind(Key.O, function()
             print(string.format("Player address: %s\n", tostring(Player:GetAddress())))
             print(string.format("Player world address: %s\n", tostring(Player:GetWorld():GetAddress())))
             
+            LogDebug("FixHeldItemLiquid: ", AFUtils.FixHeldItemLiquid(Player))
+
             -- local spawnedActor = SpawnActorFromClass("/Game/Blueprints/DeployedObjects/Furniture/Deployed_StorageCrate_Makeshift_T2.Deployed_StorageCrate_Makeshift_T2_C", Player:K2_GetActorLocation(), Player:K2_GetActorRotation())
             -- if IsValid(spawnedActor) then
             --     LogDebug("spawnedActor location:", VectorToString(spawnedActor:K2_GetActorLocation()))
@@ -1281,16 +1260,16 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
--- RegisterHook("/Game/Blueprints/Environment/Systems/DayNightManager.DayNightManager_C:TriggerWeatherEvent", function(Context, EventRow)
---     local dayNightManager = Context:get()
---     local eventRow = EventRow:get()
+RegisterHook("/Game/Blueprints/Environment/Systems/DayNightManager.DayNightManager_C:TriggerWeatherEvent", function(Context, EventRow)
+    local dayNightManager = Context:get()
+    local eventRow = EventRow:get()
 
---     LogDebug("----- [TriggerWeatherEvent] called -----")
---     LogDebug("EventRow type: " .. eventRow:type())
---     LogDebug("EventRow.RowName: " .. eventRow.RowName:ToString())
---     LogDebug("EventRow.DataTablePath: " .. eventRow.DataTablePath:ToString())
---     -- AFUtils.LogDayNightManager(dayNightManager)
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [TriggerWeatherEvent] called -----")
+    LogDebug("EventRow type: " .. eventRow:type())
+    LogDebug("EventRow.RowName: " .. eventRow.RowName:ToString())
+    LogDebug("EventRow.DataTablePath: " .. eventRow.DataTablePath:ToString())
+    -- AFUtils.LogDayNightManager(dayNightManager)
+    LogDebug("------------------------------")
+end)
 
 LogInfo("Mod loaded successfully")
