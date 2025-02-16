@@ -1264,16 +1264,38 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
-RegisterHook("/Game/Blueprints/Environment/Systems/DayNightManager.DayNightManager_C:TriggerWeatherEvent", function(Context, EventRow)
-    local dayNightManager = Context:get()
-    local eventRow = EventRow:get()
+-- RegisterHook("/Game/Blueprints/Environment/Systems/DayNightManager.DayNightManager_C:TriggerWeatherEvent", function(Context, EventRow)
+--     local dayNightManager = Context:get()
+--     local eventRow = EventRow:get()
 
-    LogDebug("----- [TriggerWeatherEvent] called -----")
-    LogDebug("EventRow type: " .. eventRow:type())
-    LogDebug("EventRow.RowName: " .. eventRow.RowName:ToString())
-    LogDebug("EventRow.DataTablePath: " .. eventRow.DataTablePath:ToString())
-    -- AFUtils.LogDayNightManager(dayNightManager)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [TriggerWeatherEvent] called -----")
+--     LogDebug("EventRow type: " .. eventRow:type())
+--     LogDebug("EventRow.RowName: " .. eventRow.RowName:ToString())
+--     LogDebug("EventRow.DataTablePath: " .. eventRow.DataTablePath:ToString())
+--     -- AFUtils.LogDayNightManager(dayNightManager)
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Meta/Abiotic_PlayerController.Abiotic_PlayerController_C:Request_ContinenceReduction", function(Context, SuccessLevel)
+--     local playerController = Context:get() ---@type AAbiotic_PlayerController_C
+--     local successLevel = SuccessLevel:get() ---@type CriticalityLevels
+
+--     LogDebug("----- [Request_ContinenceReduction] called -----")
+--     LogDebug("SuccessLevel:", successLevel)
+--     LogDebug("CurrentContinence:", playerController.MyPlayerCharacter.CurrentContinence)
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Meta/Abiotic_PlayerController.Abiotic_PlayerController_C:Client_ToggleContinenceMinigame", function(Context, Show)
+--     local playerController = Context:get() ---@type AAbiotic_PlayerController_C
+--     local show = Show:get() ---@type boolean
+
+--     LogDebug("----- [Client_ToggleContinenceMinigame] called -----")
+--     LogDebug("Show:", show)
+--     LogDebug("CurrentContinence:", playerController.MyPlayerCharacter.CurrentContinence)
+--     -- playerController.MyPlayerCharacter.CurrentContinence = 99
+--     -- playerController:Request_ContinenceReduction(AFUtils.CriticalityLevels.Green)
+--     LogDebug("------------------------------")
+-- end)
 
 LogInfo("Mod loaded successfully")
