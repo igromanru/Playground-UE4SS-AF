@@ -19,6 +19,21 @@ DebugMode = true
 
 LogInfo("Starting mod initialization")
 
+-- RegisterCustomProperty({
+--     ["Name"] = "RowMap",
+--     ["Type"] = PropertyTypes.MapProperty,
+--     ["BelongsToClass"] = "/Script/Engine.DataTable",
+--     ["OffsetInternal"] = 0x98,
+--     ["MapProperty"] = {
+--         ["Key"] = {
+--             ["Type"] = PropertyTypes.NameProperty
+--         },
+--         ["Value"] = {
+--             ["Type"] = PropertyTypes.ObjectProperty
+--         }
+--     }
+-- })
+
 local function LeyakTest()
     local aiDirector = AFUtils.GetAIDirector()
     if aiDirector then
@@ -94,6 +109,12 @@ RegisterKeyBind(Key.L, function()
         --         --     player.OutlineComponent:UpdateHighlightedComponents()
         --         -- end
         --     end
+        -- end
+
+        -- local defaultBattery1 = StaticFindObject("/Game/Blueprints/DeployedObjects/Misc/Deployed_Battery_T1.Default__Deployed_Battery_T1_C") ---@cast defaultBattery1 ADeployed_Battery_T1_C
+        -- if IsValid(defaultBattery1) then
+        --     LogDebug("Default Battery T1:")
+        --     AFUtils.LogDeployedBattery(defaultBattery1)
         -- end
 
         -- local npcs = FindAllOf("NPC_Base_ParentBP_C") ---@type ANPC_Base_ParentBP_C[]?
@@ -206,13 +227,13 @@ RegisterKeyBind(Key.L, function()
             --     AFUtils.LogInventoryComponent(myPlayer.CharacterEquipSlotInventory, "CharacterEquipSlotInventory.")
             -- end
             
-            if IsValid(myPlayer.ItemInHand_BP) then
-                if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
-                    AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
-                else
-                    AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
-                end
-            end
+            -- if IsValid(myPlayer.ItemInHand_BP) then
+            --     if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
+            --         AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
+            --     else
+            --         AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
+            --     end
+            -- end
 
             -- local components = {}
             -- myPlayer:GetHighlightComponents(components)
