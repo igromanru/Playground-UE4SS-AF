@@ -98,18 +98,16 @@ RegisterKeyBind(Key.L, function()
         --     LogDebug("IsSingleplayer:", gameInstance.IsSingleplayer)
         -- end
 
-        -- local players = FindAllOf("Abiotic_PlayerCharacter_C") ---@type AAbiotic_PlayerCharacter_C[]?
-        -- if players and #players > 0 then
-        --     for i = 1, #players do
-        --         local player = players[i]
-        --         LogDebug(i ..": Faction:", player.Faction)
-        --         -- if IsValid(player.OutlineComponent) then
-        --         --     AFUtils.LogOutlineComponent(player.OutlineComponent, i .. ": OutlineComponent.")
-        --         --     player.OutlineComponent.OutlineMask = AFUtils.OutlineMask.White
-        --         --     player.OutlineComponent:UpdateHighlightedComponents()
-        --         -- end
-        --     end
-        -- end
+        local gardenPlot = FindFirstOf("GardenPlot_Large_C") ---@cast gardenPlot AGardenPlot_Large_C
+        if gardenPlot:IsValid() then
+            LogDebug("GardenPlot Address:", gardenPlot:GetAddress())
+            LogDebug("FarmingPlots count:", #gardenPlot.FarmingPlots)
+            for i = 1, #gardenPlot.FarmingPlots do
+                local farmingPlot = gardenPlot.FarmingPlots[i]
+                LogDebug(i ..": PlotIndex:", farmingPlot.PlotIndex)
+                LogDebug(i ..": HasPlant:", farmingPlot:HasPlant())
+            end
+        end
 
         -- local defaultBattery1 = StaticFindObject("/Game/Blueprints/DeployedObjects/Misc/Deployed_Battery_T1.Default__Deployed_Battery_T1_C") ---@cast defaultBattery1 ADeployed_Battery_T1_C
         -- if IsValid(defaultBattery1) then
@@ -186,63 +184,59 @@ RegisterKeyBind(Key.L, function()
         -- LogDebug("IsServer:", IsServer())
         -- LogDebug("IsDedicatedServer:", IsDedicatedServer())
 
-        local myPlayerController = AFUtils.GetMyPlayerController()
-        if myPlayerController:IsValid() then
-            -- LogDebug("myPlayerController: " .. myPlayerController:GetFullName())
-            -- LogDebug("ActiveLevelName: " .. myPlayerController.ActiveLevelName:ToString())
-            -- local viewTarget = myPlayerController:GetViewTarget()
-            -- if IsValid(viewTarget) then
-            --     LogDebug("ViewTarget class:", viewTarget:GetClass():GetFullName())
-            -- end
-            -- local pawn = myPlayerController.Pawn
-            -- if IsValid(pawn) then
-            --     LogDebug("Controlled Pawn class:", pawn:GetClass():GetFullName())
-            -- end
+        -- local myPlayerController = AFUtils.GetMyPlayerController()
+        -- if myPlayerController:IsValid() then
+        --     -- LogDebug("myPlayerController: " .. myPlayerController:GetFullName())
+        --     -- LogDebug("ActiveLevelName: " .. myPlayerController.ActiveLevelName:ToString())
+        --     -- local viewTarget = myPlayerController:GetViewTarget()
+        --     -- if IsValid(viewTarget) then
+        --     --     LogDebug("ViewTarget class:", viewTarget:GetClass():GetFullName())
+        --     -- end
+        --     -- local pawn = myPlayerController.Pawn
+        --     -- if IsValid(pawn) then
+        --     --     LogDebug("Controlled Pawn class:", pawn:GetClass():GetFullName())
+        --     -- end
 
-            -- if myPlayerController.DayNightManager:IsValid() then
-            --     local dayNightManager = myPlayerController.DayNightManager
-            --     AFUtils.TriggerWeatherEvent(AFUtils.WeatherEvents.Fog)
-            --     -- dayNightManager.IsNight = false
-            --     -- AFUtils.SetNextWeatherEvent(AFUtils.WeatherEvents.Fog)
-            --     -- 5:40 o'clock
-            --     -- AFUtils.SetGameTime(6, 50)
-            --     -- AFUtils.SetGameTime(0.0)
-            --     AFUtils.LogDayNightManager(dayNightManager, "DayNightManager.")
-            -- end
-        end
-
-        -- local playerState = AFUtils.GetMyPlayerState()
-        -- if IsValid(playerState) then
-            
+        --     -- if myPlayerController.DayNightManager:IsValid() then
+        --     --     local dayNightManager = myPlayerController.DayNightManager
+        --     --     AFUtils.TriggerWeatherEvent(AFUtils.WeatherEvents.Fog)
+        --     --     -- dayNightManager.IsNight = false
+        --     --     -- AFUtils.SetNextWeatherEvent(AFUtils.WeatherEvents.Fog)
+        --     --     -- 5:40 o'clock
+        --     --     -- AFUtils.SetGameTime(6, 50)
+        --     --     -- AFUtils.SetGameTime(0.0)
+        --     --     AFUtils.LogDayNightManager(dayNightManager, "DayNightManager.")
+        --     -- end
         -- end
-        local myPlayer = AFUtils.GetMyPlayer()
-        if IsValid(myPlayer) then
-            local location = myPlayer:K2_GetActorLocation()
-            LogDebug("myPlayer location: " .. VectorToString(location))
 
-            -- myPlayer.CustomTimeDilation = 3.0
-            -- LogDebug("CustomTimeDilation:", myPlayer.CustomTimeDilation)
-            -- AFUtils.LogCharacterParentBP(myPlayer)
-            -- if myPlayer.CharacterEquipSlotInventory:IsValid() then
-            --     AFUtils.LogInventoryComponent(myPlayer.CharacterEquipSlotInventory, "CharacterEquipSlotInventory.")
-            -- end
+        -- local myPlayer = AFUtils.GetMyPlayer()
+        -- if IsValid(myPlayer) then
+        --     local location = myPlayer:K2_GetActorLocation()
+        --     LogDebug("myPlayer location: " .. VectorToString(location))
+
+        --     -- myPlayer.CustomTimeDilation = 3.0
+        --     -- LogDebug("CustomTimeDilation:", myPlayer.CustomTimeDilation)
+        --     -- AFUtils.LogCharacterParentBP(myPlayer)
+        --     -- if myPlayer.CharacterEquipSlotInventory:IsValid() then
+        --     --     AFUtils.LogInventoryComponent(myPlayer.CharacterEquipSlotInventory, "CharacterEquipSlotInventory.")
+        --     -- end
             
-            -- if IsValid(myPlayer.ItemInHand_BP) then
-            --     if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
-            --         AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
-            --     else
-            --         AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
-            --     end
-            -- end
+        --     -- if IsValid(myPlayer.ItemInHand_BP) then
+        --     --     if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
+        --     --         AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
+        --     --     else
+        --     --         AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
+        --     --     end
+        --     -- end
 
-            -- local components = {}
-            -- myPlayer:GetHighlightComponents(components)
-            -- LogDebug("HighlightComponents count: ", #components)
-            -- for i = 1, #components do
-            --     local component = components[i]:get()
-            --     LogDebug(i .. ":", component:GetFullName())
-            -- end
-        end
+        --     -- local components = {}
+        --     -- myPlayer:GetHighlightComponents(components)
+        --     -- LogDebug("HighlightComponents count: ", #components)
+        --     -- for i = 1, #components do
+        --     --     local component = components[i]:get()
+        --     --     LogDebug(i .. ":", component:GetFullName())
+        --     -- end
+        -- end
         
         -- local myInventoryComponent = AFUtils.GetMyInventoryComponent()
         -- if myInventoryComponent:IsValid() then
@@ -367,25 +361,25 @@ RegisterKeyBind(Key.O, function()
         -- if World:IsValid() then
         --     print(string.format("World address: %s\n", tostring(World:GetAddress())))
         -- end
-        local Player = UEHelpers.GetPlayer()
-        if Player:IsValid() then
-            print(string.format("Player address: %s\n", tostring(Player:GetAddress())))
-            print(string.format("Player world address: %s\n", tostring(Player:GetWorld():GetAddress())))
+        -- local Player = UEHelpers.GetPlayer()
+        -- if Player:IsValid() then
+        --     print(string.format("Player address: %s\n", tostring(Player:GetAddress())))
+        --     print(string.format("Player world address: %s\n", tostring(Player:GetWorld():GetAddress())))
             
-            LogDebug("FixHeldItemLiquid: ", AFUtils.FixHeldItemLiquid(Player))
+        --     -- LogDebug("FixHeldItemLiquid: ", AFUtils.FixHeldItemLiquid(Player))
 
-            -- local spawnedActor = SpawnActorFromClass("/Game/Blueprints/DeployedObjects/Furniture/Deployed_StorageCrate_Makeshift_T2.Deployed_StorageCrate_Makeshift_T2_C", Player:K2_GetActorLocation(), Player:K2_GetActorRotation())
-            -- if IsValid(spawnedActor) then
-            --     LogDebug("spawnedActor location:", VectorToString(spawnedActor:K2_GetActorLocation()))
-            --     LogDebug("spawnedActor rotation:", RotatorToString(spawnedActor:K2_GetActorRotation()))
-            -- end
+        --     -- local spawnedActor = SpawnActorFromClass("/Game/Blueprints/DeployedObjects/Furniture/Deployed_StorageCrate_Makeshift_T2.Deployed_StorageCrate_Makeshift_T2_C", Player:K2_GetActorLocation(), Player:K2_GetActorRotation())
+        --     -- if IsValid(spawnedActor) then
+        --     --     LogDebug("spawnedActor location:", VectorToString(spawnedActor:K2_GetActorLocation()))
+        --     --     LogDebug("spawnedActor rotation:", RotatorToString(spawnedActor:K2_GetActorRotation()))
+        --     -- end
             
-            -- local spawnedActorByClassName = SpawnActorByClassName("/Game/Blueprints/DeployedObjects/Furniture/Deployed_StorageCrate_Makeshift_T2.Deployed_StorageCrate_Makeshift_T2_C", Player:K2_GetActorLocation(), Player:K2_GetActorRotation())
-            -- if spawnedActorByClassName:IsValid() then
-            --     LogDebug("spawnedActorByClassName location:", VectorToString(spawnedActorByClassName:K2_GetActorLocation()))
-            --     LogDebug("spawnedActorByClassName rotation:", RotatorToString(spawnedActorByClassName:K2_GetActorRotation()))
-            -- end
-        end
+        --     -- local spawnedActorByClassName = SpawnActorByClassName("/Game/Blueprints/DeployedObjects/Furniture/Deployed_StorageCrate_Makeshift_T2.Deployed_StorageCrate_Makeshift_T2_C", Player:K2_GetActorLocation(), Player:K2_GetActorRotation())
+        --     -- if spawnedActorByClassName:IsValid() then
+        --     --     LogDebug("spawnedActorByClassName location:", VectorToString(spawnedActorByClassName:K2_GetActorLocation()))
+        --     --     LogDebug("spawnedActorByClassName rotation:", RotatorToString(spawnedActorByClassName:K2_GetActorRotation()))
+        --     -- end
+        -- end
         -- local playerController = UEHelpers.GetPlayerController()
         -- if playerController:IsValid() then
         --     print(string.format("playerController: %s\n", playerController:GetFullName()))
@@ -647,6 +641,7 @@ RegisterKeyBind(Key.PAUSE, function()
         LogDebug("------------------------------")
     end)
 end)
+
 
 -- RegisterProcessConsoleExecPreHook(function(Context, FullCommand, CommandParts, Ar, Executor)
 --     print("RegisterProcessConsoleExecPreHook:\n")
@@ -1318,5 +1313,57 @@ end)
 --     -- playerController:Request_ContinenceReduction(AFUtils.CriticalityLevels.Green)
 --     LogDebug("------------------------------")
 -- end)
+
+-- RegisterHook("/Game/Blueprints/DeployedObjects/Farming/FarmingPlot_BP.FarmingPlot_BP_C:GrowthTick", function(Context)
+--     local farmingPlot = Context:get() ---@type AFarmingPlot_BP_C
+    
+--     LogDebug("----- [GrowthTick] called -----")
+--     LogDebug("GrowthTickRate:", farmingPlot.GrowthTickRate)
+--     LogDebug("GrowthAmountPerTick:", farmingPlot.GrowthAmountPerTick)
+--     LogDebug("PlantGrowthStageMax:", farmingPlot.PlantGrowthStageMax)
+--     LogDebug("GetCurrentGrowthProgress:", farmingPlot:GetCurrentGrowthProgress())
+    
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/DeployedObjects/Farming/FarmingPlot_BP.FarmingPlot_BP_C:HasPlant", function(Context, ReturnValue)
+--     local farmingPlot = Context:get() ---@type AFarmingPlot_BP_C
+    
+--     LogDebug("----- [HasPlant] called -----")
+--     LogDebug("PlotIndex:", farmingPlot.PlotIndex)
+--     LogDebug("ReturnValue type:", type(ReturnValue))
+--     if ReturnValue then
+--         LogDebug("ReturnValue:", ReturnValue:get())
+--     end
+--     LogDebug("------------------------------")
+-- end)
+
+RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:OnRep_State", function(Context)
+    local context = Context:get() ---@type ACookingProxy_BP_C
+    
+    LogDebug("----- [OnRep_State] called -----")
+    LogDebug("State:", context.State)
+    -- LogDebug("ChefSkill:", context.ChefSkill)
+    LogDebug("Cookware:", context.Cookware)
+    LogDebug("IsCookingSoup:", context.IsCookingSoup)
+    LogDebug("TimeToCook:", context.TimeToCook)
+    LogDebug("TimeToIgnite:", context.TimeToIgnite)
+    LogDebug("------------------------------")
+end)
+
+RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:UpdateChangeableState", function(Context, CookingState, CookedProgress)
+    local context = Context:get() ---@type ACookingProxy_BP_C
+    local cookingState = CookingState:get() ---@type EFoodCookStates
+    local cookedProgress = CookedProgress:get() ---@type float
+    
+    LogDebug("----- [UpdateChangeableState] called -----")
+    LogDebug("CookingState:", cookingState)
+    LogDebug("CookedProgress:", cookedProgress)
+    LogDebug("State:", context.State)
+    -- LogDebug("ChefSkill:", context.ChefSkill)
+    LogDebug("Cookware:", context.Cookware)
+    LogDebug("IsCookingSoup:", context.IsCookingSoup)
+    LogDebug("------------------------------")
+end)
 
 LogInfo("Mod loaded successfully")
