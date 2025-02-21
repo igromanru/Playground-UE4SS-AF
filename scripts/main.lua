@@ -677,47 +677,73 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
--- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_FishingReward", function(Context, Reward, Lucky)
---     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
---     local reward = Reward:get() ---@type FFishRowHandle
---     local lucky = Lucky:get() ---@type boolean
+RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_FishingReward", function(Context, Reward, Lucky)
+    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+    local reward = Reward:get() ---@type FFishRowHandle
+    local lucky = Lucky:get() ---@type boolean
 
---     LogDebug("----- [Request_FishingReward] called -----")
---     LogDebug("Reward.RowName:", reward.RowName:ToString())
---     LogDebug("Lucky:", lucky)
+    LogDebug("----- [Request_FishingReward] called -----")
+    LogDebug("Reward.RowName:", reward.RowName:ToString())
+    LogDebug("Lucky:", lucky)
+    LogDebug("------------------------------")
+end)
+
+RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Start Fishing Minigame", function(Context, InLocation)
+    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+
+    LogDebug("----- [Start Fishing Minigame] called -----")
+    -- LogDebug("CatchingJunk:", fishingRod.CatchingJunk)
+    -- LogDebug("LuckyHat:", fishingRod.LuckyHat)
+    -- fishingRod.CatchingJunk = false
+    -- fishingRod.LuckyHat = true
+    AFUtils.LogFishingRod(fishingRod)
+    LogDebug("------------------------------")
+    fishingRod:FishingSuccess()
+end)
+
+RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:FishingSuccess", function(Context)
+    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+
+    LogDebug("----- [FishingSuccess] called -----")
+    LogDebug("------------------------------")
+end)
+
+RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:EndFishingMinigame", function(Context, Fail)
+    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+    local fail = Fail:get() ---@type boolean
+
+    LogDebug("----- [EndFishingMinigame] called -----")
+    LogDebug("Fail:", fail)
+    AFUtils.LogFishingRod(fishingRod)
+    LogDebug("------------------------------")
+end)
+
+RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Local_DetermineReward", function(Context, ReadyToMinigame)
+    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+    local readyToMinigame = ReadyToMinigame:get() ---@type boolean
+
+    LogDebug("----- [Local_DetermineReward] called -----")
+    LogDebug("ReadyToMinigame:", readyToMinigame)
+    LogDebug("------------------------------")
+end)
+
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:IsConsumingPlayerInput", function(Context)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+
+--     LogDebug("----- [IsConsumingPlayerInput] called -----")
 --     LogDebug("------------------------------")
 -- end)
 
--- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Start Fishing Minigame", function(Context, InLocation)
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:IsFishingActive", function(Context, Active)
 --     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+--     local active = Active:get() ---@type boolean
 
---     LogDebug("----- [Start Fishing Minigame] called -----")
---     LogDebug("------------------------------")
--- end)
-
--- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:FishingSuccess", function(Context)
---     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
-
---     LogDebug("----- [FishingSuccess] called -----")
---     LogDebug("------------------------------")
--- end)
-
--- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:EndFishingMinigame", function(Context, Fail)
---     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
---     local fail = Fail:get() ---@type boolean
-
---     LogDebug("----- [EndFishingMinigame] called -----")
---     LogDebug("Fail:", fail)
---     LogDebug("------------------------------")
--- end)
-
--- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Local_DetermineReward", function(Context, ReadyToMinigame)
---     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
---     local readyToMinigame = ReadyToMinigame:get() ---@type boolean
-
---     LogDebug("----- [Local_DetermineReward] called -----")
---     LogDebug("ReadyToMinigame:", readyToMinigame)
---     LogDebug("------------------------------")
+--     if active then
+--         LogDebug("----- [IsFishingActive] called -----")
+--         -- LogDebug("Active:", active)
+--         AFUtils.LogFishingRod(fishingRod)
+--         LogDebug("------------------------------")
+--     end
 -- end)
 
 -- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:TickMinigame", function(Context, DeltaTime)
@@ -737,19 +763,22 @@ end)
 --     LogDebug("------------------------------")
 -- end,
 -- function(Context, FishingZone, TimeOfDayHour, RodTags, BaitTags, PlayerTags, WeatherTags, bHotspot, bNoRares, WorldFlags, bDebug, bWasJunkCatch, OutJunkSalvage, OutFishReward)
---     local functionLibrary = Context:get() ---@type UAbioticFunctionLibrary
+--     -- local functionLibrary = Context:get() ---@type UAbioticFunctionLibrary
+--     -- local fishingZone = FishingZone:get() ---@type FFishingZoneRowHandle
 --     local timeOfDayHour = TimeOfDayHour:get() ---@type integer
 --     local hotspot = bHotspot:get() ---@type boolean
---     local noRares = bNoRares:get() ---@type boolean
---     local debug = bDebug:get() ---@type boolean
---     local wasJunkCatch = bWasJunkCatch:get() ---@type boolean
+--     -- local noRares = bNoRares:get() ---@type boolean
+--     -- local debug = bDebug:get() ---@type boolean
+--     -- local wasJunkCatch = bWasJunkCatch:get() ---@type boolean
 
 --     LogDebug("----- [CalculateFishingReward Post] called -----")
+--     -- LogDebug("Context type:", functionLibrary:type())
+--     -- LogDebug("FishingZone.RowName:", fishingZone.RowName:ToString())
 --     LogDebug("TimeOfDayHour:", timeOfDayHour)
 --     LogDebug("bHotspot:", hotspot)
---     LogDebug("bNoRares:", noRares)
---     LogDebug("bDebug:", debug)
---     LogDebug("bWasJunkCatch:", wasJunkCatch)
+--     -- LogDebug("bNoRares:", noRares)
+--     -- LogDebug("bDebug:", debug)
+--     -- LogDebug("bWasJunkCatch:", wasJunkCatch)
 --     LogDebug("------------------------------")
 -- end)
 
