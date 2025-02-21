@@ -12,6 +12,7 @@ require("AFUtils.AFUtilsDebug")
 require("AFUtils.BaseUtils.LinearColors")
 
 local UEHelpers = require("UEHelpers")
+local jsb = require("jsbProfiler.jsbProfi")
 
 ModName = "Playground"
 ModVersion = "1.0.0"
@@ -98,16 +99,16 @@ RegisterKeyBind(Key.L, function()
         --     LogDebug("IsSingleplayer:", gameInstance.IsSingleplayer)
         -- end
 
-        local gardenPlot = FindFirstOf("GardenPlot_Large_C") ---@cast gardenPlot AGardenPlot_Large_C
-        if gardenPlot:IsValid() then
-            LogDebug("GardenPlot Address:", gardenPlot:GetAddress())
-            LogDebug("FarmingPlots count:", #gardenPlot.FarmingPlots)
-            for i = 1, #gardenPlot.FarmingPlots do
-                local farmingPlot = gardenPlot.FarmingPlots[i]
-                LogDebug(i ..": PlotIndex:", farmingPlot.PlotIndex)
-                LogDebug(i ..": HasPlant:", farmingPlot:HasPlant())
-            end
-        end
+        -- local gardenPlot = FindFirstOf("GardenPlot_Large_C") ---@cast gardenPlot AGardenPlot_Large_C
+        -- if gardenPlot:IsValid() then
+        --     LogDebug("GardenPlot Address:", gardenPlot:GetAddress())
+        --     LogDebug("FarmingPlots count:", #gardenPlot.FarmingPlots)
+        --     for i = 1, #gardenPlot.FarmingPlots do
+        --         local farmingPlot = gardenPlot.FarmingPlots[i]
+        --         LogDebug(i ..": PlotIndex:", farmingPlot.PlotIndex)
+        --         LogDebug(i ..": HasPlant:", farmingPlot:HasPlant())
+        --     end
+        -- end
 
         -- local defaultBattery1 = StaticFindObject("/Game/Blueprints/DeployedObjects/Misc/Deployed_Battery_T1.Default__Deployed_Battery_T1_C") ---@cast defaultBattery1 ADeployed_Battery_T1_C
         -- if IsValid(defaultBattery1) then
@@ -324,6 +325,7 @@ end)
 RegisterKeyBind(Key.O, function()
     ExecuteInGameThread(function()
         LogDebug("------------ O ---------------")
+
         -- local transform = {
         --     Translation = {
         --         X = 11.0,
@@ -675,8 +677,7 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
--- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_FishingReward",
--- function(Context, Reward, Lucky)
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_FishingReward", function(Context, Reward, Lucky)
 --     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
 --     local reward = Reward:get() ---@type FFishRowHandle
 --     local lucky = Lucky:get() ---@type boolean
@@ -684,6 +685,47 @@ end)
 --     LogDebug("----- [Request_FishingReward] called -----")
 --     LogDebug("Reward.RowName:", reward.RowName:ToString())
 --     LogDebug("Lucky:", lucky)
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Start Fishing Minigame", function(Context, InLocation)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+
+--     LogDebug("----- [Start Fishing Minigame] called -----")
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:FishingSuccess", function(Context)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+
+--     LogDebug("----- [FishingSuccess] called -----")
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:EndFishingMinigame", function(Context, Fail)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+--     local fail = Fail:get() ---@type boolean
+
+--     LogDebug("----- [EndFishingMinigame] called -----")
+--     LogDebug("Fail:", fail)
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Local_DetermineReward", function(Context, ReadyToMinigame)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+--     local readyToMinigame = ReadyToMinigame:get() ---@type boolean
+
+--     LogDebug("----- [Local_DetermineReward] called -----")
+--     LogDebug("ReadyToMinigame:", readyToMinigame)
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:TickMinigame", function(Context, DeltaTime)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+--     local deltaTime = DeltaTime:get() ---@type float
+
+--     LogDebug("----- [TickMinigame] called -----")
+--     LogDebug("DeltaTime:", deltaTime)
 --     LogDebug("------------------------------")
 -- end)
 
@@ -1329,41 +1371,54 @@ end)
 -- RegisterHook("/Game/Blueprints/DeployedObjects/Farming/FarmingPlot_BP.FarmingPlot_BP_C:HasPlant", function(Context, ReturnValue)
 --     local farmingPlot = Context:get() ---@type AFarmingPlot_BP_C
     
---     LogDebug("----- [HasPlant] called -----")
---     LogDebug("PlotIndex:", farmingPlot.PlotIndex)
---     LogDebug("ReturnValue type:", type(ReturnValue))
---     if ReturnValue then
---         LogDebug("ReturnValue:", ReturnValue:get())
---     end
---     LogDebug("------------------------------")
+--     -- LogDebug("----- [HasPlant] called -----")
+--     -- LogDebug("PlotIndex:", farmingPlot.PlotIndex)
+--     -- LogDebug("ReturnValue type:", type(ReturnValue))
+--     -- if ReturnValue then
+--     --     LogDebug("ReturnValue:", ReturnValue:get())
+--     -- end
+--     -- LogDebug("------------------------------")
 -- end)
 
-RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:OnRep_State", function(Context)
-    local context = Context:get() ---@type ACookingProxy_BP_C
+-- RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:OnRep_State", function(Context)
+--     local context = Context:get() ---@type ACookingProxy_BP_C
     
-    LogDebug("----- [OnRep_State] called -----")
-    LogDebug("State:", context.State)
-    -- LogDebug("ChefSkill:", context.ChefSkill)
-    LogDebug("Cookware:", context.Cookware)
-    LogDebug("IsCookingSoup:", context.IsCookingSoup)
-    LogDebug("TimeToCook:", context.TimeToCook)
-    LogDebug("TimeToIgnite:", context.TimeToIgnite)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [OnRep_State] called -----")
+--     LogDebug("State:", context.State)
+--     -- LogDebug("ChefSkill:", context.ChefSkill)
+--     LogDebug("Cookware:", context.Cookware)
+--     LogDebug("IsCookingSoup:", context.IsCookingSoup)
+--     LogDebug("TimeToCook:", context.TimeToCook)
+--     LogDebug("TimeToBurn:", context.TimeToBurn)
+--     LogDebug("TimeToIgnite:", context.TimeToIgnite)
+--     LogDebug("CookingState:", context["Soup Data"].CookingState_32_568AB66645F40DCFF9789698F2B13EA0)
+--     LogDebug("CookedProgress:", context["Soup Data"].CookedProgress_34_F73379824243A5DFBCABCEB136769B43)
+--     LogDebug("CookDuration:", context["Soup Data"].CookDuration_37_228EDAD3449116421DDD5D9463A67B6A)
+--     LogDebug("------------------------------")
+--     -- local targetState = AFUtils.FoodCookStates.BeautifullyCooked
+--     -- if context.IsCookingSoup then
+--     --     targetState = AFUtils.FoodCookStates.Cooked
+--     -- end
+--     -- if context.State ~= targetState then
+--     --     context["Soup Data"].CookingState_32_568AB66645F40DCFF9789698F2B13EA0 = targetState
+--     --     context["Soup Data"].CookedProgress_34_F73379824243A5DFBCABCEB136769B43 = 1.0
+--     --     context:UpdateChangeableState(targetState, 1.0)
+--     -- end
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:UpdateChangeableState", function(Context, CookingState, CookedProgress)
-    local context = Context:get() ---@type ACookingProxy_BP_C
-    local cookingState = CookingState:get() ---@type EFoodCookStates
-    local cookedProgress = CookedProgress:get() ---@type float
+-- RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:UpdateChangeableState", function(Context, CookingState, CookedProgress)
+--     local context = Context:get() ---@type ACookingProxy_BP_C
+--     local cookingState = CookingState:get() ---@type EFoodCookStates
+--     local cookedProgress = CookedProgress:get() ---@type float
     
-    LogDebug("----- [UpdateChangeableState] called -----")
-    LogDebug("CookingState:", cookingState)
-    LogDebug("CookedProgress:", cookedProgress)
-    LogDebug("State:", context.State)
-    -- LogDebug("ChefSkill:", context.ChefSkill)
-    LogDebug("Cookware:", context.Cookware)
-    LogDebug("IsCookingSoup:", context.IsCookingSoup)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [UpdateChangeableState] called -----")
+--     LogDebug("CookingState:", cookingState)
+--     LogDebug("CookedProgress:", cookedProgress)
+--     LogDebug("State:", context.State)
+--     -- LogDebug("ChefSkill:", context.ChefSkill)
+--     LogDebug("Cookware:", context.Cookware)
+--     LogDebug("IsCookingSoup:", context.IsCookingSoup)
+--     LogDebug("------------------------------")
+-- end)
 
 LogInfo("Mod loaded successfully")
