@@ -1445,11 +1445,32 @@ RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C
     LogDebug("------------------------------")
 end)
 
-RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:OnRep_OriginalItem", function(Context)
+RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:RefreshItemAppearance", function(Context)
     local context = Context:get() ---@type ACookingProxy_BP_C
     
-    LogDebug("----- [OnRep_OriginalItem] called -----")
-    AFUtils.LogCookingProxy(context)
+    LogDebug("----- [RefreshItemAppearance] called -----")
+    LogDebug("------------------------------")
+end)
+
+RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:RefreshItemStates",
+function(Context, OriginalItem, ChangeableData, ChefSkill, TimeToCook, TimeToBurn, OriginalChef, ShowCookwareMesh, Cookware, StartCookingSoup, NewIngredientAdded, CanCookSoup)
+    local context = Context:get() ---@type ACookingProxy_BP_C
+    local originalItem = OriginalItem:get() ---@type FDataTableRowHandle
+    local changeableData = ChangeableData:get() ---@type FAbiotic_InventoryChangeableDataStruct
+    local chefSkill = ChefSkill:get() ---@type integer
+    local timeToCook = TimeToCook:get() ---@type float
+    local timeToBurn = TimeToBurn:get() ---@type float
+    local startCookingSoup = StartCookingSoup:get() ---@type boolean
+    local newIngredientAdded = NewIngredientAdded:get() ---@type boolean
+    
+    LogDebug("----- [RefreshItemStates] called -----")
+    LogDebug("OriginalItem.RowName:", originalItem.RowName:ToString())
+    AFUtils.LogInventoryChangeableDataStruct(changeableData, "ChangeableData.")
+    LogDebug("TimeToCook:", timeToCook)
+    LogDebug("TimeToBurn:", timeToBurn)
+    LogDebug("TimeToBurn:", timeToBurn)
+    LogDebug("StartCookingSoup:", startCookingSoup)
+    LogDebug("NewIngredientAdded:", newIngredientAdded)
     LogDebug("------------------------------")
 end)
 
