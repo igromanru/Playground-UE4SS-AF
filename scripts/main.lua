@@ -185,30 +185,34 @@ RegisterKeyBind(Key.L, function()
         -- LogDebug("IsServer:", IsServer())
         -- LogDebug("IsDedicatedServer:", IsDedicatedServer())
 
-        -- local myPlayerController = AFUtils.GetMyPlayerController()
-        -- if myPlayerController:IsValid() then
-        --     -- LogDebug("myPlayerController: " .. myPlayerController:GetFullName())
-        --     -- LogDebug("ActiveLevelName: " .. myPlayerController.ActiveLevelName:ToString())
-        --     -- local viewTarget = myPlayerController:GetViewTarget()
-        --     -- if IsValid(viewTarget) then
-        --     --     LogDebug("ViewTarget class:", viewTarget:GetClass():GetFullName())
-        --     -- end
-        --     -- local pawn = myPlayerController.Pawn
-        --     -- if IsValid(pawn) then
-        --     --     LogDebug("Controlled Pawn class:", pawn:GetClass():GetFullName())
-        --     -- end
+        local myPlayerController = AFUtils.GetMyPlayerController()
+        if myPlayerController:IsValid() then
+            -- LogDebug("CheatComponent IsValid:", myPlayerController.CheatComponent:IsValid())
+            -- LogDebug("CheatMenu IsValid:", myPlayerController.CheatMenu:IsValid())
+            -- LogDebug("CheatAttempt:", myPlayerController.CheatAttempt)
 
-        --     -- if myPlayerController.DayNightManager:IsValid() then
-        --     --     local dayNightManager = myPlayerController.DayNightManager
-        --     --     AFUtils.TriggerWeatherEvent(AFUtils.WeatherEvents.Fog)
-        --     --     -- dayNightManager.IsNight = false
-        --     --     -- AFUtils.SetNextWeatherEvent(AFUtils.WeatherEvents.Fog)
-        --     --     -- 5:40 o'clock
-        --     --     -- AFUtils.SetGameTime(6, 50)
-        --     --     -- AFUtils.SetGameTime(0.0)
-        --     --     AFUtils.LogDayNightManager(dayNightManager, "DayNightManager.")
-        --     -- end
-        -- end
+            -- LogDebug("myPlayerController: " .. myPlayerController:GetFullName())
+            -- LogDebug("ActiveLevelName: " .. myPlayerController.ActiveLevelName:ToString())
+            -- local viewTarget = myPlayerController:GetViewTarget()
+            -- if IsValid(viewTarget) then
+            --     LogDebug("ViewTarget class:", viewTarget:GetClass():GetFullName())
+            -- end
+            -- local pawn = myPlayerController.Pawn
+            -- if IsValid(pawn) then
+            --     LogDebug("Controlled Pawn class:", pawn:GetClass():GetFullName())
+            -- end
+
+            -- if myPlayerController.DayNightManager:IsValid() then
+            --     local dayNightManager = myPlayerController.DayNightManager
+            --     AFUtils.TriggerWeatherEvent(AFUtils.WeatherEvents.Fog)
+            --     -- dayNightManager.IsNight = false
+            --     -- AFUtils.SetNextWeatherEvent(AFUtils.WeatherEvents.Fog)
+            --     -- 5:40 o'clock
+            --     -- AFUtils.SetGameTime(6, 50)
+            --     -- AFUtils.SetGameTime(0.0)
+            --     AFUtils.LogDayNightManager(dayNightManager, "DayNightManager.")
+            -- end
+        end
 
         -- local myPlayer = AFUtils.GetMyPlayer()
         -- if IsValid(myPlayer) then
@@ -677,55 +681,55 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_FishingReward", function(Context, Reward, Lucky)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
-    local reward = Reward:get() ---@type FFishRowHandle
-    local lucky = Lucky:get() ---@type boolean
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_FishingReward", function(Context, Reward, Lucky)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+--     local reward = Reward:get() ---@type FFishRowHandle
+--     local lucky = Lucky:get() ---@type boolean
 
-    LogDebug("----- [Request_FishingReward] called -----")
-    LogDebug("Reward.RowName:", reward.RowName:ToString())
-    LogDebug("Lucky:", lucky)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [Request_FishingReward] called -----")
+--     LogDebug("Reward.RowName:", reward.RowName:ToString())
+--     LogDebug("Lucky:", lucky)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Start Fishing Minigame", function(Context, InLocation)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Start Fishing Minigame", function(Context, InLocation)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
 
-    LogDebug("----- [Start Fishing Minigame] called -----")
-    -- LogDebug("CatchingJunk:", fishingRod.CatchingJunk)
-    -- LogDebug("LuckyHat:", fishingRod.LuckyHat)
-    -- fishingRod.CatchingJunk = false
-    -- fishingRod.LuckyHat = true
-    AFUtils.LogFishingRod(fishingRod)
-    LogDebug("------------------------------")
-    fishingRod:FishingSuccess()
-end)
+--     LogDebug("----- [Start Fishing Minigame] called -----")
+--     -- LogDebug("CatchingJunk:", fishingRod.CatchingJunk)
+--     -- LogDebug("LuckyHat:", fishingRod.LuckyHat)
+--     -- fishingRod.CatchingJunk = false
+--     -- fishingRod.LuckyHat = true
+--     AFUtils.LogFishingRod(fishingRod)
+--     LogDebug("------------------------------")
+--     fishingRod:FishingSuccess()
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:FishingSuccess", function(Context)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:FishingSuccess", function(Context)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
 
-    LogDebug("----- [FishingSuccess] called -----")
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [FishingSuccess] called -----")
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:EndFishingMinigame", function(Context, Fail)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
-    local fail = Fail:get() ---@type boolean
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:EndFishingMinigame", function(Context, Fail)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+--     local fail = Fail:get() ---@type boolean
 
-    LogDebug("----- [EndFishingMinigame] called -----")
-    LogDebug("Fail:", fail)
-    AFUtils.LogFishingRod(fishingRod)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [EndFishingMinigame] called -----")
+--     LogDebug("Fail:", fail)
+--     AFUtils.LogFishingRod(fishingRod)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Local_DetermineReward", function(Context, ReadyToMinigame)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
-    local readyToMinigame = ReadyToMinigame:get() ---@type boolean
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Local_DetermineReward", function(Context, ReadyToMinigame)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+--     local readyToMinigame = ReadyToMinigame:get() ---@type boolean
 
-    LogDebug("----- [Local_DetermineReward] called -----")
-    LogDebug("ReadyToMinigame:", readyToMinigame)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [Local_DetermineReward] called -----")
+--     LogDebug("ReadyToMinigame:", readyToMinigame)
+--     LogDebug("------------------------------")
+-- end)
 
 -- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:IsConsumingPlayerInput", function(Context)
 --     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
@@ -1409,45 +1413,44 @@ end)
 --     -- LogDebug("------------------------------")
 -- end)
 
--- RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:OnRep_State", function(Context)
---     local context = Context:get() ---@type ACookingProxy_BP_C
+RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:OnRep_State", function(Context)
+    local context = Context:get() ---@type ACookingProxy_BP_C
     
---     LogDebug("----- [OnRep_State] called -----")
---     LogDebug("State:", context.State)
---     -- LogDebug("ChefSkill:", context.ChefSkill)
---     LogDebug("Cookware:", context.Cookware)
---     LogDebug("IsCookingSoup:", context.IsCookingSoup)
---     LogDebug("TimeToCook:", context.TimeToCook)
---     LogDebug("TimeToBurn:", context.TimeToBurn)
---     LogDebug("TimeToIgnite:", context.TimeToIgnite)
---     LogDebug("CookingState:", context["Soup Data"].CookingState_32_568AB66645F40DCFF9789698F2B13EA0)
---     LogDebug("CookedProgress:", context["Soup Data"].CookedProgress_34_F73379824243A5DFBCABCEB136769B43)
---     LogDebug("CookDuration:", context["Soup Data"].CookDuration_37_228EDAD3449116421DDD5D9463A67B6A)
---     LogDebug("------------------------------")
---     -- local targetState = AFUtils.FoodCookStates.BeautifullyCooked
---     -- if context.IsCookingSoup then
---     --     targetState = AFUtils.FoodCookStates.Cooked
---     -- end
---     -- if context.State ~= targetState then
---     --     context["Soup Data"].CookingState_32_568AB66645F40DCFF9789698F2B13EA0 = targetState
---     --     context["Soup Data"].CookedProgress_34_F73379824243A5DFBCABCEB136769B43 = 1.0
---     --     context:UpdateChangeableState(targetState, 1.0)
---     -- end
--- end)
+    LogDebug("----- [OnRep_State] called -----")
+    AFUtils.LogCookingProxy(context)
+    LogDebug("------------------------------")
+    -- local targetState = AFUtils.FoodCookStates.BeautifullyCooked
+    -- if context.IsCookingSoup then
+    --     targetState = AFUtils.FoodCookStates.Cooked
+    -- end
+    -- if context.State ~= targetState then
+    --     context["Soup Data"].CookingState_32_568AB66645F40DCFF9789698F2B13EA0 = targetState
+    --     context["Soup Data"].CookedProgress_34_F73379824243A5DFBCABCEB136769B43 = 1.0
+    --     context:UpdateChangeableState(targetState, 1.0)
+    -- end
+end)
 
--- RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:UpdateChangeableState", function(Context, CookingState, CookedProgress)
---     local context = Context:get() ---@type ACookingProxy_BP_C
---     local cookingState = CookingState:get() ---@type EFoodCookStates
---     local cookedProgress = CookedProgress:get() ---@type float
+RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:UpdateChangeableState", function(Context, CookingState, CookedProgress)
+    local context = Context:get() ---@type ACookingProxy_BP_C
+    local cookingState = CookingState:get() ---@type EFoodCookStates
+    local cookedProgress = CookedProgress:get() ---@type float
     
---     LogDebug("----- [UpdateChangeableState] called -----")
---     LogDebug("CookingState:", cookingState)
---     LogDebug("CookedProgress:", cookedProgress)
---     LogDebug("State:", context.State)
---     -- LogDebug("ChefSkill:", context.ChefSkill)
---     LogDebug("Cookware:", context.Cookware)
---     LogDebug("IsCookingSoup:", context.IsCookingSoup)
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [UpdateChangeableState] called -----")
+    LogDebug("CookingState:", cookingState)
+    LogDebug("CookedProgress:", cookedProgress)
+    LogDebug("State:", context.State)
+    -- LogDebug("ChefSkill:", context.ChefSkill)
+    LogDebug("Cookware:", context.Cookware)
+    LogDebug("IsCookingSoup:", context.IsCookingSoup)
+    LogDebug("------------------------------")
+end)
+
+RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:OnRep_OriginalItem", function(Context)
+    local context = Context:get() ---@type ACookingProxy_BP_C
+    
+    LogDebug("----- [OnRep_OriginalItem] called -----")
+    AFUtils.LogCookingProxy(context)
+    LogDebug("------------------------------")
+end)
 
 LogInfo("Mod loaded successfully")
