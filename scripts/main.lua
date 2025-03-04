@@ -92,6 +92,24 @@ end
 RegisterKeyBind(Key.L, function()
     ExecuteInGameThread(function()
         LogDebug("------------ L ---------------")
+
+        local traitSelection = FindFirstOf("W_Character_Trait_Selection_C") ---@cast traitSelection UW_Character_Trait_Selection_C
+        if IsValid(traitSelection) then
+            LogDebug("W_Character_Trait_Selection_C instance:")
+            LogDebug("Starting Trait Points:", traitSelection["Starting Trait Points"])
+            LogDebug("TraitsAndPoints.Num:", #traitSelection.TraitsAndPoints)
+            LogDebug("FinalPoints:", traitSelection.FinalPoints)
+        end
+
+        -- local defaultTraitSelection = StaticFindObject("/Game/Blueprints/Widgets/TraitSelect/W_Character_Trait_Selection.Default__W_Character_Trait_Selection_C")
+        --  ---@cast defaultTraitSelection UW_Character_Trait_Selection_C
+        -- if IsValid(defaultTraitSelection) then
+        --     LogDebug("Default__W_Character_Trait_Selection_C:")
+        --     LogDebug("Starting Trait Points:", defaultTraitSelection["Starting Trait Points"])
+        --     LogDebug("TraitsAndPoints.Num:", #defaultTraitSelection.TraitsAndPoints)
+        --     LogDebug("FinalPoints:", defaultTraitSelection.FinalPoints)
+        -- end
+
         -- local gameInstance = UEHelpers.GetGameInstance() ---@cast gameInstance UAbiotic_GameInstance_C
         -- if IsValid(gameInstance) then
         --     LogDebug("bCanPlayOnline:", gameInstance.bCanPlayOnline)
@@ -134,6 +152,7 @@ RegisterKeyBind(Key.L, function()
         -- if IsValid(gameState) then
         --     LogDebug("PlayerCharacterInGame count:", #gameState.PlayerCharacterInGame)
         --     LogDebug("AlivePlayerCharacters count:", #gameState.AlivePlayerCharacters)
+        --     LogDebug("StartingTraitPoints:", gameState.StartingTraitPoints)
         -- end
 
         -- local leyakContainment = FindFirstOf("Deployed_LeyakContainment_C") ---@cast leyakContainment ADeployed_LeyakContainment_C
@@ -1413,65 +1432,201 @@ end)
 --     -- LogDebug("------------------------------")
 -- end)
 
-RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:OnRep_State", function(Context)
-    local context = Context:get() ---@type ACookingProxy_BP_C
+-- RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:OnRep_State", function(Context)
+--     local context = Context:get() ---@type ACookingProxy_BP_C
     
-    LogDebug("----- [OnRep_State] called -----")
-    AFUtils.LogCookingProxy(context)
-    LogDebug("------------------------------")
-    -- local targetState = AFUtils.FoodCookStates.BeautifullyCooked
-    -- if context.IsCookingSoup then
-    --     targetState = AFUtils.FoodCookStates.Cooked
-    -- end
-    -- if context.State ~= targetState then
-    --     context["Soup Data"].CookingState_32_568AB66645F40DCFF9789698F2B13EA0 = targetState
-    --     context["Soup Data"].CookedProgress_34_F73379824243A5DFBCABCEB136769B43 = 1.0
-    --     context:UpdateChangeableState(targetState, 1.0)
-    -- end
-end)
+--     LogDebug("----- [OnRep_State] called -----")
+--     AFUtils.LogCookingProxy(context)
+--     LogDebug("------------------------------")
+--     -- local targetState = AFUtils.FoodCookStates.BeautifullyCooked
+--     -- if context.IsCookingSoup then
+--     --     targetState = AFUtils.FoodCookStates.Cooked
+--     -- end
+--     -- if context.State ~= targetState then
+--     --     context["Soup Data"].CookingState_32_568AB66645F40DCFF9789698F2B13EA0 = targetState
+--     --     context["Soup Data"].CookedProgress_34_F73379824243A5DFBCABCEB136769B43 = 1.0
+--     --     context:UpdateChangeableState(targetState, 1.0)
+--     -- end
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:UpdateChangeableState", function(Context, CookingState, CookedProgress)
-    local context = Context:get() ---@type ACookingProxy_BP_C
-    local cookingState = CookingState:get() ---@type EFoodCookStates
-    local cookedProgress = CookedProgress:get() ---@type float
+-- RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:UpdateChangeableState", function(Context, CookingState, CookedProgress)
+--     local context = Context:get() ---@type ACookingProxy_BP_C
+--     local cookingState = CookingState:get() ---@type EFoodCookStates
+--     local cookedProgress = CookedProgress:get() ---@type float
     
-    LogDebug("----- [UpdateChangeableState] called -----")
-    LogDebug("CookingState:", cookingState)
-    LogDebug("CookedProgress:", cookedProgress)
-    LogDebug("State:", context.State)
-    -- LogDebug("ChefSkill:", context.ChefSkill)
-    LogDebug("Cookware:", context.Cookware)
-    LogDebug("IsCookingSoup:", context.IsCookingSoup)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [UpdateChangeableState] called -----")
+--     LogDebug("CookingState:", cookingState)
+--     LogDebug("CookedProgress:", cookedProgress)
+--     LogDebug("State:", context.State)
+--     -- LogDebug("ChefSkill:", context.ChefSkill)
+--     LogDebug("Cookware:", context.Cookware)
+--     LogDebug("IsCookingSoup:", context.IsCookingSoup)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:RefreshItemAppearance", function(Context)
-    local context = Context:get() ---@type ACookingProxy_BP_C
+-- RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:RefreshItemAppearance", function(Context)
+--     local context = Context:get() ---@type ACookingProxy_BP_C
     
-    LogDebug("----- [RefreshItemAppearance] called -----")
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [RefreshItemAppearance] called -----")
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:RefreshItemStates",
-function(Context, OriginalItem, ChangeableData, ChefSkill, TimeToCook, TimeToBurn, OriginalChef, ShowCookwareMesh, Cookware, StartCookingSoup, NewIngredientAdded, CanCookSoup)
-    local context = Context:get() ---@type ACookingProxy_BP_C
-    local originalItem = OriginalItem:get() ---@type FDataTableRowHandle
-    local changeableData = ChangeableData:get() ---@type FAbiotic_InventoryChangeableDataStruct
-    local chefSkill = ChefSkill:get() ---@type integer
-    local timeToCook = TimeToCook:get() ---@type float
-    local timeToBurn = TimeToBurn:get() ---@type float
-    local startCookingSoup = StartCookingSoup:get() ---@type boolean
-    local newIngredientAdded = NewIngredientAdded:get() ---@type boolean
+-- RegisterHook("/Game/Blueprints/Items/FakeItems/CookingProxy_BP.CookingProxy_BP_C:RefreshItemStates",
+-- function(Context, OriginalItem, ChangeableData, ChefSkill, TimeToCook, TimeToBurn, OriginalChef, ShowCookwareMesh, Cookware, StartCookingSoup, NewIngredientAdded, CanCookSoup)
+--     local context = Context:get() ---@type ACookingProxy_BP_C
+--     local originalItem = OriginalItem:get() ---@type FDataTableRowHandle
+--     local changeableData = ChangeableData:get() ---@type FAbiotic_InventoryChangeableDataStruct
+--     local chefSkill = ChefSkill:get() ---@type integer
+--     local timeToCook = TimeToCook:get() ---@type float
+--     local timeToBurn = TimeToBurn:get() ---@type float
+--     local startCookingSoup = StartCookingSoup:get() ---@type boolean
+--     local newIngredientAdded = NewIngredientAdded:get() ---@type boolean
     
-    LogDebug("----- [RefreshItemStates] called -----")
-    LogDebug("OriginalItem.RowName:", originalItem.RowName:ToString())
-    AFUtils.LogInventoryChangeableDataStruct(changeableData, "ChangeableData.")
-    LogDebug("TimeToCook:", timeToCook)
-    LogDebug("TimeToBurn:", timeToBurn)
-    LogDebug("TimeToBurn:", timeToBurn)
-    LogDebug("StartCookingSoup:", startCookingSoup)
-    LogDebug("NewIngredientAdded:", newIngredientAdded)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [RefreshItemStates] called -----")
+--     LogDebug("OriginalItem.RowName:", originalItem.RowName:ToString())
+--     AFUtils.LogInventoryChangeableDataStruct(changeableData, "ChangeableData.")
+--     LogDebug("TimeToCook:", timeToCook)
+--     LogDebug("TimeToBurn:", timeToBurn)
+--     LogDebug("StartCookingSoup:", startCookingSoup)
+--     LogDebug("NewIngredientAdded:", newIngredientAdded)
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/DeployedObjects/Cooking/Stove_ParentBP.Stove_ParentBP_C:Update Powered Cook Spots", function(Context)
+--     local context = Context:get() ---@type AStove_ParentBP_C
+    
+--     LogDebug("----- [Update Powered Cook Spots] called -----")
+--     AFUtils.LogStoveParent(context)
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/DeployedObjects/Cooking/Stove_ParentBP.Stove_ParentBP_C:Set Remaining Cooking Time", function(Context, StoveTopSpot, NewChangeableData)
+--     local context = Context:get() ---@type AStove_ParentBP_C
+--     local stoveTopSpot = StoveTopSpot:get() ---@type StoveTopSpot
+--     local newChangeableData = NewChangeableData:get() ---@type FAbiotic_InventoryChangeableDataStruct
+    
+--     LogDebug("----- [Set Remaining Cooking Time] called -----")
+--     LogDebug("StoveTopSpot:", stoveTopSpot)
+--     AFUtils.LogStoveParent(context)
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Widgets/TraitSelect/W_Character_Trait_Selection.W_Character_Trait_Selection_C:CalculatePointsAvailable", function(Context, SelectedJob)
+--     local context = Context:get() ---@type UW_Character_Trait_Selection_C
+--     local selectedJob = SelectedJob:get() ---@type FName
+    
+--     LogDebug("----- [CalculatePointsAvailable] called -----")
+--     LogDebug("SelectedJob:", selectedJob:ToString())
+--     LogDebug("Starting Trait Points:", context["Starting Trait Points"])
+--     LogDebug("TraitsAndPoints.Num:", #context.TraitsAndPoints)
+--     LogDebug("FinalPoints:", context.FinalPoints)
+--     LogDebug("------------------------------")
+--     -- context.TraitsAndPoints:ForEach(function (key, value)
+--     --     LogDebug("key:", key:get())
+--     --     LogDebug("value:", value:get())
+--     --     value:set(50)
+--     -- end)
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Widgets/TraitSelect/W_Character_Trait_Selection.W_Character_Trait_Selection_C:Change Trait Points", function(Context, Name, IsJobChange, Remove, TraitData, FinalPoints)
+--     local context = Context:get() ---@type UW_Character_Trait_Selection_C
+--     local name = Name:get() ---@type FName
+--     local isJobChange = IsJobChange:get() ---@type boolean
+--     local remove = Remove:get() ---@type boolean
+--     local traitData = TraitData:get() ---@type FTrait_Struct
+--     local finalPoints = FinalPoints:get() ---@type integer
+
+--     LogDebug("----- [Change Trait Points] called -----")
+--     LogDebug("Name:", name:ToString())
+--     LogDebug("IsJobChange:", isJobChange)
+--     LogDebug("Remove:",remove)
+--     LogDebug("PointCost:", traitData.PointCost_27_1F822A4E48D40334AD58858A1AB4F9F3)
+--     LogDebug("FinalPoints:", finalPoints)
+
+--     LogDebug("Starting Trait Points:", context["Starting Trait Points"])
+--     LogDebug("TraitsAndPoints.Num:", #context.TraitsAndPoints)
+--     LogDebug("FinalPoints:", context.FinalPoints)
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Widgets/TraitSelect/W_Character_Trait_Selection.W_Character_Trait_Selection_C:UpdateCharacterStatSummary", function(Context)
+--     local context = Context:get() ---@type UW_Character_Trait_Selection_C
+
+--     LogDebug("----- [UpdateCharacterStatSummary] called -----")
+--     LogDebug("Starting Trait Points:", context["Starting Trait Points"])
+--     LogDebug("TraitsAndPoints.Num:", #context.TraitsAndPoints)
+--     LogDebug("FinalPoints:", context.FinalPoints)
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Widgets/TraitSelect/W_Character_Trait_Selection.W_Character_Trait_Selection_C:UpdateJobSummary", function(Context)
+--     local context = Context:get() ---@type UW_Character_Trait_Selection_C
+
+--     LogDebug("----- [UpdateJobSummary] called -----")
+--     LogDebug("Starting Trait Points:", context["Starting Trait Points"])
+--     LogDebug("TraitsAndPoints.Num:", #context.TraitsAndPoints)
+--     LogDebug("FinalPoints:", context.FinalPoints)
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Widgets/TraitSelect/W_Character_Job_Selection.W_Character_Job_Selection_C:UpdateSelectedJobInfo", function(Context, JobData, AttributeInfo)
+--     local context = Context:get() ---@type UW_Character_Job_Selection_C
+--     local jobData = JobData:get() ---@type FTrait_Struct
+--     local attributeInfo = AttributeInfo:get() ---@type FString
+
+--     LogDebug("----- [UpdateSelectedJobInfo] called -----")
+--     LogDebug("TraitName:", jobData.TraitName_7_E2887506467F3946582B49A4AD6F3CE7:ToString())
+--     LogDebug("PointCost:", jobData.PointCost_27_1F822A4E48D40334AD58858A1AB4F9F3)
+--     -- LogDebug("AttributeInfo:", attributeInfo:ToString())
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Widgets/TraitSelect/W_Character_Job_Selection.W_Character_Job_Selection_C:OnFailure_F294E4EE4E039DC6363DA8B2C6FAFCC3", function(Context)
+--     local context = Context:get() ---@type UW_Character_Job_Selection_C
+
+--     LogDebug("----- [OnFailure_F294E4EE4E039DC6363DA8B2C6FAFCC3] called -----")
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Widgets/TraitSelect/W_Character_Job_Selection.W_Character_Job_Selection_C:OnSuccess_F294E4EE4E039DC6363DA8B2C6FAFCC3", function(Context)
+--     local context = Context:get() ---@type UW_Character_Job_Selection_C
+
+--     LogDebug("----- [OnSuccess_F294E4EE4E039DC6363DA8B2C6FAFCC3] called -----")
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Widgets/TraitSelect/W_Character_Trait_PhDRow.W_Character_Trait_PhDRow_C:Select", function(Context)
+--     local context = Context:get() ---@type UW_Character_Trait_PhDRow_C
+
+--     LogDebug("----- [Select] called -----")
+--     LogDebug("Selected:", context.Selected)
+--     LogDebug("TraitName:", context.JobData.TraitName_7_E2887506467F3946582B49A4AD6F3CE7:ToString())
+--     LogDebug("PointCost:", context.JobData.PointCost_27_1F822A4E48D40334AD58858A1AB4F9F3)
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Widgets/TraitSelect/W_Character_Trait_SelectionRow.W_Character_Trait_SelectionRow_C:Deselect", function(Context)
+--     local context = Context:get() ---@type UW_Character_Trait_SelectionRow_C
+
+--     LogDebug("----- [W_Character_Trait_SelectionRow_C:Deselect] called -----")
+--     LogDebug("TraitRowName:", context.TraitRowName:ToString())
+--     LogDebug("TraitName:", context.TraitData.TraitName_7_E2887506467F3946582B49A4AD6F3CE7:ToString())
+--     LogDebug("PointCost:", context.TraitData.PointCost_27_1F822A4E48D40334AD58858A1AB4F9F3)
+--     LogDebug("Trait Description:", context["Trait Description"]:ToString())
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Widgets/TraitSelect/W_Character_Trait_SelectionRow.W_Character_Trait_SelectionRow_C:ToggleDisableTrait", function(Context, Disable, CausedByTrait, RemoveAllTraitBlockers)
+--     local context = Context:get() ---@type UW_Character_Trait_SelectionRow_C
+--     local disable = Disable:get() ---@type boolean
+
+--     LogDebug("----- [W_Character_Trait_SelectionRow_C:ToggleDisableTrait] called -----")
+--     LogDebug("Disable:", disable)
+--     LogDebug("TraitRowName:", context.TraitRowName:ToString())
+--     LogDebug("TraitName:", context.TraitData.TraitName_7_E2887506467F3946582B49A4AD6F3CE7:ToString())
+--     LogDebug("PointCost:", context.TraitData.PointCost_27_1F822A4E48D40334AD58858A1AB4F9F3)
+--     LogDebug("Trait Description:", context["Trait Description"]:ToString())
+--     LogDebug("------------------------------")
+-- end)
 
 LogInfo("Mod loaded successfully")
