@@ -101,7 +101,6 @@ RegisterKeyBind(Key.L, function()
         --     LogDebug("FinalPoints:", traitSelection.FinalPoints)
         -- end
 
-
         -- local fishingHotspots = FindAllOf("BP_FishingHotspot_C")
         -- if fishingHotspots then
         --     LogDebug("FishingHotspots count:", #fishingHotspots)
@@ -238,38 +237,53 @@ RegisterKeyBind(Key.L, function()
             --     -- 5:40 o'clock
             --     -- AFUtils.SetGameTime(6, 50)
             --     -- AFUtils.SetGameTime(0.0)
-            --     AFUtils.LogDayNightManager(dayNightManager, "DayNightManager.")
+            --     -- AFUtils.LogDayNightManager(dayNightManager, "DayNightManager.")
             -- end
         end
 
-        -- local myPlayer = AFUtils.GetMyPlayer()
-        -- if IsValid(myPlayer) then
-        --     local location = myPlayer:K2_GetActorLocation()
-        --     LogDebug("myPlayer location: " .. VectorToString(location))
+        local myPlayer = AFUtils.GetMyPlayer()
+        if IsValid(myPlayer) then
+            local location = myPlayer:K2_GetActorLocation()
+            LogDebug("myPlayer location: " .. VectorToString(location))
 
-        --     -- myPlayer.CustomTimeDilation = 3.0
-        --     -- LogDebug("CustomTimeDilation:", myPlayer.CustomTimeDilation)
-        --     -- AFUtils.LogCharacterParentBP(myPlayer)
-        --     -- if myPlayer.CharacterEquipSlotInventory:IsValid() then
-        --     --     AFUtils.LogInventoryComponent(myPlayer.CharacterEquipSlotInventory, "CharacterEquipSlotInventory.")
-        --     -- end
+            -- myPlayer.CustomTimeDilation = 3.0
+            -- LogDebug("CustomTimeDilation:", myPlayer.CustomTimeDilation)
+            -- AFUtils.LogCharacterParentBP(myPlayer)
+            -- if myPlayer.CharacterEquipSlotInventory:IsValid() then
+            --     AFUtils.LogInventoryComponent(myPlayer.CharacterEquipSlotInventory, "CharacterEquipSlotInventory.")
+            -- end
+
+            if myPlayer.CharacterInventory:IsValid() then
+                -- LogDebug("CharacterInventory:")
+                -- AFUtils.LogInventoryComponent(myPlayer.CharacterInventory)
+                -- local itemDataBale = StaticFindObject("/Game/Blueprints/Items/ItemTable_Global.ItemTable_Global") ---@cast itemDataBale UCompositeDataTable
+                -- if itemDataBale:IsValid() then
+                --     LogDebug("UCompositeDataTable:", itemDataBale:GetFullName())
+                --     local rataTableRowHandle = {
+                --         DataTable = itemDataBale,
+                --         RowName = UEHelpers.FindFName("scrap_composer")
+                --     }
+                --     local outItemSlotData = {}
+                --     myPlayer.CharacterInventory:CreateNewItemWithDefaultData(rataTableRowHandle, 1, outItemSlotData)
+                -- end
+            end
             
-        --     -- if IsValid(myPlayer.ItemInHand_BP) then
-        --     --     if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
-        --     --         AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
-        --     --     else
-        --     --         AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
-        --     --     end
-        --     -- end
+            -- if IsValid(myPlayer.ItemInHand_BP) then
+            --     if myPlayer.ItemInHand_BP:IsA(AFUtils.GetClassAbiotic_Weapon_ParentBP_C()) then
+            --         AFUtils.LogWeaponParentBP(myPlayer.ItemInHand_BP)
+            --     else
+            --         AFUtils.LogItemParentBP(myPlayer.ItemInHand_BP)
+            --     end
+            -- end
 
-        --     -- local components = {}
-        --     -- myPlayer:GetHighlightComponents(components)
-        --     -- LogDebug("HighlightComponents count: ", #components)
-        --     -- for i = 1, #components do
-        --     --     local component = components[i]:get()
-        --     --     LogDebug(i .. ":", component:GetFullName())
-        --     -- end
-        -- end
+            -- local components = {}
+            -- myPlayer:GetHighlightComponents(components)
+            -- LogDebug("HighlightComponents count: ", #components)
+            -- for i = 1, #components do
+            --     local component = components[i]:get()
+            --     LogDebug(i .. ":", component:GetFullName())
+            -- end
+        end
         
         -- local myInventoryComponent = AFUtils.GetMyInventoryComponent()
         -- if myInventoryComponent:IsValid() then
@@ -676,7 +690,6 @@ RegisterKeyBind(Key.PAUSE, function()
     end)
 end)
 
-
 -- RegisterProcessConsoleExecPreHook(function(Context, FullCommand, CommandParts, Ar, Executor)
 --     print("RegisterProcessConsoleExecPreHook:\n")
 --     local ContextObject = Context:get()
@@ -698,6 +711,21 @@ end)
 --     return true
 -- end)
 
+RegisterHook("/Game/Blueprints/Characters/Abiotic_InventoryComponent.Abiotic_InventoryComponent_C:CreateNewItemWithDefaultData",
+function(Context, DataTableRowHandle, StackAmount, ItemSlotData)
+    local context = Context:get() ---@type UAbiotic_InventoryComponent_C
+    local dataTableRowHandle = DataTableRowHandle:get() ---@type FDataTableRowHandle
+    local stackAmount = StackAmount:get() ---@type integer
+    local itemSlotData = ItemSlotData:get() ---@type FAbiotic_InventoryItemSlotStruct
+
+    LogDebug("----- [CreateNewItemWithDefaultData] called -----")
+    LogDebug("DataTableRowHandle.RowName:", dataTableRowHandle.RowName:ToString())
+    LogDebug("DataTableRowHandle.DataTable FullName:", dataTableRowHandle.DataTable:GetFullName())
+    LogDebug("StackAmount:", stackAmount)
+    AFUtils.LogInventoryItemSlotStruct(itemSlotData)
+    LogDebug("------------------------------")
+end)
+
 -- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:CanCrouchRoll?",
 -- function(Context, CanRoll)
 --     local player = Context:get() ---@type AAbiotic_PlayerCharacter_C
@@ -709,98 +737,98 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_FishingReward", function(Context, Reward, Lucky)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
-    local reward = Reward:get() ---@type FFishRowHandle
-    local lucky = Lucky:get() ---@type boolean
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_FishingReward", function(Context, Reward, Lucky)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+--     local reward = Reward:get() ---@type FFishRowHandle
+--     local lucky = Lucky:get() ---@type boolean
 
-    LogDebug("----- [Request_FishingReward] called -----")
-    LogDebug("Reward.RowName:", reward.RowName:ToString())
-    LogDebug("Lucky:", lucky)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [Request_FishingReward] called -----")
+--     LogDebug("Reward.RowName:", reward.RowName:ToString())
+--     LogDebug("Lucky:", lucky)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_JunkReward", function(Context, Reward)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
-    local reward = Reward:get() ---@type FFishRowHandle
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_JunkReward", function(Context, Reward)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+--     local reward = Reward:get() ---@type FFishRowHandle
 
-    LogDebug("----- [Request_JunkReward ] called -----")
-    LogDebug("Reward.RowName:", reward.RowName:ToString())
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [Request_JunkReward ] called -----")
+--     LogDebug("Reward.RowName:", reward.RowName:ToString())
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:DelayedFishShadow", function(Context)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:DelayedFishShadow", function(Context)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
 
-    LogDebug("----- [DelayedFishShadow] called -----")
-    -- AFUtils.LogFishingRod(fishingRod)
-    LogDebug("JunkReward.RowName:", fishingRod.JunkReward.RowName:ToString())
-    LogDebug("FishReward.RowName:", fishingRod.FishReward.RowName:ToString())
-    LogDebug("HotspotActive:", fishingRod.HotspotActive)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [DelayedFishShadow] called -----")
+--     -- AFUtils.LogFishingRod(fishingRod)
+--     LogDebug("JunkReward.RowName:", fishingRod.JunkReward.RowName:ToString())
+--     LogDebug("FishReward.RowName:", fishingRod.FishReward.RowName:ToString())
+--     LogDebug("HotspotActive:", fishingRod.HotspotActive)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:OnRep_ActiveFishingLocation", function(Context)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:OnRep_ActiveFishingLocation", function(Context)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
 
-    LogDebug("----- [OnRep_ActiveFishingLocation] called -----")
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [OnRep_ActiveFishingLocation] called -----")
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Local_DetermineReward", function(Context, ReadyToMinigame)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
-    local readyToMinigame = ReadyToMinigame:get() ---@type boolean
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Local_DetermineReward", function(Context, ReadyToMinigame)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+--     local readyToMinigame = ReadyToMinigame:get() ---@type boolean
 
-    LogDebug("----- [Local_DetermineReward] called -----")
-    LogDebug("ReadyToMinigame:", readyToMinigame)
-    -- AFUtils.LogFishingRod(fishingRod)
-    LogDebug("JunkReward.RowName:", fishingRod.JunkReward.RowName:ToString())
-    LogDebug("FishReward.RowName:", fishingRod.FishReward.RowName:ToString())
-    LogDebug("HotspotActive:", fishingRod.HotspotActive)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [Local_DetermineReward] called -----")
+--     LogDebug("ReadyToMinigame:", readyToMinigame)
+--     -- AFUtils.LogFishingRod(fishingRod)
+--     LogDebug("JunkReward.RowName:", fishingRod.JunkReward.RowName:ToString())
+--     LogDebug("FishReward.RowName:", fishingRod.FishReward.RowName:ToString())
+--     LogDebug("HotspotActive:", fishingRod.HotspotActive)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Start Fishing Minigame", function(Context, InLocation)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Start Fishing Minigame", function(Context, InLocation)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
 
-    LogDebug("----- [Start Fishing Minigame] called -----")
-    -- LogDebug("CatchingJunk:", fishingRod.CatchingJunk)
-    -- LogDebug("LuckyHat:", fishingRod.LuckyHat)
-    -- AFUtils.LogFishingRod(fishingRod)
-    LogDebug("JunkReward.RowName:", fishingRod.JunkReward.RowName:ToString())
-    LogDebug("FishReward.RowName:", fishingRod.FishReward.RowName:ToString())
-    LogDebug("HotspotActive:", fishingRod.HotspotActive)
-    LogDebug("------------------------------")
-    -- fishingRod:FishingSuccess()
-end)
+--     LogDebug("----- [Start Fishing Minigame] called -----")
+--     -- LogDebug("CatchingJunk:", fishingRod.CatchingJunk)
+--     -- LogDebug("LuckyHat:", fishingRod.LuckyHat)
+--     -- AFUtils.LogFishingRod(fishingRod)
+--     LogDebug("JunkReward.RowName:", fishingRod.JunkReward.RowName:ToString())
+--     LogDebug("FishReward.RowName:", fishingRod.FishReward.RowName:ToString())
+--     LogDebug("HotspotActive:", fishingRod.HotspotActive)
+--     LogDebug("------------------------------")
+--     -- fishingRod:FishingSuccess()
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_SetActiveFishingZone", function(Context, InLocation)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
-    local inLocation = InLocation:get() ---@type FVector
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_SetActiveFishingZone", function(Context, InLocation)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+--     local inLocation = InLocation:get() ---@type FVector
 
-    LogDebug("----- [Request_SetActiveFishingZone] called -----")
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [Request_SetActiveFishingZone] called -----")
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:FishingSuccess", function(Context)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:FishingSuccess", function(Context)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
 
-    LogDebug("----- [FishingSuccess] called -----")
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [FishingSuccess] called -----")
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:EndFishingMinigame", function(Context, Fail)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
-    local fail = Fail:get() ---@type boolean
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:EndFishingMinigame", function(Context, Fail)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+--     local fail = Fail:get() ---@type boolean
 
-    LogDebug("----- [EndFishingMinigame] called -----")
-    LogDebug("Fail:", fail)
-    -- AFUtils.LogFishingRod(fishingRod)
-    LogDebug("JunkReward.RowName:", fishingRod.JunkReward.RowName:ToString())
-    LogDebug("FishReward.RowName:", fishingRod.FishReward.RowName:ToString())
-    LogDebug("HotspotActive:", fishingRod.HotspotActive)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [EndFishingMinigame] called -----")
+--     LogDebug("Fail:", fail)
+--     -- AFUtils.LogFishingRod(fishingRod)
+--     LogDebug("JunkReward.RowName:", fishingRod.JunkReward.RowName:ToString())
+--     LogDebug("FishReward.RowName:", fishingRod.FishReward.RowName:ToString())
+--     LogDebug("HotspotActive:", fishingRod.HotspotActive)
+--     LogDebug("------------------------------")
+-- end)
 
 -- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:IsFishingActive", function(Context, Active)
 --     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
@@ -817,89 +845,89 @@ end)
 --     end
 -- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_TriggerBaitUsage", function(Context)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_TriggerBaitUsage", function(Context)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
 
-    LogDebug("----- [Request_TriggerBaitUsage] called -----")
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [Request_TriggerBaitUsage] called -----")
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_ElectricalStun", function(Context)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_ElectricalStun", function(Context)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
 
-    LogDebug("----- [Request_ElectricalStun] called -----")
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [Request_ElectricalStun] called -----")
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_UseHotspot", function(Context, HotspotUsed)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
-    local hotspotUsed = HotspotUsed:get() ---@type ABP_FishingHotspot_C
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_UseHotspot", function(Context, HotspotUsed)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+--     local hotspotUsed = HotspotUsed:get() ---@type ABP_FishingHotspot_C
 
-    LogDebug("----- [Request_UseHotspot] called -----")
-    AFUtils.LogFishingHotspot(hotspotUsed)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [Request_UseHotspot] called -----")
+--     AFUtils.LogFishingHotspot(hotspotUsed)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:TriggerCooldown", function(Context)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:TriggerCooldown", function(Context)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
 
-    LogDebug("----- [TriggerCooldown] called -----")
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [TriggerCooldown] called -----")
+--     LogDebug("------------------------------")
+-- end)
 
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Server_GrantJunkReward", function(Context, Player, Reward)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
-    local player = Player:get() ---@type AAbiotic_PlayerCharacter_C
-    local reward = Reward:get() ---@type FDataTableRowHandle
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Server_GrantJunkReward", function(Context, Player, Reward)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+--     local player = Player:get() ---@type AAbiotic_PlayerCharacter_C
+--     local reward = Reward:get() ---@type FDataTableRowHandle
 
-    LogDebug("----- [Server_GrantJunkReward] called -----")
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [Server_GrantJunkReward] called -----")
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:GatherJunkRows", function(Context, SalvageRow, Rows, Chances)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
-    local salvageRow = SalvageRow:get() ---@type FName
-    local rows = Rows:get() ---@type TArray<FName>
-    local chances = Chances:get() ---@type TArray<double>
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:GatherJunkRows", function(Context, SalvageRow, Rows, Chances)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+--     local salvageRow = SalvageRow:get() ---@type FName
+--     local rows = Rows:get() ---@type TArray<FName>
+--     local chances = Chances:get() ---@type TArray<double>
 
-    LogDebug("----- [GatherJunkRows] called -----")
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [GatherJunkRows] called -----")
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Environment/Systems/BP_FishingHotspot.BP_FishingHotspot_C:CanUseThisHotspot", function(Context, CanUse)
-    local context = Context:get() ---@type ABP_FishingHotspot_C
-    local canUse = CanUse:get() ---@type boolean
+-- RegisterHook("/Game/Blueprints/Environment/Systems/BP_FishingHotspot.BP_FishingHotspot_C:CanUseThisHotspot", function(Context, CanUse)
+--     local context = Context:get() ---@type ABP_FishingHotspot_C
+--     local canUse = CanUse:get() ---@type boolean
 
-    LogDebug("----- [CanUseThisHotspot] called -----")
-    LogDebug("CanUse:", canUse)
-    AFUtils.LogFishingHotspot(context)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [CanUseThisHotspot] called -----")
+--     LogDebug("CanUse:", canUse)
+--     AFUtils.LogFishingHotspot(context)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Environment/Systems/BP_FishingHotspot.BP_FishingHotspot_C:OnRep_HotspotActive", function(Context)
-    local context = Context:get() ---@type ABP_FishingHotspot_C
+-- RegisterHook("/Game/Blueprints/Environment/Systems/BP_FishingHotspot.BP_FishingHotspot_C:OnRep_HotspotActive", function(Context)
+--     local context = Context:get() ---@type ABP_FishingHotspot_C
 
-    LogDebug("----- [OnRep_HotspotActive] called -----")
-    AFUtils.LogFishingHotspot(context)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [OnRep_HotspotActive] called -----")
+--     AFUtils.LogFishingHotspot(context)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Environment/Systems/BP_FishingHotspot.BP_FishingHotspot_C:IsHotspotOnCooldown", function(Context, OnCooldown)
-    local context = Context:get() ---@type ABP_FishingHotspot_C
-    local onCooldown = OnCooldown:get() ---@type boolean
+-- RegisterHook("/Game/Blueprints/Environment/Systems/BP_FishingHotspot.BP_FishingHotspot_C:IsHotspotOnCooldown", function(Context, OnCooldown)
+--     local context = Context:get() ---@type ABP_FishingHotspot_C
+--     local onCooldown = OnCooldown:get() ---@type boolean
 
-    LogDebug("----- [IsHotspotOnCooldown] called -----")
-    LogDebug("OnCooldown:", onCooldown)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [IsHotspotOnCooldown] called -----")
+--     LogDebug("OnCooldown:", onCooldown)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Environment/Systems/BP_FishingHotspot.BP_FishingHotspot_C:ServerUseHotspot", function(Context)
-    local context = Context:get() ---@type ABP_FishingHotspot_C
+-- RegisterHook("/Game/Blueprints/Environment/Systems/BP_FishingHotspot.BP_FishingHotspot_C:ServerUseHotspot", function(Context)
+--     local context = Context:get() ---@type ABP_FishingHotspot_C
 
-    LogDebug("----- [ServerUseHotspot] called -----")
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [ServerUseHotspot] called -----")
+--     LogDebug("------------------------------")
+-- end)
 
 
 -- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:TickMinigame", function(Context, DeltaTime)
