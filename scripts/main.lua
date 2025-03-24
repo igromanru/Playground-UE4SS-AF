@@ -12,7 +12,7 @@ require("AFUtils.AFUtilsDebug")
 require("AFUtils.BaseUtils.LinearColors")
 
 local UEHelpers = require("UEHelpers")
-local jsb = require("jsbProfiler.jsbProfi")
+-- local jsb = require("jsbProfiler.jsbProfi")
 
 ModName = "Playground"
 ModVersion = "1.0.0"
@@ -92,7 +92,6 @@ end
 RegisterKeyBind(Key.L, function()
     ExecuteInGameThread(function()
         LogDebug("------------ L ---------------")
-
         -- local traitSelection = FindFirstOf("W_Character_Trait_Selection_C") ---@cast traitSelection UW_Character_Trait_Selection_C
         -- if IsValid(traitSelection) then
         --     LogDebug("W_Character_Trait_Selection_C instance:")
@@ -243,8 +242,8 @@ RegisterKeyBind(Key.L, function()
 
         local myPlayer = AFUtils.GetMyPlayer()
         if IsValid(myPlayer) then
-            local location = myPlayer:K2_GetActorLocation()
-            LogDebug("myPlayer location: " .. VectorToString(location))
+            -- local location = myPlayer:K2_GetActorLocation()
+            -- LogDebug("myPlayer location: " .. VectorToString(location))
 
             -- myPlayer.CustomTimeDilation = 3.0
             -- LogDebug("CustomTimeDilation:", myPlayer.CustomTimeDilation)
@@ -711,20 +710,66 @@ end)
 --     return true
 -- end)
 
-RegisterHook("/Game/Blueprints/Characters/Abiotic_InventoryComponent.Abiotic_InventoryComponent_C:CreateNewItemWithDefaultData",
-function(Context, DataTableRowHandle, StackAmount, ItemSlotData)
-    local context = Context:get() ---@type UAbiotic_InventoryComponent_C
-    local dataTableRowHandle = DataTableRowHandle:get() ---@type FDataTableRowHandle
-    local stackAmount = StackAmount:get() ---@type integer
-    local itemSlotData = ItemSlotData:get() ---@type FAbiotic_InventoryItemSlotStruct
+-- RegisterHook("/Game/Blueprints/Characters/Abiotic_InventoryComponent.Abiotic_InventoryComponent_C:CreateNewItemWithDefaultData",
+-- function(Context, DataTableRowHandle, StackAmount, ItemSlotData)
+--     local context = Context:get() ---@type UAbiotic_InventoryComponent_C
+--     local dataTableRowHandle = DataTableRowHandle:get() ---@type FDataTableRowHandle
+--     local stackAmount = StackAmount:get() ---@type integer
+--     local itemSlotData = ItemSlotData:get() ---@type FAbiotic_InventoryItemSlotStruct
 
-    LogDebug("----- [CreateNewItemWithDefaultData] called -----")
-    LogDebug("DataTableRowHandle.RowName:", dataTableRowHandle.RowName:ToString())
-    LogDebug("DataTableRowHandle.DataTable FullName:", dataTableRowHandle.DataTable:GetFullName())
-    LogDebug("StackAmount:", stackAmount)
-    AFUtils.LogInventoryItemSlotStruct(itemSlotData)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [CreateNewItemWithDefaultData] called -----")
+--     LogDebug("DataTableRowHandle.RowName:", dataTableRowHandle.RowName:ToString())
+--     LogDebug("DataTableRowHandle.DataTable FullName:", dataTableRowHandle.DataTable:GetFullName())
+--     LogDebug("StackAmount:", stackAmount)
+--     AFUtils.LogInventoryItemSlotStruct(itemSlotData)
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Characters/Abiotic_CharacterProgressionComponent.Abiotic_CharacterProgressionComponent_C:HasCompendiumSectionUnlocked",
+-- function(Context, CompendiumRowName, UnlockType, Unlocked)
+--     local context = Context:get() ---@type UAbiotic_CharacterProgressionComponent_C
+--     local compendiumRowName = CompendiumRowName:get() ---@type FName
+--     local unlockType = UnlockType:get() ---@type ECompendiumUnlockType
+--     local unlocked = Unlocked:get() ---@type boolean
+
+--     LogDebug("----- [HasCompendiumSectionUnlocked] called -----")
+--     LogDebug("CompendiumRowName.RowName:", compendiumRowName:ToString())
+--     LogDebug("UnlockType:", unlockType)
+--     LogDebug("Unlocked:", unlocked)
+--     -- if not unlocked then
+--     --     local outAddedSuccessfully = {}
+--     --     context:Request_UnlockCompendiumSection(compendiumRowName, unlockType)
+--     -- end
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Widgets/Journal/W_Compendium_Section.W_Compendium_Section_C:OnLoaded_4B58DDD04E2C6C0F477AE9B496ECCB24",
+-- function(Context)
+--     local context = Context:get() ---@type UW_Compendium_Section_C
+
+--     LogDebug("----- [OnLoaded_4B58DDD04E2C6C0F477AE9B496ECCB24] called -----")
+--     LogDebug("SectionText:", context.SectionText:ToString())
+--     LogDebug("Unlocked:", context.Unlocked)
+--     LogDebug("SectionIndex:", context.SectionIndex)
+--     LogDebug("SectionType:", context.SectionType)
+--     LogDebug("CompendiumRow.RowName:", context.CompendiumRow.RowName:ToString())
+--     LogDebug("SectionType:", context.SectionType)
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Widgets/Journal/W_Compendium_Section.W_Compendium_Section_C:SetLockedContentText",
+-- function(Context)
+--     local context = Context:get() ---@type UW_Compendium_Section_C
+
+--     LogDebug("----- [SetLockedContentText] called -----")
+--     LogDebug("SectionText:", context.SectionText:ToString())
+--     LogDebug("Unlocked:", context.Unlocked)
+--     LogDebug("SectionIndex:", context.SectionIndex)
+--     LogDebug("SectionType:", context.SectionType)
+--     LogDebug("CompendiumRow.RowName:", context.CompendiumRow.RowName:ToString())
+--     LogDebug("SectionType:", context.SectionType)
+--     LogDebug("------------------------------")
+-- end)
 
 -- RegisterHook("/Game/Blueprints/Characters/Abiotic_PlayerCharacter.Abiotic_PlayerCharacter_C:CanCrouchRoll?",
 -- function(Context, CanRoll)
@@ -772,6 +817,10 @@ end)
 --     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
 
 --     LogDebug("----- [OnRep_ActiveFishingLocation] called -----")
+--     -- AFUtils.LogFishingRod(fishingRod)
+--     LogDebug("JunkReward.RowName:", fishingRod.JunkReward.RowName:ToString())
+--     LogDebug("FishReward.RowName:", fishingRod.FishReward.RowName:ToString())
+--     LogDebug("HotspotActive:", fishingRod.HotspotActive)
 --     LogDebug("------------------------------")
 -- end)
 
@@ -781,10 +830,10 @@ end)
 
 --     LogDebug("----- [Local_DetermineReward] called -----")
 --     LogDebug("ReadyToMinigame:", readyToMinigame)
---     -- AFUtils.LogFishingRod(fishingRod)
---     LogDebug("JunkReward.RowName:", fishingRod.JunkReward.RowName:ToString())
---     LogDebug("FishReward.RowName:", fishingRod.FishReward.RowName:ToString())
---     LogDebug("HotspotActive:", fishingRod.HotspotActive)
+--     AFUtils.LogFishingRod(fishingRod)
+--     -- LogDebug("JunkReward.RowName:", fishingRod.JunkReward.RowName:ToString())
+--     -- LogDebug("FishReward.RowName:", fishingRod.FishReward.RowName:ToString())
+--     -- LogDebug("HotspotActive:", fishingRod.HotspotActive)
 --     LogDebug("------------------------------")
 -- end)
 
@@ -794,10 +843,10 @@ end)
 --     LogDebug("----- [Start Fishing Minigame] called -----")
 --     -- LogDebug("CatchingJunk:", fishingRod.CatchingJunk)
 --     -- LogDebug("LuckyHat:", fishingRod.LuckyHat)
---     -- AFUtils.LogFishingRod(fishingRod)
---     LogDebug("JunkReward.RowName:", fishingRod.JunkReward.RowName:ToString())
---     LogDebug("FishReward.RowName:", fishingRod.FishReward.RowName:ToString())
---     LogDebug("HotspotActive:", fishingRod.HotspotActive)
+--     AFUtils.LogFishingRod(fishingRod)
+--     -- LogDebug("JunkReward.RowName:", fishingRod.JunkReward.RowName:ToString())
+--     -- LogDebug("FishReward.RowName:", fishingRod.FishReward.RowName:ToString())
+--     -- LogDebug("HotspotActive:", fishingRod.HotspotActive)
 --     LogDebug("------------------------------")
 --     -- fishingRod:FishingSuccess()
 -- end)
@@ -849,13 +898,6 @@ end)
 --     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
 
 --     LogDebug("----- [Request_TriggerBaitUsage] called -----")
---     LogDebug("------------------------------")
--- end)
-
--- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:Request_ElectricalStun", function(Context)
---     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
-
---     LogDebug("----- [Request_ElectricalStun] called -----")
 --     LogDebug("------------------------------")
 -- end)
 
