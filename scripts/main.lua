@@ -213,6 +213,9 @@ RegisterKeyBind(Key.L, function()
 
         local myPlayerController = AFUtils.GetMyPlayerController()
         if myPlayerController:IsValid() then
+            -- LogDebug("myPlayerController.IsLocalPlayerController:", myPlayerController:IsLocalPlayerController())
+            -- LogDebug("myPlayerController.HasAuthority:", myPlayerController:HasAuthority())
+            -- LogDebug("myPlayerController.GetRemoteRole:", myPlayerController:GetRemoteRole())
             -- LogDebug("CheatComponent IsValid:", myPlayerController.CheatComponent:IsValid())
             -- LogDebug("CheatMenu IsValid:", myPlayerController.CheatMenu:IsValid())
             -- LogDebug("CheatAttempt:", myPlayerController.CheatAttempt)
@@ -244,6 +247,8 @@ RegisterKeyBind(Key.L, function()
         if IsValid(myPlayer) then
             -- local location = myPlayer:K2_GetActorLocation()
             -- LogDebug("myPlayer location: " .. VectorToString(location))
+            -- LogDebug("myPlayer.HasAuthority:", myPlayer:HasAuthority())
+            -- LogDebug("myPlayer.GetRemoteRole:", myPlayer:GetRemoteRole())
 
             -- myPlayer.CustomTimeDilation = 3.0
             -- LogDebug("CustomTimeDilation:", myPlayer.CustomTimeDilation)
@@ -859,25 +864,26 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
--- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:FishingSuccess", function(Context)
---     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:FishingSuccess", function(Context)
+    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
 
---     LogDebug("----- [FishingSuccess] called -----")
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [FishingSuccess] called -----")
+    AFUtils.LogFishingRod(fishingRod)
+    LogDebug("------------------------------")
+end)
 
--- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:EndFishingMinigame", function(Context, Fail)
---     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
---     local fail = Fail:get() ---@type boolean
+RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:EndFishingMinigame", function(Context, Fail)
+    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+    local fail = Fail:get() ---@type boolean
 
---     LogDebug("----- [EndFishingMinigame] called -----")
---     LogDebug("Fail:", fail)
---     -- AFUtils.LogFishingRod(fishingRod)
---     LogDebug("JunkReward.RowName:", fishingRod.JunkReward.RowName:ToString())
---     LogDebug("FishReward.RowName:", fishingRod.FishReward.RowName:ToString())
---     LogDebug("HotspotActive:", fishingRod.HotspotActive)
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [EndFishingMinigame] called -----")
+    LogDebug("Fail:", fail)
+    -- AFUtils.LogFishingRod(fishingRod)
+    LogDebug("JunkReward.RowName:", fishingRod.JunkReward.RowName:ToString())
+    LogDebug("FishReward.RowName:", fishingRod.FishReward.RowName:ToString())
+    LogDebug("HotspotActive:", fishingRod.HotspotActive)
+    LogDebug("------------------------------")
+end)
 
 -- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:IsFishingActive", function(Context, Active)
 --     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
