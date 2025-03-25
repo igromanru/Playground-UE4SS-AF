@@ -201,11 +201,11 @@ RegisterKeyBind(Key.L, function()
 
         -- local gameInstance = UEHelpers.GetGameInstance() ---@cast gameInstance UAbiotic_GameInstance_C
         -- if IsValid(gameInstance) then
-        --     LogDebug("PendingPlayerSaves:", #gameInstance.PendingPlayerSaves)
-        --     for i = 1, #gameInstance.PendingPlayerSaves, 1 do
-        --         local playerSave = gameInstance.PendingPlayerSaves[i]
-        --         LogDebug(i .. ": Class:", playerSave:GetClass():GetFullName())
-        --     end
+        --     -- LogDebug("PendingPlayerSaves:", #gameInstance.PendingPlayerSaves)
+        --     -- for i = 1, #gameInstance.PendingPlayerSaves, 1 do
+        --     --     local playerSave = gameInstance.PendingPlayerSaves[i]
+        --     --     LogDebug(i .. ": Class:", playerSave:GetClass():GetFullName())
+        --     -- end
         -- end
 
         -- LogDebug("IsServer:", IsServer())
@@ -368,6 +368,13 @@ RegisterKeyBind(Key.L, function()
         --     local rowHandle = outRowHandles[i]:get()
         --     LogDebug(string.format("%d: RowName: %s", i, rowHandle.RowName:ToString()))
         -- end
+
+        local world = GetWorld()
+        if IsValid(world) then
+            if IsValid(world.AuthorityGameMode) then
+                LogDebug("World.AuthorityGameMode:", world.AuthorityGameMode:GetClass():GetFullName())
+            end
+        end
         LogDebug("------------------------------")
     end)
 end)
