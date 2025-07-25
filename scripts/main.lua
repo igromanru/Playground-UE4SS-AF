@@ -92,6 +92,7 @@ end
 RegisterKeyBind(Key.L, function()
     ExecuteInGameThread(function()
         LogDebug("------------ L ---------------")
+        LogDebug("IsHost:", IsHost())
         -- local traitSelection = FindFirstOf("W_Character_Trait_Selection_C") ---@cast traitSelection UW_Character_Trait_Selection_C
         -- if IsValid(traitSelection) then
         --     LogDebug("W_Character_Trait_Selection_C instance:")
@@ -688,18 +689,18 @@ RegisterKeyBind(Key.PAGE_DOWN, function()
     LogDebug("Trace type: " .. TraceType)
 end)
 
-RegisterKeyBind(Key.PAUSE, function()
-    ExecuteInGameThread(function()
-        LogDebug("------- NoClip (Pause) -------")
-        local myPlayer = AFUtils.GetMyPlayer()
-        if myPlayer then
-            myPlayer.Noclip_On = not myPlayer.Noclip_On
-            myPlayer:OnRep_Noclip_On()
-            LogDebug("Noclip_On: " .. tostring(myPlayer.Noclip_On))
-        end
-        LogDebug("------------------------------")
-    end)
-end)
+-- RegisterKeyBind(Key.PAUSE, function()
+--     ExecuteInGameThread(function()
+--         LogDebug("------- NoClip (Pause) -------")
+--         local myPlayer = AFUtils.GetMyPlayer()
+--         if myPlayer then
+--             myPlayer.Noclip_On = not myPlayer.Noclip_On
+--             myPlayer:OnRep_Noclip_On()
+--             LogDebug("Noclip_On: " .. tostring(myPlayer.Noclip_On))
+--         end
+--         LogDebug("------------------------------")
+--     end)
+-- end)
 
 -- RegisterProcessConsoleExecPreHook(function(Context, FullCommand, CommandParts, Ar, Executor)
 --     print("RegisterProcessConsoleExecPreHook:\n")
@@ -871,26 +872,26 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:FishingSuccess", function(Context)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:FishingSuccess", function(Context)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
 
-    LogDebug("----- [FishingSuccess] called -----")
-    AFUtils.LogFishingRod(fishingRod)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [FishingSuccess] called -----")
+--     AFUtils.LogFishingRod(fishingRod)
+--     LogDebug("------------------------------")
+-- end)
 
-RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:EndFishingMinigame", function(Context, Fail)
-    local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
-    local fail = Fail:get() ---@type boolean
+-- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:EndFishingMinigame", function(Context, Fail)
+--     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
+--     local fail = Fail:get() ---@type boolean
 
-    LogDebug("----- [EndFishingMinigame] called -----")
-    LogDebug("Fail:", fail)
-    -- AFUtils.LogFishingRod(fishingRod)
-    LogDebug("JunkReward.RowName:", fishingRod.JunkReward.RowName:ToString())
-    LogDebug("FishReward.RowName:", fishingRod.FishReward.RowName:ToString())
-    LogDebug("HotspotActive:", fishingRod.HotspotActive)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [EndFishingMinigame] called -----")
+--     LogDebug("Fail:", fail)
+--     -- AFUtils.LogFishingRod(fishingRod)
+--     LogDebug("JunkReward.RowName:", fishingRod.JunkReward.RowName:ToString())
+--     LogDebug("FishReward.RowName:", fishingRod.FishReward.RowName:ToString())
+--     LogDebug("HotspotActive:", fishingRod.HotspotActive)
+--     LogDebug("------------------------------")
+-- end)
 
 -- RegisterHook("/Game/Blueprints/Items/Weapons/Guns/Weapon_FishingRod.Weapon_FishingRod_C:IsFishingActive", function(Context, Active)
 --     local fishingRod = Context:get() ---@type AWeapon_FishingRod_C
@@ -1124,16 +1125,18 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
--- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:ServerUpdateStabilityLevel",
--- function(Context, Value)
---     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
---     local value = Value:get()
+RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:ServerUpdateStabilityLevel",
+function(Context, Value, RowName)
+    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+    local value = Value:get()
+    local rowName = RowName:get()
 
---     LogDebug("----- [ServerUpdateStabilityLevel] called -----")
---     LogDebug("Value:", value)
---     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [ServerUpdateStabilityLevel] called -----")
+    LogDebug("Value:", value)
+    LogDebug("RowName:", rowName:ToString())
+    -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
+    LogDebug("------------------------------")
+end)
 
 -- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:OnRep_Stability Level",
 -- function(Context)
@@ -1163,10 +1166,14 @@ end)
 -- end)
 
 -- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:TrapLeyak",
--- function(Context)
+-- function(Context, DelayBeforeSuccessfulTrap, LeyakRowName)
 --     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+--     local delayBeforeSuccessfulTrap = DelayBeforeSuccessfulTrap:get() ---@type double
+--     local leyakRowName = LeyakRowName:get() ---@type FName
 
 --     LogDebug("----- [TrapLeyak] called -----")
+--     LogDebug("DelayBeforeSuccessfulTrap:", delayBeforeSuccessfulTrap)
+--     LogDebug("LeyakRowName:", leyakRowName:ToString())
 --     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
 --     LogDebug("------------------------------")
 -- end)
@@ -1420,18 +1427,18 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
--- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SpawnLeyak", function(Context, Location)
---     local aiDirector = Context:get()
---     local location = Location:get()
+RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SpawnLeyak", function(Context, Location)
+    local aiDirector = Context:get()
+    local location = Location:get()
 
---     LogDebug("----- [SpawnLeyak] called -----")
---     -- local aiControllerLeyak = FindFirstOf("AI_Controller_Leyak_C")
---     -- if aiControllerLeyak and aiControllerLeyak:IsValid() then
---     --     LogDebug("AI_Controller_Leyak_C found, call Despawn")
---     --     aiControllerLeyak:Despawn()
---     -- end
---     LogDebug("------------------------------")
--- end)
+    LogDebug("----- [SpawnLeyak] called -----")
+    -- local aiControllerLeyak = FindFirstOf("AI_Controller_Leyak_C")
+    -- if aiControllerLeyak and aiControllerLeyak:IsValid() then
+    --     LogDebug("AI_Controller_Leyak_C found, call Despawn")
+    --     aiControllerLeyak:Despawn()
+    -- end
+    LogDebug("------------------------------")
+end)
 
 -- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:LeyakFailsafeRemove", function(Context)
 --     local aIDirector = Context:get()
