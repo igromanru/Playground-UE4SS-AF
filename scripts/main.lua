@@ -93,6 +93,8 @@ RegisterKeyBind(Key.L, function()
     ExecuteInGameThread(function()
         LogDebug("------------ L ---------------")
         LogDebug("IsHost:", IsHost())
+
+        LeyakTest()
         -- local traitSelection = FindFirstOf("W_Character_Trait_Selection_C") ---@cast traitSelection UW_Character_Trait_Selection_C
         -- if IsValid(traitSelection) then
         --     LogDebug("W_Character_Trait_Selection_C instance:")
@@ -562,13 +564,13 @@ RegisterKeyBind(Key.O, function()
         --     LogDebug("NPCs Spawned:", npcSpawned)
         -- end
         
-        -- local aiDirector = AFUtils.GetAIDirector()
-        -- if aiDirector then
-        --     -- local cooldownInMin = 1.0
-        --     -- aiDirector.LeyakCooldown = cooldownInMin * 60.0
-        --     -- aiDirector:SetLeyakOnCooldown(1.0)
-        --     -- LogDebug("LeyakCooldown set to: "..aiDirector.LeyakCooldown.." ("..cooldownInMin.." min)")
-        -- end
+        local aiDirector = AFUtils.GetAIDirector()
+        if aiDirector then
+            -- local cooldownInMin = 1.0
+            -- aiDirector.LeyakCooldown = cooldownInMin * 60.0
+            -- aiDirector:SetLeyakOnCooldown(1.0)
+            -- LogDebug("LeyakCooldown set to: "..aiDirector.LeyakCooldown.." ("..cooldownInMin.." min)")
+        end
 
         -- local leyakContainment = FindFirstOf("Deployed_LeyakContainment_C") ---@cast leyakContainment ADeployed_LeyakContainment_C
         -- if leyakContainment:IsValid() then
@@ -1125,18 +1127,18 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
-RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:ServerUpdateStabilityLevel",
-function(Context, Value, RowName)
-    local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
-    local value = Value:get()
-    local rowName = RowName:get()
+-- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:ServerUpdateStabilityLevel",
+-- function(Context, Value, RowName)
+--     local leyakContainment = Context:get() ---@type ADeployed_LeyakContainment_C
+--     local value = Value:get()
+--     local rowName = RowName:get()
 
-    LogDebug("----- [ServerUpdateStabilityLevel] called -----")
-    LogDebug("Value:", value)
-    LogDebug("RowName:", rowName:ToString())
-    -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [ServerUpdateStabilityLevel] called -----")
+--     LogDebug("Value:", value)
+--     LogDebug("RowName:", rowName:ToString())
+--     -- AFUtils.LogDeployedLeyakContainment(leyakContainment)
+--     LogDebug("------------------------------")
+-- end)
 
 -- RegisterHook("/Game/Blueprints/DeployedObjects/Furniture/Deployed_LeyakContainment.Deployed_LeyakContainment_C:OnRep_Stability Level",
 -- function(Context)
@@ -1427,18 +1429,19 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
-RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SpawnLeyak", function(Context, Location)
-    local aiDirector = Context:get()
-    local location = Location:get()
+---- The function doesn't seems to spawn Leayal anymore
+-- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:SpawnLeyak", function(Context, Location)
+--     local aiDirector = Context:get()
+--     local location = Location:get()
 
-    LogDebug("----- [SpawnLeyak] called -----")
-    -- local aiControllerLeyak = FindFirstOf("AI_Controller_Leyak_C")
-    -- if aiControllerLeyak and aiControllerLeyak:IsValid() then
-    --     LogDebug("AI_Controller_Leyak_C found, call Despawn")
-    --     aiControllerLeyak:Despawn()
-    -- end
-    LogDebug("------------------------------")
-end)
+--     LogDebug("----- [SpawnLeyak] called -----")
+--     -- local aiControllerLeyak = FindFirstOf("AI_Controller_Leyak_C")
+--     -- if aiControllerLeyak and aiControllerLeyak:IsValid() then
+--     --     LogDebug("AI_Controller_Leyak_C found, call Despawn")
+--     --     aiControllerLeyak:Despawn()
+--     -- end
+--     LogDebug("------------------------------")
+-- end)
 
 -- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:LeyakFailsafeRemove", function(Context)
 --     local aIDirector = Context:get()
