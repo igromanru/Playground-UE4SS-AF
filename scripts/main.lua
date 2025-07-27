@@ -95,6 +95,7 @@ RegisterKeyBind(Key.L, function()
         LogDebug("IsHost:", IsHost())
 
         LeyakTest()
+
         -- local traitSelection = FindFirstOf("W_Character_Trait_Selection_C") ---@cast traitSelection UW_Character_Trait_Selection_C
         -- if IsValid(traitSelection) then
         --     LogDebug("W_Character_Trait_Selection_C instance:")
@@ -248,6 +249,18 @@ RegisterKeyBind(Key.L, function()
 
         local myPlayer = AFUtils.GetMyPlayer()
         if IsValid(myPlayer) then
+            -- myPlayer:SetActorEnableCollision(true)
+            -- if IsValid(myPlayer.CharacterMovement) then
+            --     myPlayer.CharacterMovement.bCheatFlying = true;
+            --     myPlayer.CharacterMovement:SetMovementMode(5, 0)
+            -- end
+            -- if IsValid(myPlayer.CapsuleComponent) then
+            --     -- LogDebug("CapsuleComponent:SetCollisionResponseToAllChannels: 0")
+            --     -- myPlayer.CapsuleComponent:SetCollisionResponseToAllChannels(0)
+            --     myPlayer.CapsuleComponent:SetCollisionResponseToChannel(0, 0) -- ECC_WorldStatic
+            --     myPlayer.CapsuleComponent:SetCollisionResponseToChannel(1, 0) -- ECC_WorldDynamic
+            -- end
+
             -- local location = myPlayer:K2_GetActorLocation()
             -- LogDebug("myPlayer location: " .. VectorToString(location))
             -- LogDebug("myPlayer.HasAuthority:", myPlayer:HasAuthority())
@@ -1443,13 +1456,6 @@ end)
 --     LogDebug("------------------------------")
 -- end)
 
--- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:LeyakFailsafeRemove", function(Context)
---     local aIDirector = Context:get()
-
---     LogDebug("[Abiotic_AIDirector_C:LeyakFailsafeRemove] called:")
---     LogDebug("------------------------------")
--- end)
-
 -- RegisterHook("/Game/Blueprints/Characters/NPCs/AI_Controller_Leyak.AI_Controller_Leyak_C:Despawn", function(Context)
 --     local aiControllerLeyak = Context:get()
 
@@ -1481,6 +1487,64 @@ end)
 --     -- leyak.TimeAllowedToBeStuck = 0.1
 --     -- leyak.AbsolutelyStuck = true
 --     -- AFUtils.LogNPCLeyak(leyak)
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Characters/NPCs/NPC_Leyak.NPC_Leyak_C:PrepareLeyakDespawn", function(Context)
+--     local leyak = Context:get()
+
+--     LogDebug("[PrepareLeyakDespawn] called:")
+--     LogDebug("------------------------------")
+-- end)
+
+
+-- RegisterHook("/Game/Blueprints/Environment/Systems/LeyakDirectorComponent.LeyakDirectorComponent_C:SpawnNPC_Internal", function(Context, Class, Location, Rotation)
+--     local context = Context:get() ---@type ULeyakDirectorComponent_C
+--     local class = Class:get() ---@type UClass
+--     local location = Location:get() ---@type FVector
+--     local rotation = Rotation:get() ---@type FRotator
+
+--     LogDebug("----- [SpawnNPC_Internal] called -----")
+--     LogDebug("Class:", class:GetFullName())
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Environment/Systems/LeyakDirectorComponent.LeyakDirectorComponent_C:SetLeyakContainmentID", function(Context, NewID)
+--     local context = Context:get() ---@type ULeyakDirectorComponent_C
+--     local newID = NewID:get() ---@type FString
+
+--     LogDebug("----- [SetLeyakContainmentID] called -----")
+--     LogDebug("NewID:", newID:ToString())
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Environment/Systems/LeyakDirectorComponent.LeyakDirectorComponent_C:IncreaseLeyakViewCounter", function(Context)
+--     local context = Context:get() ---@type ULeyakDirectorComponent_C
+
+--     LogDebug("----- [IncreaseLeyakViewCounter] called -----")
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Environment/Systems/LeyakDirectorComponent.LeyakDirectorComponent_C:ResetLeyakViewCounter", function(Context)
+--     local context = Context:get() ---@type ULeyakDirectorComponent_C
+
+--     LogDebug("----- [ResetLeyakViewCounter] called -----")
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Environment/Systems/LeyakDirectorComponent.LeyakDirectorComponent_C:SetLeyakOnCooldown", function(Context, CooldownReductionMultiplier)
+--     local context = Context:get() ---@type ULeyakDirectorComponent_C
+--     local cooldownReductionMultiplier = CooldownReductionMultiplier:get() ---@type double
+
+--     LogDebug("----- [SetLeyakOnCooldown] called -----")
+--     LogDebug("CooldownReductionMultiplier:", cooldownReductionMultiplier)
+--     LogDebug("------------------------------")
+-- end)
+
+-- RegisterHook("/Game/Blueprints/Environment/Systems/Abiotic_AIDirector.Abiotic_AIDirector_C:LeyakFailsafeRemove", function(Context)
+--     local aIDirector = Context:get()
+
+--     LogDebug("[Abiotic_AIDirector_C:LeyakFailsafeRemove] called:")
 --     LogDebug("------------------------------")
 -- end)
 
