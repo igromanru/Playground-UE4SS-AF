@@ -40,24 +40,14 @@ local function LeyakTest()
     if aiDirector then
         LogDebug("-- Abiotic_AIDirector_C:")
 
-        -- aiDirector.LeyakCooldown = 10 * 60.0
-
         AFUtils.LogAIDirector(aiDirector)
         if aiDirector.ActiveLeyak:IsValid() and not IsEmptyVector(aiDirector.ActiveLeyak:K2_GetActorLocation()) then
             LogDebug("-- ActiveLeyak:")
             AFUtils.LogNPCLeyak(aiDirector.ActiveLeyak)
-            
-            -- aiDirector.ActiveLeyak:DropEssence()
-        else
-            -- local spawnDistanceInM = 20
-            -- local playerController = GetMyPlayerController()
-            -- if playerController and playerController.PlayerCameraManager:IsValid() then
-            --     local cameraManager = playerController.PlayerCameraManager
-            --     local lookDirection = cameraManager:GetActorForwardVector()
-            --     local lookDirOffset = GetKismetMathLibrary():Multiply_VectorFloat(lookDirection, MToUnits(spawnDistanceInM))
-            --     local spawnLocation = GetKismetMathLibrary():Add_VectorVector(cameraManager:GetCameraLocation(), lookDirOffset)
-            --     aiDirector:SpawnLeyak(VectorToTable(spawnLocation));
-            -- end
+        end
+
+        if IsValid(aiDirector.KrasueDirectorComponent) then
+            AFUtils.LogLeyakDirectorComponent(aiDirector.KrasueDirectorComponent, "KrasueDirectorComponent.")
         end
     else
         LogDebug("No Abiotic_AIDirector_C found")
